@@ -26,6 +26,6 @@ namespace position
 
         public override int GetHashCode() => x*y;
 
-        public int scalarProduct(Position p) => x*p.x + y*p.y;
+        public int ScalarProduct(Position p) => x*p.x + y*p.y;
     }
 }

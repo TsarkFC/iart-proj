@@ -85,8 +85,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
   spritePackingTag: 
-  pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
+  pSDReMoveMatte: 0
+  pSDShowReMoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

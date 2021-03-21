@@ -13,9 +13,9 @@ namespace piece_orderer
         // 0 -> equal; -1 -> p2 greater; 1 -> p1 greater 
         public int Compare(Piece p1, Piece p2)
         {
-            if (p1.position.scalarProduct(direction) > p2.position.scalarProduct(direction))
+            if (p1.position.ScalarProduct(direction) > p2.position.ScalarProduct(direction))
                 return -1;
-            else if (p1.position.scalarProduct(direction) < p2.position.scalarProduct(direction))
+            else if (p1.position.ScalarProduct(direction) < p2.position.ScalarProduct(direction))
                 return 1;
             return 0;
         }

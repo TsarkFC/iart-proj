@@ -13,10 +13,10 @@ namespace logic
     {
         int xDim = 4;
         int yDim = 4;
-        String[,] board = new String[,] {{"x", "tp", " ", "pp"},
-                                    {"x", "x", "tp", "pp"},
-                                    {" ", "x", " ", " "},
-                                    {" ", " ", "x", " "}};
+        String[,] board = new String[,] {{"x", "tp", " ", " "},
+                                        {"x", "x", "tp", "pp"},
+                                        {" ", "x", " ", "pp"},
+                                        {" ", " ", "x", " "}};
 
         List<Piece> pieces = new List<Piece>();
         PieceOrderer pieceOrderer = new PieceOrderer();
@@ -25,77 +25,72 @@ namespace logic
         static void Main(string[] args)
         {
             Logic logic = new Logic();
-            logic.pieces.Add(new Piece("pp", new Position(3, 0)));
             logic.pieces.Add(new Piece("pp", new Position(3, 1)));
+            logic.pieces.Add(new Piece("pp", new Position(3, 2)));
 
             while (true)
             {
-                Console.WriteLine("move left");
-                Console.WriteLine(logic.moveLeft());
-                Console.WriteLine("move right");
-                Console.WriteLine(logic.moveRight());
-                Console.WriteLine("move up");
-                Console.WriteLine(logic.moveUp());
-                Console.WriteLine("move down");
-                Console.WriteLine(logic.moveDown());
-                Console.ReadKey();
+                logic.PrintBoard();
+                ConsoleKeyInfo keyInfo = Console.ReadKey();
+                if (keyInfo.Key == ConsoleKey.LeftArrow)
+                {
+                    Console.WriteLine("Move left");
+                    Console.WriteLine(logic.MoveLeft());
+                }
+                else if (keyInfo.Key == ConsoleKey.RightArrow)
+                {
+                    Console.WriteLine("Move right");
+                    Console.WriteLine(logic.MoveRight());
+                }
+                else if (keyInfo.Key == ConsoleKey.UpArrow)
+                {
+                    Console.WriteLine("Move up");
+                    Console.WriteLine(logic.MoveUp());
+                }
+                else if (keyInfo.Key == ConsoleKey.DownArrow)
+                {
+                    Console.WriteLine("Move down");
+                    Console.WriteLine(logic.MoveDown());
+                }
             }
         }
 
-        public bool moveLeft()
+        public bool MoveLeft()
         {
-            List<Tuple<Position, Piece>> playPosition = getMoves(new Position(-1, 0));
-            if (playPosition.Capacity == 0) return false;
-
-            return true;
+            return Move(new Position(-1, 0));
         }
 
-        public bool moveRight()
+        public bool MoveRight()
         {
-            List<Tuple<Position, Piece>> playPosition = getMoves(new Position(1, 0));
-            if (playPosition.Capacity == 0) return false;
-
-            return true;
+            return Move(new Position(1, 0));
         }
 
-        public bool moveUp()
+        public bool MoveUp()
         {
-            List<Tuple<Position, Piece>> playPosition = getMoves(new Position(0, -1));
-            if (playPosition.Capacity == 0) return false;
-
-            return true;
+            return Move(new Position(0, -1));
         }
 
-        public bool moveDown()
+        public bool MoveDown()
         {
-            List<Tuple<Position, Piece>> playPosition = getMoves(new Position(0, 1));
-            if (playPosition.Capacity == 0) return false;
-
-            return true;
+            return Move(new Position(0, 1));
         }
 
-        private List<Tuple<Position, Piece>> getMoves(Position direction)
+        private bool Move(Position direction)
         {
-            List<Tuple<Position, Piece>> newPieces = new List<Tuple<Position, Piece>>();
+            bool Moved = false;
 
-            foreach (Piece piece in pieces)
-            {
-                Console.WriteLine(piece.position.x + " " + piece.position.y);
-            }
             pieceOrderer.direction = direction;
             pieces.Sort(pieceOrderer);
-            foreach (Piece piece in pieces)
-            {
-                Console.WriteLine(piece.position.x + " " + piece.position.y);
-            }
 
             foreach (Piece piece in pieces)
             {
                 Position nextPos = getNextPosition(direction, piece);
                 if (nextPos == null) continue;
-                newPieces.Add(new Tuple<Position, Piece>(nextPos, piece));
+                Moved = true;
+                ApplyMove(nextPos, piece);
+                //newPieces.Add(new Tuple<Position, Piece>(nextPos, piece));
             }
-            return newPieces;
+            return Moved;
         }
 
         private Position getNextPosition(Position direction, Piece piece)
@@ -105,7 +100,7 @@ namespace logic
             {
                 nextPos += direction;
 
-                if (!inBounds(nextPos))
+                if (!InBounds(nextPos))
                 {
                     nextPos -= direction;
                     break;
@@ -120,11 +115,33 @@ namespace logic
             return nextPos;
         }
 
-        private bool inBounds(Position position)
+        private bool InBounds(Position position)
         {
             if (position.x >= xDim || position.x < 0) return false;
             if (position.y >= yDim || position.y < 0) return false;
             return true;
+        }
+
+        private void ApplyMove(Position nextPos, Piece piece)
+        {
+            board[nextPos.y, nextPos.x] = piece.symbol;
+            board[piece.position.y, piece.position.x] = " ";
+            piece.position = nextPos;
+        }
+
+        private void PrintBoard()
+        {
+            int rowLength = board.GetLength(0);
+            int colLength = board.GetLength(1);
+
+            for (int row = 0; row < rowLength; row++)
+            {
+                for (int col = 0; col < colLength; col++)
+                {
+                    Console.Write(String.Format("|{0}\t|", board[row,col]));
+                }
+                Console.WriteLine();
+            }
         }
     }
 }
