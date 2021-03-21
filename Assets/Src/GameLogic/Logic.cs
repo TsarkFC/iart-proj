@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using piece;
 using position;
+using piece_orderer;
 
 // namespace declaration 
 namespace logic
@@ -12,17 +13,21 @@ namespace logic
     {
         int xDim = 4;
         int yDim = 4;
-        String[,] board = new String[,] {{"x", "tp", " ", " "},
-                                    {"x", "x", "tp", " "},
+        String[,] board = new String[,] {{"x", "tp", " ", "pp"},
+                                    {"x", "x", "tp", "pp"},
                                     {" ", "x", " ", " "},
                                     {" ", " ", "x", " "}};
 
-        Piece[] pieces = { new Piece("pp", new Position(2, 1)), new Piece("pp", new Position(2, 2)) };
+        List<Piece> pieces = new List<Piece>();
+        PieceOrderer pieceOrderer = new PieceOrderer();
 
         // Main Method 
         static void Main(string[] args)
         {
             Logic logic = new Logic();
+            logic.pieces.Add(new Piece("pp", new Position(3, 0)));
+            logic.pieces.Add(new Piece("pp", new Position(3, 1)));
+
             while (true)
             {
                 Console.WriteLine("move left");
@@ -72,6 +77,18 @@ namespace logic
         private List<Tuple<Position, Piece>> getMoves(Position direction)
         {
             List<Tuple<Position, Piece>> newPieces = new List<Tuple<Position, Piece>>();
+
+            foreach (Piece piece in pieces)
+            {
+                Console.WriteLine(piece.position.x + " " + piece.position.y);
+            }
+            pieceOrderer.direction = direction;
+            pieces.Sort(pieceOrderer);
+            foreach (Piece piece in pieces)
+            {
+                Console.WriteLine(piece.position.x + " " + piece.position.y);
+            }
+
             foreach (Piece piece in pieces)
             {
                 Position nextPos = getNextPosition(direction, piece);

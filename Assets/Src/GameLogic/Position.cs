@@ -24,8 +24,8 @@ namespace position
             return pos.x == x && pos.y == y;
         }
 
-        public override int GetHashCode() {
-            return 0;
-        }
+        public override int GetHashCode() => x*y;
+
+        public int scalarProduct(Position p) => x*p.x + y*p.y;
     }
 }
