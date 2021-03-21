@@ -8,7 +8,7 @@ public class SingleplayerUnlocker : MonoBehaviour
     public Button[] lvlButtons;
     void Start()
     {
-        int levelAt = PlayerPrefs.GetInt("levelAt", 2);
+        int levelAt = PlayerPrefs.GetInt("levelAt", 9);
 
         for (int i = levelAt; i < lvlButtons.Length; i++)
         {
