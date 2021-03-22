@@ -13,20 +13,25 @@ namespace logic
     {
         int xDim = 4;
         int yDim = 4;
-        String[,] board = new String[,] {{"x", "tp", " ", " "},
-                                        {"x", "x", "tp", "pp"},
-                                        {" ", "x", " ", "pp"},
-                                        {" ", " ", "x", " "}};
+        String[,] board = new String[,] {{"o", " ", " ", "tp"},
+                                        {"o", " ", " ", "o"},
+                                        {" ", "pr", " ", "tr"},
+                                        {" ", " ", "o", "pp"}};
 
         List<Piece> pieces = new List<Piece>();
+        List<Piece> pieces_copy = new List<Piece>();
+        List<Piece> targets = new List<Piece>();
+
         PieceOrderer pieceOrderer = new PieceOrderer();
 
         // Main Method 
         static void Main(string[] args)
         {
             Logic logic = new Logic();
-            logic.pieces.Add(new Piece("pp", new Position(3, 1)));
-            logic.pieces.Add(new Piece("pp", new Position(3, 2)));
+            logic.GameStart();
+
+            Console.WriteLine("PIECES: " + logic.pieces.Count.ToString());
+            Console.WriteLine("TARGETS: " + logic.targets.Count.ToString());
 
             while (true)
             {
@@ -52,6 +57,7 @@ namespace logic
                     Console.WriteLine("Move down");
                     Console.WriteLine(logic.MoveDown());
                 }
+                if (logic.VerifyEndGame()) break;
             }
         }
 
@@ -88,7 +94,6 @@ namespace logic
                 if (nextPos == null) continue;
                 Moved = true;
                 ApplyMove(nextPos, piece);
-                //newPieces.Add(new Tuple<Position, Piece>(nextPos, piece));
             }
             return Moved;
         }
@@ -96,20 +101,16 @@ namespace logic
         private Position getNextPosition(Position direction, Piece piece)
         {
             Position nextPos = piece.position;
+            Position temp = null;
             while (true)
             {
-                nextPos += direction;
+                temp = nextPos + direction;
 
-                if (!InBounds(nextPos))
-                {
-                    nextPos -= direction;
+                if (!InBounds(temp)) break;
+                if (board[temp.y, temp.x] != " " && board[temp.y, temp.x][0] != 't')
                     break;
-                }
-                if (board[nextPos.y, nextPos.x] != " " && board[nextPos.y, nextPos.x] != "tp")
-                {
-                    nextPos -= direction;
-                    break;
-                }
+
+                nextPos += direction;
             }
             if (nextPos.Equals(piece.position)) return null;
             return nextPos;
@@ -125,7 +126,8 @@ namespace logic
         private void ApplyMove(Position nextPos, Piece piece)
         {
             board[nextPos.y, nextPos.x] = piece.symbol;
-            board[piece.position.y, piece.position.x] = " ";
+            if (!replaceTargets(piece))
+                board[piece.position.y, piece.position.x] = " ";
             piece.position = nextPos;
         }
 
@@ -142,6 +144,40 @@ namespace logic
                 }
                 Console.WriteLine();
             }
+        }
+
+        private bool VerifyEndGame()
+        {
+            int size = pieces.Count;
+            for (int i = 0; i < size; i++)
+            {
+                if (!pieces_copy[i].position.Equals(targets[i].position)) return false;
+            }
+            return true;
+        }
+
+        private bool replaceTargets(Piece piece)
+        {
+            foreach (Piece target in targets)
+                if (target.position.Equals(piece.position))
+                {
+                    board[piece.position.y, piece.position.x] = target.symbol;
+                    return true;
+                }
+            return false;
+        }
+
+        private void GameStart()
+        {
+            Piece p1 = new Piece("pp", new Position(3, 3));
+            Piece p2 = new Piece("pr", new Position(1, 2));
+
+            pieces.Add(p1);
+            pieces.Add(p2);
+            pieces_copy.Add(p1);
+            pieces_copy.Add(p2);
+            targets.Add(new Piece("tp", new Position(3, 0)));
+            targets.Add(new Piece("tr", new Position(3, 2)));
         }
     }
 }
