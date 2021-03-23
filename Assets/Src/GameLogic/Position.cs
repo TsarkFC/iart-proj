@@ -2,7 +2,7 @@ using System;
 
 namespace position
 {
-    class Position
+    public class Position
     {
         public int x { get; set; }
         public int y { get; set;}
@@ -22,6 +22,10 @@ namespace position
             if (!(obj is Position)) return false;
             Position pos = (Position)obj;
             return pos.x == x && pos.y == y;
+        }
+
+        public override String ToString() {
+            return "(" + this.x + ", " + this.y + ")";
         }
 
         public override int GetHashCode() => x*y;

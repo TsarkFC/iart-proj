@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using position;
 
 public abstract class Level : MonoBehaviour
 {
@@ -16,10 +18,6 @@ public abstract class Level : MonoBehaviour
         EMPTY
     }
 
-    public int xDim;
-    public int yDim;
-    protected PieceType[,] board;
-
     [System.Serializable]
     public struct PiecePrefab
     {
@@ -27,18 +25,29 @@ public abstract class Level : MonoBehaviour
         public GameObject prefab;
     }
 
+    /* Controllable in Unity */
+    public int xDim;
+    public int yDim;
     public PiecePrefab[] piecePrefabs;
-    private GameObject[,] pieces;
-    protected Dictionary<PieceType, GameObject> piecePrefabDict;
     public GameObject backgroundPrefab;
-
     public float pieceVelocity;
 
-    private Dictionary<GameObject, Movement> piecesMovement = new Dictionary<GameObject, Movement>();
-    private bool moving = false;
+
+    protected PieceType[,] board;
+    protected Dictionary<PieceType, GameObject> piecePrefabDict;
+
+    private GameObject[,] pieces;
+
+    private Dictionary<GameObject, Movement> piecesMovement = new Dictionary<GameObject, Movement>();  // each piece's movement
+    private bool moving = false;  // is any piece moving?
+
+    private GameLogic logic;
 
     protected void BuildBoard() 
     {
+        this.logic = new GameLogic(board, xDim, yDim);
+
+        // correspondance between PieceType and prefabs
         for (int i = 0; i < piecePrefabs.Length; i++)
         {
             if (!piecePrefabDict.ContainsKey(piecePrefabs[i].type))
@@ -47,29 +56,28 @@ public abstract class Level : MonoBehaviour
             }
         }
 
-
-        for (int x = 0; x < xDim; x++)
+        // instantiating backgrounds
+        for (int y = 0; y < yDim; y++)
         {
-            for (int y = 0; y < yDim; y++)
+            for (int x = 0; x < xDim; x++)
             {
-                GameObject background = (GameObject)Instantiate(backgroundPrefab, GetWorldPosition(y*90, ((xDim-1)-x)*90), Quaternion.identity, transform);
+                GameObject background = (GameObject)Instantiate(backgroundPrefab, GetWorldPosition(x*90, ((yDim-1)-y)*90), Quaternion.identity, transform);
             }
         }
 
-        foreach(KeyValuePair<PieceType, GameObject> entry in piecePrefabDict)
-        {
-            Debug.Log(entry.Key);
-        }
+        foreach(KeyValuePair<PieceType, GameObject> entry in piecePrefabDict) Debug.Log(entry.Key);
 
-        pieces = new GameObject[xDim, yDim];
-        for (int x = 0; x < xDim; x++)
+        // Instantiating entities (obstacles, pieces, targets)
+        pieces = new GameObject[yDim, xDim];
+
+        for (int y = 0; y < yDim; y++)
         {
-            for (int y = 0; y < yDim; y++)
+            for (int x = 0; x < xDim; x++)
             {
-                if (board[x, y] == PieceType.EMPTY) continue;
-                pieces[x, y] = (GameObject) Instantiate(piecePrefabDict[board[x, y]], GetWorldPosition(y*90, ((xDim-1)-x)*90), Quaternion.identity, transform);
-                piecesMovement.Add(pieces[x, y], new Movement());
-                pieces[x, y].name = "Piece(" + x + "," + y + ")";
+                if (board[y, x] == PieceType.EMPTY) continue;
+                pieces[y, x] = (GameObject) Instantiate(piecePrefabDict[board[y, x]], GetWorldPosition(x*90, ((yDim-1)-y)*90), Quaternion.identity, transform);
+                piecesMovement.Add(pieces[y, x], new Movement(new Position(x, y)));
+                pieces[y, x].name = "Piece(" + x + "," + y + ")";
             }
         }
 
@@ -88,27 +96,27 @@ public abstract class Level : MonoBehaviour
 
     protected void Update()
     {
-        if (this.moving) 
+        if (this.moving) // if moving
         {
             // there should be different target value for each piece
-            bool movementGoesOn = false;
-            for (int x = 0; x < xDim; x++)
+            bool movementGoesOn = false;  // whether the movement continues
+            for (int y = 0; y < yDim; y++)
             {
-                for (int y = 0; y < yDim; y++)
+                for (int x = 0; x < xDim; x++)
                 {
-                    if (IsPiece(board[x, y]))
+                    if (IsPiece(board[y, x]))
                     {
-                        GameObject piece = pieces[x, y];
+                        GameObject piece = pieces[y, x];
                         Movement movement = piecesMovement[piece];
 
                         if (movement.type == Movement.MovementType.NONE) continue;   // if piece is not moving
 
-                        float amount = this.pieceVelocity*Time.deltaTime;
+                        float amount = this.pieceVelocity*Time.deltaTime;  // amount to move by
 
                         float diff = movement.target - movement.delta;
-                        if (amount > diff) amount = diff;
+                        if (amount > diff) amount = diff;   // good math
 
-                        Vector3 position = pieces[x, y].transform.position;
+                        Vector3 position = pieces[y, x].transform.position;
                         switch(movement.type) {
                             case Movement.MovementType.DOWN:
                                 position.y -= amount;
@@ -125,23 +133,18 @@ public abstract class Level : MonoBehaviour
                             default:
                                 continue;
                         }
-                        pieces[x, y].transform.position = position;
-                        movement.Increment(amount);
-                        
-                        if ((int) movement.delta >= movement.target)
-                        {
-                            movement.StopMovement();
-                        } 
-                        else
-                        {
-                            movementGoesOn = true;
-                        }
+
+                        pieces[y, x].transform.position = position;
+
+                        movementGoesOn = movement.Update(amount) ? true : movementGoesOn; // returns true if the piece's movement continues
+
+                        // Debug.Log("Delta: "+ movement.delta + ", target: " + movement.target + ", goesOn: " + movementGoesOn);
                     }
                 }
             }
             if (!movementGoesOn) this.moving = false;
         }
-        else 
+        else  // if not moving
         {
             Movement.MovementType movementType = Movement.MovementType.NONE;
             if (Input.GetKeyDown(KeyCode.RightArrow)) {
@@ -154,14 +157,24 @@ public abstract class Level : MonoBehaviour
                 movementType = Movement.MovementType.DOWN;
             }
 
+
             if (movementType != Movement.MovementType.NONE) {
-                for (int x = 0; x < xDim; x++)
+                Dictionary<Position, Position> prevNextPositions = logic.Move(movementType);
+                if (prevNextPositions == null) return;
+
+                for (int y = 0; y < yDim; y++)
                 {
-                    for (int y = 0; y < yDim; y++)
+                    for (int x = 0; x < xDim; x++)
                     {
-                        if (IsPiece(board[x, y]))
+                        if (IsPiece(board[y, x]))
                         {
-                            piecesMovement[pieces[x, y]].StartMovement(movementType, 90);
+                            Movement movement = piecesMovement[pieces[y, x]];
+                            Position nextPosition = prevNextPositions[movement.position];
+                            // Debug.Log("Previous position: " + movement.position);
+                            // Debug.Log("Next position: " + nextPosition);
+                            if (nextPosition == null) continue;
+                            // need to get the next position of the piece and calculate the amount to move
+                            movement.StartMovement(nextPosition, movementType);
                         }
                     }
                 }
