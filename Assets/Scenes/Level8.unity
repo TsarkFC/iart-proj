@@ -301,6 +301,7 @@ MonoBehaviour:
       type: 3}
   backgroundPrefab: {fileID: 6254349062941298256, guid: eac149b9af95abc0da04b24df15aa913,
     type: 3}
+  pieceVelocity: 500
 --- !u!156049354 &266563717
 Grid:
   m_ObjectHideFlags: 0
