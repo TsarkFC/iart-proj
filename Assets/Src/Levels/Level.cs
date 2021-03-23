@@ -27,33 +27,15 @@ public abstract class Level : MonoBehaviour
         public GameObject prefab;
     }
 
-    public enum MovementType
-    {
-        NONE,
-        RIGHT,
-        LEFT,
-        UP,
-        DOWN
-    }
-
     public PiecePrefab[] piecePrefabs;
     private GameObject[,] pieces;
     protected Dictionary<PieceType, GameObject> piecePrefabDict;
     public GameObject backgroundPrefab;
+
     public float pieceVelocity;
-    protected struct Movement
-    {
-        public MovementType type;
-        public float delta;
 
-        public Movement(MovementType type = MovementType.NONE, float delta = 0)
-        {
-            this.type = type;
-            this.delta = delta;
-        }
-    }
-
-    private Movement movement = new Movement();
+    private Dictionary<GameObject, Movement> piecesMovement = new Dictionary<GameObject, Movement>();
+    private bool moving = false;
 
     protected void BuildBoard() 
     {
@@ -86,6 +68,7 @@ public abstract class Level : MonoBehaviour
             {
                 if (board[x, y] == PieceType.EMPTY) continue;
                 pieces[x, y] = (GameObject) Instantiate(piecePrefabDict[board[x, y]], GetWorldPosition(y*90, ((xDim-1)-x)*90), Quaternion.identity, transform);
+                piecesMovement.Add(pieces[x, y], new Movement());
                 pieces[x, y].name = "Piece(" + x + "," + y + ")";
             }
         }
@@ -105,57 +88,84 @@ public abstract class Level : MonoBehaviour
 
     protected void Update()
     {
-        if (this.movement.type != MovementType.NONE) 
+        if (this.moving) 
         {
-            float amount = this.pieceVelocity*Time.deltaTime;
-            if (amount > 90 - this.movement.delta)
-            {
-                amount = 90 - this.movement.delta;
-            }
+            // there should be different target value for each piece
+            bool movementGoesOn = false;
             for (int x = 0; x < xDim; x++)
             {
                 for (int y = 0; y < yDim; y++)
                 {
                     if (IsPiece(board[x, y]))
                     {
+                        GameObject piece = pieces[x, y];
+                        Movement movement = piecesMovement[piece];
+
+                        if (movement.type == Movement.MovementType.NONE) continue;   // if piece is not moving
+
+                        float amount = this.pieceVelocity*Time.deltaTime;
+
+                        float diff = movement.target - movement.delta;
+                        if (amount > diff) amount = diff;
+
                         Vector3 position = pieces[x, y].transform.position;
-                        switch(this.movement.type) {
-                            case MovementType.DOWN:
+                        switch(movement.type) {
+                            case Movement.MovementType.DOWN:
                                 position.y -= amount;
                                 break;
-                            case MovementType.UP:
+                            case Movement.MovementType.UP:
                                 position.y += amount;
                                 break;
-                            case MovementType.RIGHT:
+                            case Movement.MovementType.RIGHT:
                                 position.x += amount;
                                 break;
-                            case MovementType.LEFT:
+                            case Movement.MovementType.LEFT:
                                 position.x -= amount;
                                 break;
                             default:
                                 continue;
                         }
                         pieces[x, y].transform.position = position;
+                        movement.Increment(amount);
+                        
+                        if ((int) movement.delta >= movement.target)
+                        {
+                            movement.StopMovement();
+                        } 
+                        else
+                        {
+                            movementGoesOn = true;
+                        }
                     }
                 }
             }
-            this.movement.delta += amount;
-            if ((int) this.movement.delta >= 90)
-            {
-                this.movement.type = MovementType.NONE;
-                this.movement.delta = 0;
-            }
+            if (!movementGoesOn) this.moving = false;
         }
         else 
         {
+            Movement.MovementType movementType = Movement.MovementType.NONE;
             if (Input.GetKeyDown(KeyCode.RightArrow)) {
-                this.movement.type = MovementType.RIGHT;
+                movementType = Movement.MovementType.RIGHT;
             } else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
-                this.movement.type = MovementType.LEFT;
+                movementType = Movement.MovementType.LEFT;
             } else if (Input.GetKeyDown(KeyCode.UpArrow)) {
-                this.movement.type = MovementType.UP;
+                movementType = Movement.MovementType.UP;
             } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
-                this.movement.type = MovementType.DOWN;
+                movementType = Movement.MovementType.DOWN;
+            }
+
+            if (movementType != Movement.MovementType.NONE) {
+                for (int x = 0; x < xDim; x++)
+                {
+                    for (int y = 0; y < yDim; y++)
+                    {
+                        if (IsPiece(board[x, y]))
+                        {
+                            piecesMovement[pieces[x, y]].StartMovement(movementType, 90);
+                        }
+                    }
+                }
+                this.moving = true;
             }
         }
         
