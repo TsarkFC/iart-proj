@@ -11,11 +11,6 @@ public class Level4 : Level
                                     {PieceType.PIECE_RED, PieceType.EMPTY, PieceType.EMPTY, PieceType.BARRIER},
                                     {PieceType.PIECE_PURPLE, PieceType.EMPTY, PieceType.EMPTY, PieceType.BARRIER},
                                     {PieceType.EMPTY, PieceType.EMPTY, PieceType.TARGET_PURPLE, PieceType.TARGET_RED}};
-        base.buildBoard();
-    }
-
-    void Update()
-    {
-        
+        base.BuildBoard();
     }
 }

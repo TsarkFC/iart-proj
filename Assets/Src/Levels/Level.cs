@@ -27,12 +27,35 @@ public abstract class Level : MonoBehaviour
         public GameObject prefab;
     }
 
+    public enum MovementType
+    {
+        NONE,
+        RIGHT,
+        LEFT,
+        UP,
+        DOWN
+    }
+
     public PiecePrefab[] piecePrefabs;
     private GameObject[,] pieces;
     protected Dictionary<PieceType, GameObject> piecePrefabDict;
     public GameObject backgroundPrefab;
+    public float pieceVelocity;
+    protected struct Movement
+    {
+        public MovementType type;
+        public float delta;
 
-    protected void buildBoard() 
+        public Movement(MovementType type = MovementType.NONE, float delta = 0)
+        {
+            this.type = type;
+            this.delta = delta;
+        }
+    }
+
+    private Movement movement = new Movement();
+
+    protected void BuildBoard() 
     {
         for (int i = 0; i < piecePrefabs.Length; i++)
         {
@@ -62,14 +85,79 @@ public abstract class Level : MonoBehaviour
             for (int y = 0; y < yDim; y++)
             {
                 if (board[x, y] == PieceType.EMPTY) continue;
-                pieces[x, y] = (GameObject)Instantiate(piecePrefabDict[board[x, y]], GetWorldPosition(y*90, ((xDim-1)-x)*90), Quaternion.identity, transform);
+                pieces[x, y] = (GameObject) Instantiate(piecePrefabDict[board[x, y]], GetWorldPosition(y*90, ((xDim-1)-x)*90), Quaternion.identity, transform);
                 pieces[x, y].name = "Piece(" + x + "," + y + ")";
             }
         }
+
+        Debug.Log(pieces);
     }
 
     Vector3 GetWorldPosition(int x, int y)
     {
         return new Vector3(transform.position.x + x, transform.position.y + y, 0);
+    }
+
+    private bool IsPiece(PieceType type)
+    {
+        return type == PieceType.PIECE_PURPLE || type == PieceType.PIECE_ORANGE || type == PieceType.PIECE_RED;
+    }
+
+    protected void Update()
+    {
+        if (this.movement.type != MovementType.NONE) 
+        {
+            float amount = this.pieceVelocity*Time.deltaTime;
+            if (amount > 90 - this.movement.delta)
+            {
+                amount = 90 - this.movement.delta;
+            }
+            for (int x = 0; x < xDim; x++)
+            {
+                for (int y = 0; y < yDim; y++)
+                {
+                    if (IsPiece(board[x, y]))
+                    {
+                        Vector3 position = pieces[x, y].transform.position;
+                        switch(this.movement.type) {
+                            case MovementType.DOWN:
+                                position.y -= amount;
+                                break;
+                            case MovementType.UP:
+                                position.y += amount;
+                                break;
+                            case MovementType.RIGHT:
+                                position.x += amount;
+                                break;
+                            case MovementType.LEFT:
+                                position.x -= amount;
+                                break;
+                            default:
+                                continue;
+                        }
+                        pieces[x, y].transform.position = position;
+                    }
+                }
+            }
+            this.movement.delta += amount;
+            if ((int) this.movement.delta >= 90)
+            {
+                this.movement.type = MovementType.NONE;
+                this.movement.delta = 0;
+            }
+        }
+        else 
+        {
+            if (Input.GetKeyDown(KeyCode.RightArrow)) {
+                this.movement.type = MovementType.RIGHT;
+            } else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+                this.movement.type = MovementType.LEFT;
+            } else if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                this.movement.type = MovementType.UP;
+            } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
+                this.movement.type = MovementType.DOWN;
+            }
+        }
+        
     }
 }

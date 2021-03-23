@@ -12,11 +12,6 @@ public class Level9 : Level
                                     {PieceType.BARRIER, PieceType.BARRIER, PieceType.EMPTY, PieceType.EMPTY, PieceType.BARRIER},
                                     {PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY, PieceType.PIECE_RED},
                                     {PieceType.EMPTY, PieceType.EMPTY, PieceType.PIECE_ORANGE, PieceType.TARGET_RED, PieceType.BARRIER}};
-        base.buildBoard();
-    }
-
-    void Update()
-    {
-        
+        base.BuildBoard();
     }
 }

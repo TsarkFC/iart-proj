@@ -11,11 +11,6 @@ public class Level2 : Level
                                     {PieceType.BARRIER, PieceType.PIECE_RED, PieceType.TARGET_ORANGE, PieceType.EMPTY},
                                     {PieceType.BARRIER, PieceType.EMPTY, PieceType.EMPTY, PieceType.BARRIER},
                                     {PieceType.EMPTY, PieceType.BARRIER, PieceType.BARRIER, PieceType.EMPTY}};
-        base.buildBoard();
-    }
-
-    void Update()
-    {
-        
+        base.BuildBoard();
     }
 }
