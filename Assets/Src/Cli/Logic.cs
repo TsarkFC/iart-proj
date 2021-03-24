@@ -9,7 +9,7 @@ namespace logic
 {
 
     // Class declaration 
-    class Logic
+    public class Logic
     {
         int xDim = 4;
         int yDim = 4;
@@ -19,83 +19,50 @@ namespace logic
                                         {" ", " ", "o", "pp"}};
 
         List<Piece> pieces = new List<Piece>();
-        List<Piece> pieces_copy = new List<Piece>();
         List<Piece> targets = new List<Piece>();
 
         PieceOrderer pieceOrderer = new PieceOrderer();
 
-        // Main Method 
-        static void Main(string[] args)
+        public Logic()
         {
-            Logic logic = new Logic();
-            logic.GameStart();
+            GameStart();
+        }
 
-            Console.WriteLine("PIECES: " + logic.pieces.Count.ToString());
-            Console.WriteLine("TARGETS: " + logic.targets.Count.ToString());
-
-            while (true)
-            {
-                logic.PrintBoard();
-                ConsoleKeyInfo keyInfo = Console.ReadKey();
-                if (keyInfo.Key == ConsoleKey.LeftArrow)
-                {
-                    Console.WriteLine("Move left");
-                    Console.WriteLine(logic.MoveLeft());
-                }
-                else if (keyInfo.Key == ConsoleKey.RightArrow)
-                {
-                    Console.WriteLine("Move right");
-                    Console.WriteLine(logic.MoveRight());
-                }
-                else if (keyInfo.Key == ConsoleKey.UpArrow)
-                {
-                    Console.WriteLine("Move up");
-                    Console.WriteLine(logic.MoveUp());
-                }
-                else if (keyInfo.Key == ConsoleKey.DownArrow)
-                {
-                    Console.WriteLine("Move down");
-                    Console.WriteLine(logic.MoveDown());
-                }
-                if (logic.VerifyEndGame()) break;
+        public Dictionary<Position, Position> Move(ConsoleKeyInfo keyInfo) 
+        {
+            switch(keyInfo.Key) {
+                case ConsoleKey.DownArrow:
+                    return Move(new Position(0, 1));
+                case ConsoleKey.UpArrow:
+                    return Move(new Position(0, -1));
+                case ConsoleKey.LeftArrow:
+                    return Move(new Position(-1, 0));
+                case ConsoleKey.RightArrow:
+                    return Move(new Position(1, 0));
+                default: 
+                    return null;
             }
         }
 
-        public bool MoveLeft()
-        {
-            return Move(new Position(-1, 0));
-        }
-
-        public bool MoveRight()
-        {
-            return Move(new Position(1, 0));
-        }
-
-        public bool MoveUp()
-        {
-            return Move(new Position(0, -1));
-        }
-
-        public bool MoveDown()
-        {
-            return Move(new Position(0, 1));
-        }
-
-        private bool Move(Position direction)
+        public Dictionary<Position, Position> Move(Position direction)
         {
             bool Moved = false;
 
             pieceOrderer.direction = direction;
             pieces.Sort(pieceOrderer);
 
+            Dictionary<Position, Position> prevNextPosition = new Dictionary<Position, Position>();
+
             foreach (Piece piece in pieces)
             {
                 Position nextPos = getNextPosition(direction, piece);
+                prevNextPosition.Add(piece.position, nextPos);
                 if (nextPos == null) continue;
                 Moved = true;
                 ApplyMove(nextPos, piece);
             }
-            return Moved;
+
+            return Moved == true ? prevNextPosition : null;
         }
 
         private Position getNextPosition(Position direction, Piece piece)
@@ -131,7 +98,7 @@ namespace logic
             piece.position = nextPos;
         }
 
-        private void PrintBoard()
+        public void PrintBoard()
         {
             int rowLength = board.GetLength(0);
             int colLength = board.GetLength(1);
@@ -146,14 +113,22 @@ namespace logic
             }
         }
 
-        private bool VerifyEndGame()
+        public bool VerifyEndGame()
         {
             int size = pieces.Count;
-            for (int i = 0; i < size; i++)
+            int correct = 0;
+
+            foreach (Piece target in targets)
             {
-                if (!pieces_copy[i].position.Equals(targets[i].position)) return false;
+                foreach(Piece piece in pieces) 
+                {
+                    if (target.position.Equals(piece.position) && target.symbol[1] == piece.symbol[1])
+                    {
+                        correct++;
+                    }
+                }
             }
-            return true;
+            return correct == size;
         }
 
         private bool replaceTargets(Piece piece)
@@ -169,15 +144,21 @@ namespace logic
 
         private void GameStart()
         {
-            Piece p1 = new Piece("pp", new Position(3, 3));
-            Piece p2 = new Piece("pr", new Position(1, 2));
-
-            pieces.Add(p1);
-            pieces.Add(p2);
-            pieces_copy.Add(p1);
-            pieces_copy.Add(p2);
-            targets.Add(new Piece("tp", new Position(3, 0)));
-            targets.Add(new Piece("tr", new Position(3, 2)));
+            for (int y = 0; y < yDim; y++)
+            {
+                for (int x = 0; x < xDim; x++)
+                {
+                    if (board[y, x] == "pp" || board[y, x] == "pr" || board[y, x] == "po")
+                    {
+                        Piece piece = new Piece(board[y, x], new Position(x, y));
+                        pieces.Add(piece);
+                    } 
+                    else if (board[y, x] == "tp" || board[y, x] == "tr" || board[y, x] == "to")
+                    {
+                        targets.Add(new Piece(board[y, x], new Position(x, y)));
+                    }
+                }
+            }
         }
     }
 }

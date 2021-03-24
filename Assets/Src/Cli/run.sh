@@ -1,2 +1,2 @@
-mcs -out:Logic.exe Logic.cs ../GameLogic/Piece.cs ../GameLogic/Position.cs ../GameLogic/PieceOrderer.cs
-mono Logic.exe
+mcs -out:Game.exe Game.cs Logic.cs ../GameLogic/Piece.cs ../GameLogic/Position.cs ../GameLogic/PieceOrderer.cs Robot.cs
+mono Game.exe
