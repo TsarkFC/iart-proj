@@ -74,14 +74,28 @@ public abstract class Level : MonoBehaviour
         {
             for (int x = 0; x < xDim; x++)
             {
-                if (board[y, x] == PieceType.EMPTY) continue;
-                pieces[y, x] = (GameObject) Instantiate(piecePrefabDict[board[y, x]], GetWorldPosition(x*90, ((yDim-1)-y)*90), Quaternion.identity, transform);
-                piecesMovement.Add(pieces[y, x], new Movement(new Position(x, y)));
-                pieces[y, x].name = "Piece(" + x + "," + y + ")";
+                if (board[y, x] == PieceType.EMPTY || IsPiece(board[y, x])) continue;
+                InstantiateEntity(x, y, false);
+            }
+        }
+
+        for (int y = 0; y < yDim; y++)
+        {
+            for (int x = 0; x < xDim; x++)
+            {
+                if (!IsPiece(board[y, x])) continue;
+                InstantiateEntity(x, y, true);
             }
         }
 
         Debug.Log(pieces);
+    }
+
+    private void InstantiateEntity(int x, int y, bool isPiece)
+    {
+        pieces[y, x] = (GameObject) Instantiate(piecePrefabDict[board[y, x]], GetWorldPosition(x*90, ((yDim-1)-y)*90), Quaternion.identity, transform);
+        pieces[y, x].name = "Piece(" + x + "," + y + ")";
+        if (isPiece) piecesMovement.Add(pieces[y, x], new Movement(new Position(x, y)));
     }
 
     Vector3 GetWorldPosition(int x, int y)
