@@ -14,13 +14,6 @@ namespace game
         private Logic logic;
         private Robot robot;
         private State state;
-        // Main Method 
-        static void Main(string[] args)
-        {
-            Game game = new Game();
-            //game.RunGame();
-            game.RunAI();
-        }
 
         public Game()
         {
@@ -29,7 +22,7 @@ namespace game
             this.robot = new Robot(this.logic);
         }
 
-        private void RunGame()
+        public void RunGame()
         {
             while (true)
             {
@@ -39,7 +32,7 @@ namespace game
             }
         }
         
-        private void RunAI()
+        public void RunAI()
         {
             robot.Run();
         }
