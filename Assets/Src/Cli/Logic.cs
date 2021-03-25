@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using piece;
 using position;
 using piece_orderer;
+using state;
 
 // namespace declaration 
 namespace logic
@@ -11,21 +12,12 @@ namespace logic
     // Class declaration 
     public class Logic
     {
-        int xDim = 4;
-        int yDim = 4;
-        String[,] board = new String[,] {{"o", " ", " ", "tp"},
-                                        {"o", " ", " ", "o"},
-                                        {" ", "pr", " ", "tr"},
-                                        {" ", " ", "o", "pp"}};
-
-        List<Piece> pieces = new List<Piece>();
-        List<Piece> targets = new List<Piece>();
-
+        public State state { get; set; }
         PieceOrderer pieceOrderer = new PieceOrderer();
 
-        public Logic()
+        public Logic(State state)
         {
-            GameStart();
+            this.state = state;
         }
 
         public Dictionary<Position, Position> Move(ConsoleKeyInfo keyInfo) 
@@ -49,11 +41,11 @@ namespace logic
             bool Moved = false;
 
             pieceOrderer.direction = direction;
-            pieces.Sort(pieceOrderer);
+            state.pieces.Sort(pieceOrderer);
 
             Dictionary<Position, Position> prevNextPosition = new Dictionary<Position, Position>();
 
-            foreach (Piece piece in pieces)
+            foreach (Piece piece in state.pieces)
             {
                 Position nextPos = getNextPosition(direction, piece);
                 prevNextPosition.Add(piece.position, nextPos);
@@ -74,7 +66,7 @@ namespace logic
                 temp = nextPos + direction;
 
                 if (!InBounds(temp)) break;
-                if (board[temp.y, temp.x] != " " && board[temp.y, temp.x][0] != 't')
+                if (state.board[temp.y, temp.x] != " " && state.board[temp.y, temp.x][0] != 't')
                     break;
 
                 nextPos += direction;
@@ -85,42 +77,27 @@ namespace logic
 
         private bool InBounds(Position position)
         {
-            if (position.x >= xDim || position.x < 0) return false;
-            if (position.y >= yDim || position.y < 0) return false;
+            if (position.x >= state.xDim || position.x < 0) return false;
+            if (position.y >= state.yDim || position.y < 0) return false;
             return true;
         }
 
         private void ApplyMove(Position nextPos, Piece piece)
         {
-            board[nextPos.y, nextPos.x] = piece.symbol;
+            state.board[nextPos.y, nextPos.x] = piece.symbol;
             if (!replaceTargets(piece))
-                board[piece.position.y, piece.position.x] = " ";
+                state.board[piece.position.y, piece.position.x] = " ";
             piece.position = nextPos;
-        }
-
-        public void PrintBoard()
-        {
-            int rowLength = board.GetLength(0);
-            int colLength = board.GetLength(1);
-
-            for (int row = 0; row < rowLength; row++)
-            {
-                for (int col = 0; col < colLength; col++)
-                {
-                    Console.Write(String.Format("|{0}\t|", board[row,col]));
-                }
-                Console.WriteLine();
-            }
         }
 
         public bool VerifyEndGame()
         {
-            int size = pieces.Count;
+            int size = state.pieces.Count;
             int correct = 0;
 
-            foreach (Piece target in targets)
+            foreach (Piece target in state.targets)
             {
-                foreach(Piece piece in pieces) 
+                foreach(Piece piece in state.pieces) 
                 {
                     if (target.position.Equals(piece.position) && target.symbol[1] == piece.symbol[1])
                     {
@@ -133,32 +110,13 @@ namespace logic
 
         private bool replaceTargets(Piece piece)
         {
-            foreach (Piece target in targets)
+            foreach (Piece target in state.targets)
                 if (target.position.Equals(piece.position))
                 {
-                    board[piece.position.y, piece.position.x] = target.symbol;
+                    state.board[piece.position.y, piece.position.x] = target.symbol;
                     return true;
                 }
             return false;
-        }
-
-        private void GameStart()
-        {
-            for (int y = 0; y < yDim; y++)
-            {
-                for (int x = 0; x < xDim; x++)
-                {
-                    if (board[y, x] == "pp" || board[y, x] == "pr" || board[y, x] == "po")
-                    {
-                        Piece piece = new Piece(board[y, x], new Position(x, y));
-                        pieces.Add(piece);
-                    } 
-                    else if (board[y, x] == "tp" || board[y, x] == "tr" || board[y, x] == "to")
-                    {
-                        targets.Add(new Piece(board[y, x], new Position(x, y)));
-                    }
-                }
-            }
         }
     }
 }

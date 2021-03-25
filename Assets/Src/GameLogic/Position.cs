@@ -2,6 +2,7 @@ using System;
 
 namespace position
 {
+    [Serializable]
     public class Position
     {
         public int x { get; set; }

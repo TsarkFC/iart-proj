@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using logic;
 using robot;
+using state;
 
 // namespace declaration 
 namespace game
@@ -11,26 +12,28 @@ namespace game
     public class Game
     {
         private Logic logic;
-        //private Robot robot;
+        private Robot robot;
+        private State state;
         // Main Method 
         static void Main(string[] args)
         {
             Game game = new Game();
-            game.RunGame();
-            //game.RunAI();
+            //game.RunGame();
+            game.RunAI();
         }
 
         public Game()
         {
-            this.logic = new Logic();
-            //this.robot = new Robot(this.logic);
+            this.state = new State();
+            this.logic = new Logic(this.state);
+            this.robot = new Robot(this.logic);
         }
 
         private void RunGame()
         {
             while (true)
             {
-                logic.PrintBoard();
+                state.PrintBoard();
                 logic.Move(Console.ReadKey());
                 if (logic.VerifyEndGame()) break;
             }
@@ -38,13 +41,7 @@ namespace game
         
         private void RunAI()
         {
-            // obter moves
-            // Move[] moves = robot.FindMoves(this.board, this.xDim, this.yDim);
-
-            // foreach(Move move in moves)
-            // {
-            //     logic.Move(move);
-            // }
+            robot.Run();
         }
     }
 }
