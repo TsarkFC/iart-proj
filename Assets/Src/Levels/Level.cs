@@ -18,12 +18,6 @@ public abstract class Level : MonoBehaviour
         public GameObject prefab;
     }
 
-    protected enum Mode
-    {
-        AI,
-        HUMAN
-    }
-
     /* Controllable in Unity */
     public int xDim;
     public int yDim;
@@ -34,7 +28,6 @@ public abstract class Level : MonoBehaviour
 
     protected PieceType[,] board;
     protected Dictionary<PieceType, GameObject> piecePrefabDict;
-    protected Mode levelMode = Mode.AI;
     private GameObject[,] pieces;
 
     private Dictionary<GameObject, Movement> piecesMovement = new Dictionary<GameObject, Movement>();  // each piece's movement
@@ -50,7 +43,7 @@ public abstract class Level : MonoBehaviour
     protected void BuildBoard() 
     {
         this.logic = new Logic(new State(board, xDim, yDim));
-        if (this.levelMode == Mode.AI) {
+        if (GameMode.mode == GameMode.Mode.AI) {
             this.robot = new Robot(new Logic(new State(board, xDim, yDim)));
             this.robot.InitStepByStep(this.robot.BFS());
         }
@@ -170,7 +163,7 @@ public abstract class Level : MonoBehaviour
         else  // if not moving
         {
             Movement.MovementType movementType = Movement.MovementType.NONE;
-            if (this.levelMode == Mode.HUMAN) {
+            if (GameMode.mode == GameMode.Mode.HUMAN) {
                 if (Input.GetKeyDown(KeyCode.RightArrow)) {
                     movementType = Movement.MovementType.RIGHT;
                 } else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
@@ -180,7 +173,7 @@ public abstract class Level : MonoBehaviour
                 } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
                     movementType = Movement.MovementType.DOWN;
                 }
-            } else if (this.levelMode == Mode.AI) {
+            } else if (GameMode.mode == GameMode.Mode.AI) {
                 movementType = this.robot.GetNextStep();
                 Debug.Log("Next step: " + movementType);
             }

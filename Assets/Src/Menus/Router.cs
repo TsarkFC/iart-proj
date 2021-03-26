@@ -19,6 +19,13 @@ public class Router : MonoBehaviour
 
     public void playSinglePlayer(int lvlIndex)
     {
+        GameMode.mode = GameMode.Mode.HUMAN;
+        SceneManager.LoadScene(lvlIndex);
+    }
+
+    public void playAI(int lvlIndex)
+    {
+        GameMode.mode = GameMode.Mode.AI;
         SceneManager.LoadScene(lvlIndex);
     }
 }
