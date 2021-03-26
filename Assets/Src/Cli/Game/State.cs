@@ -15,19 +15,63 @@ namespace state
         public int xDim { get; }
         public int yDim { get; }
         public String[,] board;
-        public List<Piece> pieces;
-        public List<Piece> targets;
+        public List<Piece> pieces = new List<Piece>();
+        public List<Piece> targets = new List<Piece>();
 
         public State()
         {
-            pieces = new List<Piece>();
-            targets = new List<Piece>();
             xDim = 4;
             yDim = 4;
             this.board = new String[,] {{"o", " ", " ", "tp"},
                                         {"o", " ", " ", "o"},
                                         {" ", "pr", " ", "tr"},
                                         {" ", " ", "o", "pp"}};
+            GameStart();
+        }
+
+        public State(Level.PieceType[,] board, int xDim, int yDim)
+        {
+            this.xDim = xDim;
+            this.yDim = yDim;
+            this.board = new String[ xDim, yDim ];
+            
+
+            for (int y = 0; y < yDim; y++)
+            {
+                for (int x = 0; x < xDim; x++)
+                {
+                    switch(board[y, x]) 
+                    {
+                        case Level.PieceType.PIECE_PURPLE:
+                            this.board[y, x] = "pp";
+                            break;
+                        case Level.PieceType.PIECE_ORANGE:
+                            this.board[y, x] = "po";
+                            break;
+                        case Level.PieceType.PIECE_RED:
+                            this.board[y, x] = "pr";
+                            break;
+                        case Level.PieceType.TARGET_PURPLE:
+                            this.board[y, x] = "tp";
+                            break;
+                        case Level.PieceType.TARGET_ORANGE:
+                            this.board[y, x] = "to";
+                            break;
+                        case Level.PieceType.TARGET_RED:
+                            this.board[y, x] = "tr";
+                            break;
+                        case Level.PieceType.BARRIER:
+                            this.board[y, x] = "o";
+                            break;
+                        case Level.PieceType.EMPTY:
+                            this.board[y, x] = " ";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
             GameStart();
         }
 
@@ -39,8 +83,7 @@ namespace state
                 {
                     if (board[y, x] == "pp" || board[y, x] == "pr" || board[y, x] == "po")
                     {
-                        Piece piece = new Piece(board[y, x], new Position(x, y));
-                        pieces.Add(piece);
+                        pieces.Add(new Piece(board[y, x], new Position(x, y)));
                     }
                     else if (board[y, x] == "tp" || board[y, x] == "tr" || board[y, x] == "to")
                     {

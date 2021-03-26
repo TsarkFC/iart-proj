@@ -36,6 +36,21 @@ namespace logic
             }
         }
 
+        public Dictionary<Position, Position> Move(Movement.MovementType type) {
+            switch(type) {
+                case Movement.MovementType.DOWN:
+                    return Move(new Position(0, 1));
+                case Movement.MovementType.UP:
+                    return Move(new Position(0, -1));
+                case Movement.MovementType.LEFT:
+                    return Move(new Position(-1, 0));
+                case Movement.MovementType.RIGHT:
+                    return Move(new Position(1, 0));
+                default: 
+                    return null;
+            }
+        }
+
         public Dictionary<Position, Position> Move(Position direction)
         {
             bool Moved = false;

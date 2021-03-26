@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using position;
+using logic;
+using state;
 
 public abstract class Level : MonoBehaviour
 {
@@ -30,22 +32,21 @@ public abstract class Level : MonoBehaviour
     public int yDim;
     public PiecePrefab[] piecePrefabs;
     public GameObject backgroundPrefab;
-    public float pieceVelocity;
+    public float pieceVelocity = 500;
 
 
     protected PieceType[,] board;
     protected Dictionary<PieceType, GameObject> piecePrefabDict;
-
     private GameObject[,] pieces;
 
     private Dictionary<GameObject, Movement> piecesMovement = new Dictionary<GameObject, Movement>();  // each piece's movement
     private bool moving = false;  // is any piece moving?
 
-    private GameLogic logic;
+    private Logic logic;
 
     protected void BuildBoard() 
     {
-        this.logic = new GameLogic(board, xDim, yDim);
+        this.logic = new Logic(new State(board, xDim, yDim));
 
         // correspondance between PieceType and prefabs
         for (int i = 0; i < piecePrefabs.Length; i++)
