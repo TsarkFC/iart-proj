@@ -15,27 +15,39 @@ namespace node
         private Position direction;
         public State state { get; }
         private Logic logic;
-        static private List<Position> directions = new List<Position>();
+        public Movement.MovementType movement { get; }
+        public class Direction {
+            public Position direction { get; }
+            public Movement.MovementType movement { get; }
 
-        public Node(Node parent, Position direction, State state, Logic logic)
+            public Direction(Position direction, Movement.MovementType movement)
+            {
+                this.direction = direction;
+                this.movement = movement;
+            }
+        }
+        static private List<Direction> directions = new List<Direction>();
+
+        public Node(Node parent, Direction direction, State state, Logic logic)
         {
             this.parent = parent;
-            this.direction = direction;
+            this.direction = direction != null ? direction.direction : null;
             this.state = state;
             this.logic = logic;
+            this.movement = direction != null ? direction.movement : Movement.MovementType.NONE;
 
             if (directions.Count == 0)
             {
-                directions.Add(new Position(-1, 0));
-                directions.Add(new Position(1, 0));
-                directions.Add(new Position(0, -1));
-                directions.Add(new Position(0, 1));
+                directions.Add(new Direction(new Position(-1, 0), Movement.MovementType.LEFT));
+                directions.Add(new Direction(new Position(1, 0), Movement.MovementType.RIGHT));
+                directions.Add(new Direction(new Position(0, -1), Movement.MovementType.UP));
+                directions.Add(new Direction(new Position(0, 1), Movement.MovementType.DOWN));
             }
         }
 
-        private Node CreateNode(Position direction)
+        private Node CreateNode(Direction direction)
         {
-            if (logic.Move(direction) == null) return null;
+            if (logic.Move(direction.direction) == null) return null;
             return new Node(this, direction, logic.state, this.logic);
         }
 
@@ -43,19 +55,19 @@ namespace node
         {
             List<Node> children = new List<Node>();
 
-            foreach (Position direction in directions)
+            foreach (Direction direction in directions)
             {
                 // verify if moving directions are opposite
                 if (parent != null && this.direction != null)
                 {
-                    Position add = this.direction + direction;
+                    Position add = this.direction + direction.direction;
                     if (add.Equals(new Position(0, 0))) continue;
                 }
 
                 // create new node and update logic state
                 Node child = CreateNode(direction);
                 if (child != null) children.Add(child);
-                logic.state = Cloner.DeepClone(this.state);
+                logic.state = Cloner.DeepClone(this.state);  // ??
             }
             return children;
         }

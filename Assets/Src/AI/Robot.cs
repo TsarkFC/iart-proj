@@ -13,6 +13,7 @@ namespace robot
     public class Robot
     {
         private Logic logic;
+        private List<Node> path = null;
 
         public Robot(Logic logic)
         {
@@ -25,7 +26,28 @@ namespace robot
             PrintSearchPath(path);
         }
 
-        private List<Node> BFS(Node root)
+        public void InitStepByStep(List<Node> path)
+        {
+            this.path = path;
+        }
+
+        public Movement.MovementType GetNextStep()
+        {
+            if (this.path == null) return Movement.MovementType.NONE;
+            Node ret = this.path[0];
+            this.path.Remove(ret);
+
+            if (this.path.Count == 0) this.path = null;
+
+            return ret.movement;
+        }
+
+        public List<Node> BFS()
+        {
+            return BFS(new Node(null, null, Cloner.DeepClone(logic.state), logic));
+        }
+
+        public List<Node> BFS(Node root)
         {
             List<Node> visited = new List<Node>();
             Queue<Node> queue = new Queue<Node>();
@@ -35,7 +57,7 @@ namespace robot
             while (queue.Count != 0)
             {
                 current = queue.Dequeue();
-                logic.state = Cloner.DeepClone(current.state);
+                logic.state = Cloner.DeepClone(current.state);  // ??
                 if (logic.VerifyEndGame())
                 {
                     return GetNodePath(current);

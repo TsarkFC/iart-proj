@@ -6,6 +6,8 @@ using position;
 using logic;
 using state;
 using piecetype;
+using robot;
+using cloner;
 
 public abstract class Level : MonoBehaviour
 {
@@ -14,6 +16,12 @@ public abstract class Level : MonoBehaviour
     {
         public PieceType type;
         public GameObject prefab;
+    }
+
+    protected enum Mode
+    {
+        AI,
+        HUMAN
     }
 
     /* Controllable in Unity */
@@ -26,16 +34,27 @@ public abstract class Level : MonoBehaviour
 
     protected PieceType[,] board;
     protected Dictionary<PieceType, GameObject> piecePrefabDict;
+    protected Mode levelMode = Mode.AI;
     private GameObject[,] pieces;
 
     private Dictionary<GameObject, Movement> piecesMovement = new Dictionary<GameObject, Movement>();  // each piece's movement
     private bool moving = false;  // is any piece moving?
 
     private Logic logic;
+    private Robot robot;
+
+    // public Level(Mode mode) {
+    //     this.levelMode = mode;
+    // }
 
     protected void BuildBoard() 
     {
         this.logic = new Logic(new State(board, xDim, yDim));
+        if (this.levelMode == Mode.AI) {
+            this.robot = new Robot(new Logic(new State(board, xDim, yDim)));
+            this.robot.InitStepByStep(this.robot.BFS());
+        }
+        else this.robot = null;
 
         // correspondance between PieceType and prefabs
         for (int i = 0; i < piecePrefabs.Length; i++)
@@ -151,14 +170,19 @@ public abstract class Level : MonoBehaviour
         else  // if not moving
         {
             Movement.MovementType movementType = Movement.MovementType.NONE;
-            if (Input.GetKeyDown(KeyCode.RightArrow)) {
-                movementType = Movement.MovementType.RIGHT;
-            } else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
-                movementType = Movement.MovementType.LEFT;
-            } else if (Input.GetKeyDown(KeyCode.UpArrow)) {
-                movementType = Movement.MovementType.UP;
-            } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
-                movementType = Movement.MovementType.DOWN;
+            if (this.levelMode == Mode.HUMAN) {
+                if (Input.GetKeyDown(KeyCode.RightArrow)) {
+                    movementType = Movement.MovementType.RIGHT;
+                } else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+                    movementType = Movement.MovementType.LEFT;
+                } else if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                    movementType = Movement.MovementType.UP;
+                } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
+                    movementType = Movement.MovementType.DOWN;
+                }
+            } else if (this.levelMode == Mode.AI) {
+                movementType = this.robot.GetNextStep();
+                Debug.Log("Next step: " + movementType);
             }
 
 
