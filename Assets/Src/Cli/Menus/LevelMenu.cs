@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using mainmenu;
 using menu;
 using game;
+using levels;
 
 namespace levelmenu
 {
     public class LevelMenu : Menu
     {
-        Menu redirect;
+        //Menu redirect;
         public LevelMenu(Menu redirect)
         {
-            this.redirect = redirect;
+            //this.redirect = redirect;
 
             List<string> options = new List<string>();
             options.Add("[1] Level 1");
@@ -29,34 +30,43 @@ namespace levelmenu
 
         public override Menu ProcessInput(ConsoleKeyInfo keyInfo)
         {
-            Game game = new Game();
+            Game game;
             switch (keyInfo.Key)
             {
                 case ConsoleKey.D1:
+                    game = new Game(Levels.level1);
                     game.RunGame();
                     break;
                 case ConsoleKey.D2:
+                    game = new Game(Levels.level2);
                     game.RunGame();
                     break;
                 case ConsoleKey.D3:
+                    game = new Game(Levels.level3);
                     game.RunGame();
                     break;
                 case ConsoleKey.D4:
+                    game = new Game(Levels.level4);
                     game.RunGame();
                     break;
                 case ConsoleKey.D5:
+                    game = new Game(Levels.level5);
                     game.RunGame();
                     break;
                 case ConsoleKey.D6:
+                    game = new Game(Levels.level6);
                     game.RunGame();
                     break;
                 case ConsoleKey.D7:
+                    game = new Game(Levels.level7);
                     game.RunGame();
                     break;
                 case ConsoleKey.D8:
+                    game = new Game(Levels.level8);
                     game.RunGame();
                     break;
                 case ConsoleKey.D9:
+                    game = new Game(Levels.level9);
                     game.RunGame();
                     break;
                 case ConsoleKey.D0:

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using game;
 using menu;
+using levels;
+using mainmenu;
 
 namespace aimenu
 {
@@ -21,7 +23,7 @@ namespace aimenu
 
         public override Menu ProcessInput(ConsoleKeyInfo keyInfo)
         {
-            Game game = new Game();
+            Game game = new Game(Levels.level1);
 
             switch (keyInfo.Key)
             {
@@ -41,8 +43,7 @@ namespace aimenu
                     game.RunAI();
                     break;
                 case ConsoleKey.D0:
-                    game.RunAI();
-                    break;
+                    return new MainMenu();
                 default:
                     Console.WriteLine("ERROR: Only numeric keys!");
                     return this;

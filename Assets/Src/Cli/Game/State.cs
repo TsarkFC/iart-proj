@@ -4,6 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using piece;
 using position;
+using piecetype;
 
 // namespace declaration 
 namespace state
@@ -18,18 +19,7 @@ namespace state
         public List<Piece> pieces = new List<Piece>();
         public List<Piece> targets = new List<Piece>();
 
-        public State()
-        {
-            xDim = 4;
-            yDim = 4;
-            this.board = new String[,] {{"o", " ", " ", "tp"},
-                                        {"o", " ", " ", "o"},
-                                        {" ", "pr", " ", "tr"},
-                                        {" ", " ", "o", "pp"}};
-            GameStart();
-        }
-
-        public State(Level.PieceType[,] board, int xDim, int yDim)
+        public State(PieceType[,] board, int xDim, int yDim)
         {
             this.xDim = xDim;
             this.yDim = yDim;
@@ -42,28 +32,28 @@ namespace state
                 {
                     switch(board[y, x]) 
                     {
-                        case Level.PieceType.PIECE_PURPLE:
+                        case PieceType.PIECE_PURPLE:
                             this.board[y, x] = "pp";
                             break;
-                        case Level.PieceType.PIECE_ORANGE:
+                        case PieceType.PIECE_ORANGE:
                             this.board[y, x] = "po";
                             break;
-                        case Level.PieceType.PIECE_RED:
+                        case PieceType.PIECE_RED:
                             this.board[y, x] = "pr";
                             break;
-                        case Level.PieceType.TARGET_PURPLE:
+                        case PieceType.TARGET_PURPLE:
                             this.board[y, x] = "tp";
                             break;
-                        case Level.PieceType.TARGET_ORANGE:
+                        case PieceType.TARGET_ORANGE:
                             this.board[y, x] = "to";
                             break;
-                        case Level.PieceType.TARGET_RED:
+                        case PieceType.TARGET_RED:
                             this.board[y, x] = "tr";
                             break;
-                        case Level.PieceType.BARRIER:
+                        case PieceType.BARRIER:
                             this.board[y, x] = "o";
                             break;
-                        case Level.PieceType.EMPTY:
+                        case PieceType.EMPTY:
                             this.board[y, x] = " ";
                             break;
                         default:

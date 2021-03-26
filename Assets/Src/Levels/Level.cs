@@ -5,21 +5,10 @@ using UnityEngine;
 using position;
 using logic;
 using state;
+using piecetype;
 
 public abstract class Level : MonoBehaviour
 {
-    public enum PieceType
-    {
-        PIECE_PURPLE,
-        TARGET_PURPLE,
-        PIECE_ORANGE,
-        TARGET_ORANGE,
-        PIECE_RED,
-        TARGET_RED,
-        BARRIER,
-        EMPTY
-    }
-
     [System.Serializable]
     public struct PiecePrefab
     {

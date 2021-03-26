@@ -1,16 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using piecetype;
+using levels;
 
 public class Level3 : Level
 {
     void Start()
     {
         base.piecePrefabDict = new Dictionary<PieceType, GameObject>();
-        base.board = new PieceType[,] {{PieceType.BARRIER, PieceType.EMPTY, PieceType.EMPTY, PieceType.TARGET_PURPLE},
-                                    {PieceType.BARRIER, PieceType.EMPTY, PieceType.EMPTY, PieceType.BARRIER},
-                                    {PieceType.EMPTY, PieceType.PIECE_RED, PieceType.EMPTY, PieceType.TARGET_RED},
-                                    {PieceType.EMPTY, PieceType.EMPTY, PieceType.BARRIER, PieceType.PIECE_PURPLE}};
+        base.board = Levels.level3;
         base.BuildBoard();
     }
 }
