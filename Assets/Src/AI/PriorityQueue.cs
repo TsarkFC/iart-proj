@@ -134,13 +134,6 @@ namespace datastructures
             }
         }
 
-        // public PriorityQueue(T initialData, int initialPriority)  // the larger function receives the two data args and returns true if the first is larger than the second
-        // {
-        //     this.root = new HeapNode<T>(null, initialData, initialPriority);
-        //     this.bottom = this.root;
-        //     this.lastNode = this.root;
-        // }
-
         private void Swap(HeapNode<T> parent, HeapNode<T> child)
         {
             if (parent == this.root) this.root = child;
@@ -177,10 +170,6 @@ namespace datastructures
         {
             if (this.IsEmpty()) throw new System.Exception("[PriorityQueue] Tried popping while empty.");
             T res = this.root.GetData();
-
-            // TODO fix this
-
-            // need to do this with more attention
 
             // Console.WriteLine("The last node is " + this.lastNode);
 
@@ -347,10 +336,7 @@ namespace datastructures
 
         public void CheckValidity()
         {
-            if (!this.IsEmpty())
-            {
-                CheckNodeValidity(this.root);
-            }
+            if (!this.IsEmpty()) CheckNodeValidity(this.root);
 
             Console.WriteLine("PQ is valid!");
         }
@@ -373,6 +359,7 @@ namespace datastructures
             return this.root == null ? "The priority queue is empty\n" : dumpNode(this.root, 0);
         }
     }
+
     public class Test
     {
         static void Main(string[] args)
@@ -387,8 +374,8 @@ namespace datastructures
             {
                 if (!pq.IsEmpty() && rnd.Next(0, 10) < 5)
                 {
-                    int res = pq.Pop();
-                    if (res != insertedNumbers.Max()) throw new System.Exception("The value that was popped out of the priority queue is not the max! Value: " + res + ", max: " + insertedNumbers.Max());
+                    int res = pq.Pop(), realMax = insertedNumbers.Max();
+                    if (res != realMax) throw new System.Exception("The value that was popped out of the priority queue is not the max! Value: " + res + ", max: " + realMax);
                     insertedNumbers.Remove(res);
 
                     Console.WriteLine("\nPopped: " + res);
