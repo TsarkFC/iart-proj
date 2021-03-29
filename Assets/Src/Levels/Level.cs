@@ -175,7 +175,6 @@ public abstract class Level : MonoBehaviour
                 }
             } else if (GameMode.mode == GameMode.Mode.AI) {
                 movementType = this.robot.GetNextStep();
-                Debug.Log("Next step: " + movementType);
             }
 
 
