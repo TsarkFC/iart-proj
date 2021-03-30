@@ -88,6 +88,7 @@ namespace state
             int rowLength = board.GetLength(0);
             int colLength = board.GetLength(1);
 
+            Console.WriteLine();
             for (int row = 0; row < rowLength; row++)
             {
                 for (int col = 0; col < colLength; col++)

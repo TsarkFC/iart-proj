@@ -4,6 +4,7 @@ using logic;
 using state;
 using position;
 using cloner;
+using direction;
 
 // namespace declaration 
 namespace node
@@ -16,17 +17,17 @@ namespace node
         public State state { get; }
         private Logic logic;
         public Movement.MovementType movement { get; }
-        public class Direction {
-            public Position direction { get; }
-            public Movement.MovementType movement { get; }
+        // public class Direction {
+        //     public Position direction { get; }
+        //     public Movement.MovementType movement { get; }
 
-            public Direction(Position direction, Movement.MovementType movement)
-            {
-                this.direction = direction;
-                this.movement = movement;
-            }
-        }
-        static private List<Direction> directions = new List<Direction>();
+        //     public Direction(Position direction, Movement.MovementType movement)
+        //     {
+        //         this.direction = direction;
+        //         this.movement = movement;
+        //     }
+        // }
+        static public List<Direction> directions = new List<Direction>();
 
         public Node(Node parent, Direction direction, State state, Logic logic)
         {
@@ -51,7 +52,7 @@ namespace node
             return new Node(this, direction, logic.state, this.logic);
         }
 
-        public List<Node> Expand()
+        public List<Node> Expand(bool includeNulls)
         {
             List<Node> children = new List<Node>();
 
@@ -66,7 +67,7 @@ namespace node
 
                 // create new node and update logic state
                 Node child = CreateNode(direction);
-                if (child != null) children.Add(child);
+                if (child != null || includeNulls) children.Add(child);
                 logic.state = Cloner.DeepClone(this.state);  // ??
             }
             return children;

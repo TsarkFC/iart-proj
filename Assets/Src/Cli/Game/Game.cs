@@ -4,6 +4,8 @@ using logic;
 using robot;
 using state;
 using piecetype;
+using node;
+using direction;
 
 // namespace declaration 
 namespace game
@@ -27,7 +29,19 @@ namespace game
             while (true)
             {
                 state.PrintBoard();
-                logic.Move(Console.ReadKey());
+                ConsoleKeyInfo keyInfo = Console.ReadKey();
+                if (keyInfo.Key == ConsoleKey.H) {
+                    Direction hintDirection = robot.Hint();
+                    Console.WriteLine(" [HINT] " + hintDirection.movement);
+                    state = logic.state;
+                }
+                else if (keyInfo.Key == ConsoleKey.Q) {
+                    Console.WriteLine(" [QUIT] ");
+                    break;
+                }
+                else {
+                    logic.Move(keyInfo);
+                }
                 if (logic.VerifyEndGame()) break;
             }
         }
