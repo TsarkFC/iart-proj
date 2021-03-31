@@ -7,6 +7,8 @@ using cloner;
 using node;
 using piece;
 using direction;
+using datastructures;
+using heuristic;
 
 // namespace declaration 
 namespace robot
@@ -68,7 +70,7 @@ namespace robot
 
         public List<Node> BFS()
         {
-            return BFS(new Node(null, null, Cloner.DeepClone(logic.state), logic));
+            return BFS(new Node(null, null, Cloner.DeepClone(logic.state), logic, 0));
         }
 
         public List<Node> BFS(Node root)
@@ -97,6 +99,38 @@ namespace robot
             }
             return GetNodePath(current);
         }
+
+        public List<Node> InformedSearch(PriorityQueue<Node>.PQType pQType, Func<Node, int> heuristic)
+        {
+            List<Node> visited = new List<Node>();
+            PriorityQueue<Node> queue = new PriorityQueue<Node>(pQType);
+            Node current = null;
+            Node root = new Node(null, null, Cloner.DeepClone(logic.state), logic, 0);
+            queue.Insert(root, heuristic(root));
+
+            while (!queue.IsEmpty())
+            {
+                current = queue.Pop();
+                logic.state = Cloner.DeepClone(current.state);  // ??
+                if (logic.VerifyEndGame())
+                {
+                    return GetNodePath(current);
+                }
+
+                List<Node> children = current.Expand(false);
+                foreach (Node node in children)
+                    if (!visited.Contains(node))
+                    {
+                        queue.Insert(node, heuristic(node));
+                        visited.Add(node);
+                    }
+            }
+            return null;
+        }
+
+        public List<Node> GreedyManhattan() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.GreedyManhattanDistance);
+
+        public List<Node> AStarManhattan() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.AStarManhattanDistance);
 
         private List<Node> GetNodePath(Node node)
         {

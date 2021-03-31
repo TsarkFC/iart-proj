@@ -31,25 +31,6 @@ namespace datastructures
             if (!this.children.Remove(child)) throw new System.Exception("[PriorityQueue] Could not remove child from node.");
         }
 
-        public Boolean HasLargerChild()
-        {
-            foreach(HeapNode<T> child in children)
-            {
-                if (child.GetPriority() > this.GetPriority())
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public HeapNode<T> GetLargestChild()
-        {
-            if (children.Count == 0) return null;
-            else if (children.Count == 1) return children[0];
-            else return children[0].GetPriority() > children[1].GetPriority() ? children[0] : children[1];
-        }
-
         public int GetPriority()
         {
             return this.priority;
@@ -110,6 +91,12 @@ namespace datastructures
     public class PriorityQueue<T>     // heap-based priority queue
     {
         private HeapNode<T> root = null, bottom = null, lastNode = null;
+        private PQType type;
+
+        public enum PQType {
+            MAX,
+            MIN
+        }
 
         private class BestBottomMatch {
             public HeapNode<T> node { get; set; }
@@ -132,6 +119,11 @@ namespace datastructures
                 this.node = node;
                 this.depth = depth;
             }
+        }
+
+        public PriorityQueue(PQType type)
+        {
+            this.type = type;
         }
 
         private void Swap(HeapNode<T> parent, HeapNode<T> child)
@@ -205,9 +197,9 @@ namespace datastructures
             }
 
             HeapNode<T> movingNode = this.root;
-            while(movingNode.HasLargerChild())
+            while(HasSwappableChild(movingNode))
             {
-                HeapNode<T> largestChild = movingNode.GetLargestChild();
+                HeapNode<T> largestChild = GetMostSwappableChild(movingNode);
                 Swap(movingNode, largestChild);
             }
 
@@ -230,11 +222,11 @@ namespace datastructures
 
             this.bottom.AddChild(newNode);
 
-            if (IsLarger(newNode, newNode.GetParent())) this.lastNode = newNode.GetParent();
+            if (NeedsSwap(newNode, newNode.GetParent())) this.lastNode = newNode.GetParent();
             else this.lastNode = newNode;
 
 
-            while (IsLarger(newNode, newNode.GetParent()))
+            while (NeedsSwap(newNode, newNode.GetParent()))
             {
                 //Console.WriteLine("Swapping " + newNode + " with " + newNode.GetParent());
                 Swap(newNode.GetParent(), newNode);
@@ -316,17 +308,37 @@ namespace datastructures
             return best;
         }
 
-        private bool IsLarger(HeapNode<T> n1, HeapNode<T> n2)
+        private bool NeedsSwap(HeapNode<T> child, HeapNode<T> parent)
         {
-            if (n2 == null) return false;
-            return n1.GetPriority() > n2.GetPriority();
+            if (parent == null) return false;
+            return this.type == PQType.MAX ? child.GetPriority() > parent.GetPriority() : child.GetPriority() < parent.GetPriority();
+        }
+
+        public Boolean HasSwappableChild(HeapNode<T> node)
+        {
+            foreach(HeapNode<T> child in node.GetChildren())
+            {
+                if (NeedsSwap(child, node))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public HeapNode<T> GetMostSwappableChild(HeapNode<T> node)
+        {
+            List<HeapNode<T>> children = node.GetChildren();
+            if (children.Count == 0) return null;
+            else if (children.Count == 1) return children[0];
+            else return NeedsSwap(children[0], children[1]) ? children[0] : children[1];
         }
 
         public void CheckNodeValidity(HeapNode<T> node)
         {
             foreach (HeapNode<T> child in node.GetChildren())
             {
-                if (child.GetPriority() > node.GetPriority())
+                if (NeedsSwap(child, node))
                 {
                     throw new System.Exception("Priority Queue integrity is violated! Parent: " + node + ", child: " + child);
                 }
@@ -364,17 +376,17 @@ namespace datastructures
     {
         static void Main(string[] args)
         {
-            PriorityQueue<int> pq = new PriorityQueue<int>();
+            PriorityQueue<int> pq = new PriorityQueue<int>(PriorityQueue<int>.PQType.MIN);
             Random rnd = new Random();
 
             List<int> insertedNumbers = new List<int>();
 
             int count = 0;
-            while (count < 100000)
+            while (count < 10000)
             {
                 if (!pq.IsEmpty() && rnd.Next(0, 10) < 5)
                 {
-                    int res = pq.Pop(), realMax = insertedNumbers.Max();
+                    int res = pq.Pop(), realMax = insertedNumbers.Min();
                     if (res != realMax) throw new System.Exception("The value that was popped out of the priority queue is not the max! Value: " + res + ", max: " + realMax);
                     insertedNumbers.Remove(res);
 

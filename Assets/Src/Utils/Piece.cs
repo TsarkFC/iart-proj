@@ -14,7 +14,14 @@ namespace piece
             position = pos;
         }
 
-        public override bool Equals(Object obj) {
+        public bool ColorEquals(Piece piece)
+        {
+            if (this.symbol.Length < 2 || piece.symbol.Length < 2) throw new System.Exception("Trying to compare piece colors but their symbol doesn't have color.");
+            return this.symbol[1] == piece.symbol[1];
+        }
+
+        public override bool Equals(Object obj) 
+        {
             if (!(obj is Piece)) return false;
             Piece piece = (Piece)obj;
             return piece.symbol == symbol && piece.position.Equals(position);
