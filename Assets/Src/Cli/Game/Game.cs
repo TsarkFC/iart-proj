@@ -31,8 +31,8 @@ namespace game
                 state.PrintBoard();
                 ConsoleKeyInfo keyInfo = Console.ReadKey();
                 if (keyInfo.Key == ConsoleKey.H) {
-                    Direction hintDirection = robot.Hint();
-                    Console.WriteLine(" [HINT] " + hintDirection.movement);
+                    Movement.MovementType hintDirection = robot.Hint();
+                    Console.WriteLine(" [HINT] " + hintDirection);
                     state = logic.state;
                 }
                 else if (keyInfo.Key == ConsoleKey.Q) {

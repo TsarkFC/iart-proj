@@ -28,26 +28,14 @@ namespace robot
             PrintSearchPath(path);
         }
 
-        public Direction Hint()
+        public Movement.MovementType Hint()
         {
             State stateCopy = Cloner.DeepClone(logic.state);
             List<Node> path = BFS();
             logic.state = stateCopy;
 
-            return CalculateDirection(path[0], path[1]);
-        }
-
-        private Direction CalculateDirection(Node first, Node second)
-        {
-            List<Node> children = first.Expand(true);
-
-            for (int i = 0; i < children.Count; i++)
-            {
-                if (children[i] == null) continue;
-                if (children[i].Equals(second))
-                    return Node.directions[i];
-            }
-            return null;
+            if (path.Count < 2) return Movement.MovementType.NONE;
+            return path[1].movement;
         }
 
         public void InitStepByStep(List<Node> path)
@@ -87,7 +75,7 @@ namespace robot
                     return GetNodePath(current);
                 }
 
-                List<Node> children = current.Expand(false);
+                List<Node> children = current.Expand();
                 foreach (Node node in children)
                     if (!visited.Contains(node))
                     {
