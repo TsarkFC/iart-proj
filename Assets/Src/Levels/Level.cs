@@ -18,16 +18,25 @@ public abstract class Level : MonoBehaviour
         public GameObject prefab;
     }
 
+    [System.Serializable]
+    public struct ArrowPrefab
+    {
+        public Movement.MovementType type;
+        public GameObject prefab;
+    }
+
     /* Controllable in Unity */
     public int xDim;
     public int yDim;
     public PiecePrefab[] piecePrefabs;
     public GameObject backgroundPrefab;
     public float pieceVelocity = 500;
-
+    public ArrowPrefab[] arrowPrefabs;
+    public GameObject hintButton;
 
     protected PieceType[,] board;
     protected Dictionary<PieceType, GameObject> piecePrefabDict;
+    protected Dictionary<Movement.MovementType, GameObject> arrowPrefabDict = new Dictionary<Movement.MovementType, GameObject>();
     private GameObject[,] pieces;
 
     private Dictionary<GameObject, Movement> piecesMovement = new Dictionary<GameObject, Movement>();  // each piece's movement
@@ -35,6 +44,7 @@ public abstract class Level : MonoBehaviour
 
     private Logic logic;
     private Robot robot;
+    private GameObject currentHint;
 
     // public Level(Mode mode) {
     //     this.levelMode = mode;
@@ -110,6 +120,37 @@ public abstract class Level : MonoBehaviour
         return type == PieceType.PIECE_PURPLE || type == PieceType.PIECE_ORANGE || type == PieceType.PIECE_RED;
     }
 
+    protected void BuildHints()
+    {
+        if (GameMode.mode == GameMode.Mode.AI)
+        {
+            hintButton.SetActive(false);
+            return;
+        }
+        hintButton.SetActive(true);
+
+        // correspondance between MovementType and prefabs
+        for (int i = 0; i < arrowPrefabs.Length; i++)
+        {
+            if (!arrowPrefabDict.ContainsKey(arrowPrefabs[i].type))
+            {
+                arrowPrefabDict.Add(arrowPrefabs[i].type, arrowPrefabs[i].prefab);
+            }
+        }
+    }
+
+    public void ShowHintDirection()
+    {
+        if (this.moving) return;
+        Robot hintRobot = new Robot(this.logic);
+        Movement.MovementType hint = hintRobot.Hint();
+
+        Destroy(currentHint);
+        if (!arrowPrefabDict.ContainsKey(hint)) return;
+        currentHint = (GameObject)Instantiate(arrowPrefabDict[hint], transform.parent);
+        Debug.Log("Displayed " + hint);
+    }
+
     protected void Update()
     {
         if (this.moving) // if moving
@@ -179,6 +220,7 @@ public abstract class Level : MonoBehaviour
 
 
             if (movementType != Movement.MovementType.NONE) {
+                Destroy(currentHint);
                 Dictionary<Position, Position> prevNextPositions = logic.Move(movementType);
                 if (prevNextPositions == null) return;
 

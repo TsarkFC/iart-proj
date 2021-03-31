@@ -18,16 +18,7 @@ namespace node
         private Logic logic;
         public int cost { get; }
         public Movement.MovementType movement { get; }
-        // public class Direction {
-        //     public Position direction { get; }
-        //     public Movement.MovementType movement { get; }
-
-        //     public Direction(Position direction, Movement.MovementType movement)
-        //     {
-        //         this.direction = direction;
-        //         this.movement = movement;
-        //     }
-        // }
+        
         static public List<Direction> directions = new List<Direction>();
 
         public Node(Node parent, Direction direction, State state, Logic logic, int cost)
@@ -54,7 +45,7 @@ namespace node
             return new Node(this, direction, logic.state, this.logic, cost);
         }
 
-        public List<Node> Expand(bool includeNulls)
+        public List<Node> Expand()
         {
             List<Node> children = new List<Node>();
 
@@ -69,7 +60,7 @@ namespace node
 
                 // create new node and update logic state
                 Node child = CreateNode(direction, this.cost + 1);
-                if (child != null || includeNulls) children.Add(child);
+                if (child != null) children.Add(child);
                 logic.state = Cloner.DeepClone(this.state);  // ??
             }
             return children;
