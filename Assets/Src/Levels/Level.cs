@@ -31,8 +31,6 @@ public abstract class Level : MonoBehaviour
     public PiecePrefab[] piecePrefabs;
     public GameObject backgroundPrefab;
     public float pieceVelocity = 500;
-    
-    // hint content;
     public ArrowPrefab[] arrowPrefabs;
     public GameObject hintButton;
 
@@ -149,7 +147,7 @@ public abstract class Level : MonoBehaviour
 
         Destroy(currentHint);
         if (!arrowPrefabDict.ContainsKey(hint)) return;
-        currentHint = (GameObject)Instantiate(arrowPrefabDict[hint], transform);
+        currentHint = (GameObject)Instantiate(arrowPrefabDict[hint], transform.parent);
         Debug.Log("Displayed " + hint);
     }
 

@@ -11,5 +11,6 @@ public class Level9 : Level
         base.piecePrefabDict = new Dictionary<PieceType, GameObject>();
         base.board = Levels.level9;
         base.BuildBoard();
+        base.BuildHints();
     }
 }
