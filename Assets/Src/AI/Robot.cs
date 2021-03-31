@@ -9,6 +9,7 @@ using piece;
 using direction;
 using datastructures;
 using heuristic;
+using UnityEngine;
 
 // namespace declaration 
 namespace robot
@@ -68,12 +69,16 @@ namespace robot
             Node current = null;
             queue.Enqueue(root);
 
+            int count = 0;
+
             while (queue.Count != 0)
             {
                 current = queue.Dequeue();
+                count++;
                 logic.state = Cloner.DeepClone(current.state);  // ??
                 if (logic.VerifyEndGame())
                 {
+                    Debug.Log("Visited " + count + " nodes.");
                     return GetNodePath(current);
                 }
 
@@ -88,20 +93,23 @@ namespace robot
             return GetNodePath(current);
         }
 
-        public List<Node> InformedSearch(PriorityQueue<Node>.PQType pQType, Func<Node, int> heuristic)
+        public List<Node> InformedSearch(PriorityQueue<Node>.PQType pQType, Func<Node, float> heuristic)
         {
             List<Node> visited = new List<Node>();
             PriorityQueue<Node> queue = new PriorityQueue<Node>(pQType);
             Node current = null;
             Node root = new Node(null, null, Cloner.DeepClone(logic.state), logic, 0);
             queue.Insert(root, heuristic(root));
+            int count = 0;
 
             while (!queue.IsEmpty())
             {
                 current = queue.Pop();
+                count++;
                 logic.state = Cloner.DeepClone(current.state);  // ??
                 if (logic.VerifyEndGame())
                 {
+                    Debug.Log("Visited " + count + " nodes.");
                     return GetNodePath(current);
                 }
 
@@ -113,12 +121,17 @@ namespace robot
                         visited.Add(node);
                     }
             }
+            Debug.Log("Didn't find solution");
             return null;
         }
 
         public List<Node> GreedyManhattan() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.GreedyManhattanDistance);
 
         public List<Node> AStarManhattan() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.AStarManhattanDistance);
+
+        public List<Node> GreedyDirection() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.GreedyDirection);
+
+        public List<Node> AStarDirection() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.AStarDirection);
 
         private List<Node> GetNodePath(Node node)
         {

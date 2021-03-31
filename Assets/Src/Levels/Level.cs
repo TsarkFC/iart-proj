@@ -55,7 +55,7 @@ public abstract class Level : MonoBehaviour
         this.logic = new Logic(new State(board, xDim, yDim));
         if (GameMode.mode == GameMode.Mode.AI) {
             this.robot = new Robot(new Logic(new State(board, xDim, yDim)));
-            this.robot.InitStepByStep(this.robot.AStarManhattan());
+            this.robot.InitStepByStep(this.robot.GreedyDirection());
         }
         else this.robot = null;
 

@@ -11,9 +11,9 @@ namespace datastructures
         private T data;
         private HeapNode<T> parent;
         private List<HeapNode<T>> children = new List<HeapNode<T>>();
-        private int priority;
+        private float priority;
 
-        public HeapNode(HeapNode<T> parent, T data, int priority)
+        public HeapNode(HeapNode<T> parent, T data, float priority)
         {
             this.parent = parent;
             this.data = data;
@@ -31,7 +31,7 @@ namespace datastructures
             if (!this.children.Remove(child)) throw new System.Exception("[PriorityQueue] Could not remove child from node.");
         }
 
-        public int GetPriority()
+        public float GetPriority()
         {
             return this.priority;
         }
@@ -208,7 +208,7 @@ namespace datastructures
             return res;
         }
 
-        public void Insert(T data, int priority)
+        public void Insert(T data, float priority)
         {
             HeapNode<T> newNode = new HeapNode<T>(this.bottom, data, priority);
 
