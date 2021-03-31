@@ -37,7 +37,7 @@ public class Stats : MonoBehaviour
 
         foreach (var pair in algoResults)
         {
-            output += AlgorithmNames.get(pair.Key) + "\n" + pair.Value.timeSpent + "ms\n\n";
+            output += AlgorithmNames.get(pair.Key) + "\n" + pair.Value.timeSpent + "ms, " + pair.Value.nNodesVisited + " nodes visited\n\n";
         }
 
         statsTextBox.text = output;
