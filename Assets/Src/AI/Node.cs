@@ -15,7 +15,7 @@ namespace node
         public Node parent { get; }
         private Position direction;
         public State state { get; }
-        private Logic logic;
+        public Logic logic { get; }
         public int cost { get; }
         public Movement.MovementType movement { get; }
         

@@ -4,43 +4,52 @@ using game;
 using menu;
 using levels;
 using mainmenu;
+using algorithmtype;
+using cloner;
+using piecetype;
 
 namespace aimenu
 {
     public class AIMenu : Menu
     {
-        public AIMenu()
+        PieceType[,] level;
+
+        public AIMenu(PieceType[,] level)
         {
+            this.level = level;
             List<string> options = new List<string>();
             options.Add("[1] BFS");
             options.Add("[2] DFS");
             options.Add("[3] Iterative Deepening");
             options.Add("[4] Greedy Search");
             options.Add("[5] A Star");
+            options.Add("[6] Compare all algorithms");
             options.Add("[0] Go Back");
             base.options = options;
         }
 
         public override Menu ProcessInput(ConsoleKeyInfo keyInfo)
         {
-            Game game = new Game(Levels.level1);
-
+            AlgorithmType algorithm;
             switch (keyInfo.Key)
             {
                 case ConsoleKey.D1:
-                    game.RunAI();
+                    algorithm = AlgorithmType.BFS;
                     break;
                 case ConsoleKey.D2:
-                    game.RunAI();
+                    algorithm = AlgorithmType.DFS;
                     break;
                 case ConsoleKey.D3:
-                    game.RunAI();
+                    algorithm = AlgorithmType.IT_DEEPENING;
                     break;
                 case ConsoleKey.D4:
-                    game.RunAI();
+                    algorithm = AlgorithmType.GREEDY;
                     break;
                 case ConsoleKey.D5:
-                    game.RunAI();
+                    algorithm = AlgorithmType.ASTAR;
+                    break;
+                case ConsoleKey.D6:
+                    algorithm = AlgorithmType.ALL;
                     break;
                 case ConsoleKey.D0:
                     return new MainMenu();
@@ -49,6 +58,7 @@ namespace aimenu
                     return this;
             }
 
+            new Game(level).RunAI(algorithm);
             base.GameOver();
             return this;
         }

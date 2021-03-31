@@ -1,16 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 using logic;
 using robot;
 using state;
 using piecetype;
 using node;
 using direction;
+using algorithmtype;
 
 // namespace declaration 
 namespace game
 {
-    // Class declaration 
+    // Class declaration
+    [Serializable]
     public class Game
     {
         private Logic logic;
@@ -46,9 +50,9 @@ namespace game
             }
         }
         
-        public void RunAI()
+        public void RunAI(AlgorithmType algorithm)
         {
-            robot.Run();
+            robot.Run(algorithm);
         }
     }
 }

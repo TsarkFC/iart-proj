@@ -4,15 +4,17 @@ using mainmenu;
 using menu;
 using game;
 using levels;
+using piecetype;
+using aimenu;
 
 namespace levelmenu
 {
     public class LevelMenu : Menu
     {
-        //Menu redirect;
-        public LevelMenu(Menu redirect)
+        bool ai;
+        public LevelMenu(bool ai)
         {
-            //this.redirect = redirect;
+            this.ai = ai;
 
             List<string> options = new List<string>();
             options.Add("[1] Level 1");
@@ -30,44 +32,35 @@ namespace levelmenu
 
         public override Menu ProcessInput(ConsoleKeyInfo keyInfo)
         {
-            Game game;
+            PieceType[,] level;
             switch (keyInfo.Key)
             {
                 case ConsoleKey.D1:
-                    game = new Game(Levels.level1);
-                    game.RunGame();
+                    level = Levels.level1;
                     break;
                 case ConsoleKey.D2:
-                    game = new Game(Levels.level2);
-                    game.RunGame();
+                    level = Levels.level2;
                     break;
                 case ConsoleKey.D3:
-                    game = new Game(Levels.level3);
-                    game.RunGame();
+                    level = Levels.level3;
                     break;
                 case ConsoleKey.D4:
-                    game = new Game(Levels.level4);
-                    game.RunGame();
+                    level = Levels.level4;
                     break;
                 case ConsoleKey.D5:
-                    game = new Game(Levels.level5);
-                    game.RunGame();
+                    level = Levels.level5;
                     break;
                 case ConsoleKey.D6:
-                    game = new Game(Levels.level6);
-                    game.RunGame();
+                    level = Levels.level6;
                     break;
                 case ConsoleKey.D7:
-                    game = new Game(Levels.level7);
-                    game.RunGame();
+                    level = Levels.level7;
                     break;
                 case ConsoleKey.D8:
-                    game = new Game(Levels.level8);
-                    game.RunGame();
+                    level = Levels.level8;
                     break;
                 case ConsoleKey.D9:
-                    game = new Game(Levels.level9);
-                    game.RunGame();
+                    level = Levels.level9;
                     break;
                 case ConsoleKey.D0:
                     return new MainMenu();
@@ -75,6 +68,10 @@ namespace levelmenu
                     Console.WriteLine("ERROR: Only numeric keys!");
                     return this;
             }
+            if (ai)
+                return new AIMenu(level);
+            else 
+                new Game(level).RunGame();
 
             base.GameOver();
             return this;

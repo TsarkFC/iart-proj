@@ -9,7 +9,7 @@ using piece;
 using direction;
 using datastructures;
 using heuristic;
-using UnityEngine;
+using algorithmtype;
 
 // namespace declaration 
 namespace robot
@@ -19,15 +19,24 @@ namespace robot
     {
         private Logic logic;
         private List<Node> path = null;
+        //public int depthLimit { get; set; }
+        int depthLimit = 20;
+        private Dictionary<AlgorithmType, Func<List<Node>>> algorithms = new Dictionary<AlgorithmType, Func<List<Node>>>();
 
         public Robot(Logic logic)
         {
             this.logic = logic;
+            algorithms.Add(AlgorithmType.BFS, BFS);
+            algorithms.Add(AlgorithmType.DFS, DFS);
+            algorithms.Add(AlgorithmType.IT_DEEPENING, ItDeepening);
+            algorithms.Add(AlgorithmType.GREEDY, BFS);
+            algorithms.Add(AlgorithmType.ASTAR, BFS);
+            algorithms.Add(AlgorithmType.ALL, BFS);
         }
 
-        public void Run()
+        public void Run(AlgorithmType algorithm)
         {
-            List<Node> path = BFS();
+            List<Node> path = algorithms[algorithm]();
             PrintSearchPath(path);
         }
 
@@ -59,11 +68,7 @@ namespace robot
 
         public List<Node> BFS()
         {
-            return BFS(new Node(null, null, Cloner.DeepClone(logic.state), logic, 0));
-        }
-
-        public List<Node> BFS(Node root)
-        {
+            Node root = new Node(null, null, Cloner.DeepClone(logic.state), logic, 0);
             List<Node> visited = new List<Node>();
             Queue<Node> queue = new Queue<Node>();
             Node current = null;
@@ -78,7 +83,6 @@ namespace robot
                 logic.state = Cloner.DeepClone(current.state);  // ??
                 if (logic.VerifyEndGame())
                 {
-                    Debug.Log("Visited " + count + " nodes.");
                     return GetNodePath(current);
                 }
 
@@ -91,6 +95,49 @@ namespace robot
                     }
             }
             return GetNodePath(current);
+        }
+
+        public List<Node> DFS()
+        {
+            Node root = new Node(null, null, Cloner.DeepClone(logic.state), logic, 0);
+            List<Node> visited = new List<Node>();
+            return DepthRecursiveCall(root, visited, 0);
+        }
+
+        public List<Node> DepthRecursiveCall(Node node, List<Node> visited, int depthCount)
+        {
+            if (depthCount > depthLimit) return null;
+            
+            logic.state = Cloner.DeepClone(node.state);  // ??
+            if (logic.VerifyEndGame()) 
+                return GetNodePath(node);
+            
+            depthCount++;
+
+            if (!visited.Contains(node))
+            {
+                visited.Add(node);
+                List<Node> children = node.Expand();
+                foreach(Node child in children) {
+                    List<Node> result = DepthRecursiveCall(child, visited, depthCount);
+                    if (result != null) return result;
+                }
+            }
+            return null;
+        }
+
+        public List<Node> ItDeepening()
+        {
+            depthLimit = 1;
+            List<Node> result = null;
+
+            while (result == null)
+            {
+                Console.WriteLine("Iteration: " + depthLimit.ToString());
+                result = DFS();
+                depthLimit++;
+            }
+            return result;
         }
 
         public List<Node> InformedSearch(PriorityQueue<Node>.PQType pQType, Func<Node, float> heuristic)
@@ -109,7 +156,6 @@ namespace robot
                 logic.state = Cloner.DeepClone(current.state);  // ??
                 if (logic.VerifyEndGame())
                 {
-                    Debug.Log("Visited " + count + " nodes.");
                     return GetNodePath(current);
                 }
 
@@ -121,7 +167,6 @@ namespace robot
                         visited.Add(node);
                     }
             }
-            Debug.Log("Didn't find solution");
             return null;
         }
 
@@ -151,6 +196,10 @@ namespace robot
 
         private void PrintSearchPath(List<Node> path)
         {
+            if (path == null) {
+                Console.WriteLine("No path found");
+                return;
+            }
             foreach (Node node in path)
             {
                 node.state.PrintBoard();

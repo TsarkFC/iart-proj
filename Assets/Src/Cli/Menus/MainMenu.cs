@@ -22,9 +22,9 @@ namespace mainmenu
             switch (keyInfo.Key)
             {
                 case ConsoleKey.D1:
-                    return new LevelMenu(null);
+                    return new LevelMenu(false);
                 case ConsoleKey.D2:
-                    return new LevelMenu(new AIMenu());
+                    return new LevelMenu(true);
                 case ConsoleKey.D0:
                     System.Environment.Exit(0);
                     return null;
