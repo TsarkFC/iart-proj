@@ -46,13 +46,13 @@ namespace robot
 
         public List<Node> RunWithMeasurements(AlgorithmType algorithm)
         {
-            Stats.resetAlgoResults();
+            Stats.ResetAlgoResults();
             if (algorithm == AlgorithmType.ALL)
             {
                 foreach (var pair in this.algorithms)
                 {
                     var result = TakeMeasurements(pair.Value);
-                    Stats.addAlgoResults(pair.Key, result.Item1);
+                    Stats.AddAlgoResults(pair.Key, result.Item1);
                 }
 
                 return algorithms[AlgorithmType.ASTAR_DIRECTION]().Item1;
@@ -60,7 +60,7 @@ namespace robot
             else
             {
                 var result = TakeMeasurements(algorithms[algorithm]);
-                Stats.addAlgoResults(algorithm, result.Item1);
+                Stats.AddAlgoResults(algorithm, result.Item1);
                 return result.Item2;
             }
         }

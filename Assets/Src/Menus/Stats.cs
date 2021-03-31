@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Threading;
 using UnityEngine;
 using TMPro;
 
@@ -20,19 +21,24 @@ public class Stats : MonoBehaviour
         algoritmo usado, nº de nós visitados, tempo demorado, uso máx de memória
     */
 
-    public static void resetAlgoResults()
+    public static void ResetAlgoResults()
     {
         Stats.algoResults = new Dictionary<AlgorithmType, StatsResults>();
+        changed = true;
     }
 
-    public static void addAlgoResults(AlgorithmType type, StatsResults results)
+    public static void AddAlgoResults(AlgorithmType type, StatsResults results)
     {
         Stats.algoResults.Add(type, results);
+        changed = true;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private static bool changed = false;
+
+    private void UpdateText()
     {
+        changed = false;
+
         String output = "";
 
         foreach (var pair in algoResults)
@@ -43,9 +49,15 @@ public class Stats : MonoBehaviour
         statsTextBox.text = output;
     }
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        UpdateText();
+    }
+
     // Update is called once per frame
     void Update()
     {
-        
+        if (changed) UpdateText();
     }
 }
