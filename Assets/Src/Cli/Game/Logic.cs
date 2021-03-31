@@ -12,46 +12,45 @@ namespace logic
     // Class declaration 
     public class Logic
     {
-        public State state { get; set; }
-        PieceOrderer pieceOrderer = new PieceOrderer();
+        private static PieceOrderer pieceOrderer = new PieceOrderer();
 
-        public Logic(State state)
-        {
-            this.state = state;
-        }
+        // public Logic(State state)
+        // {
+        //     this.state = state;
+        // }
 
-        public Dictionary<Position, Position> Move(ConsoleKeyInfo keyInfo) 
+        public static Dictionary<Position, Position> Move(State state, ConsoleKeyInfo keyInfo) 
         {
             switch(keyInfo.Key) {
                 case ConsoleKey.DownArrow:
-                    return Move(new Position(0, 1));
+                    return Move(state, new Position(0, 1));
                 case ConsoleKey.UpArrow:
-                    return Move(new Position(0, -1));
+                    return Move(state, new Position(0, -1));
                 case ConsoleKey.LeftArrow:
-                    return Move(new Position(-1, 0));
+                    return Move(state, new Position(-1, 0));
                 case ConsoleKey.RightArrow:
-                    return Move(new Position(1, 0));
+                    return Move(state, new Position(1, 0));
                 default: 
                     return null;
             }
         }
 
-        public Dictionary<Position, Position> Move(Movement.MovementType type) {
+        public static Dictionary<Position, Position> Move(State state, Movement.MovementType type) {
             switch(type) {
                 case Movement.MovementType.DOWN:
-                    return Move(new Position(0, 1));
+                    return Move(state, new Position(0, 1));
                 case Movement.MovementType.UP:
-                    return Move(new Position(0, -1));
+                    return Move(state, new Position(0, -1));
                 case Movement.MovementType.LEFT:
-                    return Move(new Position(-1, 0));
+                    return Move(state, new Position(-1, 0));
                 case Movement.MovementType.RIGHT:
-                    return Move(new Position(1, 0));
+                    return Move(state, new Position(1, 0));
                 default: 
                     return null;
             }
         }
 
-        public Dictionary<Position, Position> Move(Position direction)
+        public static Dictionary<Position, Position> Move(State state, Position direction)
         {
             bool Moved = false;
 
@@ -62,17 +61,17 @@ namespace logic
 
             foreach (Piece piece in state.pieces)
             {
-                Position nextPos = getNextPosition(direction, piece);
+                Position nextPos = getNextPosition(state, direction, piece);
                 prevNextPosition.Add(piece.position, nextPos);
                 if (nextPos == null) continue;
                 Moved = true;
-                ApplyMove(nextPos, piece);
+                ApplyMove(state, nextPos, piece);
             }
 
             return Moved == true ? prevNextPosition : null;
         }
 
-        private Position getNextPosition(Position direction, Piece piece)
+        private static Position getNextPosition(State state, Position direction, Piece piece)
         {
             Position nextPos = piece.position;
             Position temp = null;
@@ -80,7 +79,7 @@ namespace logic
             {
                 temp = nextPos + direction;
 
-                if (!InBounds(temp)) break;
+                if (!InBounds(state, temp)) break;
                 if (state.board[temp.y, temp.x] != " " && state.board[temp.y, temp.x][0] != 't')
                     break;
 
@@ -90,22 +89,22 @@ namespace logic
             return nextPos;
         }
 
-        private bool InBounds(Position position)
+        private static bool InBounds(State state, Position position)
         {
             if (position.x >= state.xDim || position.x < 0) return false;
             if (position.y >= state.yDim || position.y < 0) return false;
             return true;
         }
 
-        private void ApplyMove(Position nextPos, Piece piece)
+        private static void ApplyMove(State state, Position nextPos, Piece piece)
         {
             state.board[nextPos.y, nextPos.x] = piece.symbol;
-            if (!replaceTargets(piece))
+            if (!replaceTargets(state, piece))
                 state.board[piece.position.y, piece.position.x] = " ";
             piece.position = nextPos;
         }
 
-        public bool VerifyEndGame()
+        public static bool VerifyEndGame(State state)
         {
             int size = state.pieces.Count;
             int correct = 0;
@@ -123,7 +122,7 @@ namespace logic
             return correct == size;
         }
 
-        private bool replaceTargets(Piece piece)
+        private static bool replaceTargets(State state, Piece piece)
         {
             foreach (Piece target in state.targets)
                 if (target.position.Equals(piece.position))

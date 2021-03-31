@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using logic;
 using state;
 using position;
@@ -10,6 +11,8 @@ using direction;
 using datastructures;
 using heuristic;
 using algorithmtype;
+using statsresults;
+using UnityEngine;
 
 // namespace declaration 
 namespace robot
@@ -17,34 +20,72 @@ namespace robot
     // Class declaration 
     public class Robot
     {
-        private Logic logic;
+        private State state;
         private List<Node> path = null;
         //public int depthLimit { get; set; }
         int depthLimit = 20;
         private Dictionary<AlgorithmType, Func<List<Node>>> algorithms = new Dictionary<AlgorithmType, Func<List<Node>>>();
 
-        public Robot(Logic logic)
+        public Robot(State state)
         {
-            this.logic = logic;
+            this.state = state;
             algorithms.Add(AlgorithmType.BFS, BFS);
             algorithms.Add(AlgorithmType.DFS, DFS);
             algorithms.Add(AlgorithmType.IT_DEEPENING, ItDeepening);
-            algorithms.Add(AlgorithmType.GREEDY, BFS);
-            algorithms.Add(AlgorithmType.ASTAR, BFS);
-            algorithms.Add(AlgorithmType.ALL, BFS);
+            algorithms.Add(AlgorithmType.GREEDY_MANHATTAN, GreedyManhattan);
+            algorithms.Add(AlgorithmType.GREEDY_DIRECTION, GreedyDirection);
+            algorithms.Add(AlgorithmType.ASTAR_MANHATTAN, AStarManhattan);
+            algorithms.Add(AlgorithmType.ASTAR_DIRECTION, AStarDirection);
         }
 
-        public void Run(AlgorithmType algorithm)
+        public List<Node> RunWithoutMeasurements(AlgorithmType algorithm)
         {
-            List<Node> path = algorithms[algorithm]();
-            PrintSearchPath(path);
+            if (algorithm == AlgorithmType.ALL) throw new System.Exception("There is no need to run all the algorithms without taking measurements!");
+            return algorithms[algorithm]();
+        }
+
+        public List<Node> RunWithMeasurements(AlgorithmType algorithm)
+        {
+            Stats.resetAlgoResults();
+            if (algorithm == AlgorithmType.ALL)
+            {
+                foreach (var pair in this.algorithms)
+                {
+                    var result = TakeMeasurements(pair.Value);
+                    Stats.addAlgoResults(pair.Key, result.Item1);
+                }
+
+                return algorithms[AlgorithmType.ASTAR_DIRECTION]();
+            }
+            else
+            {
+                var result = TakeMeasurements(algorithms[algorithm]);
+                Stats.addAlgoResults(algorithm, result.Item1);
+                return result.Item2;
+            }
+        }
+
+        public Tuple<StatsResults, List<Node>> TakeMeasurements(Func<List<Node>> func)
+        {
+            Stopwatch sw = new Stopwatch();
+            int millisecondsSum = 0;
+
+            for (int i = 0; i < 3; i++)
+            {
+                sw.Start();
+                List<Node> path = func();
+                sw.Stop();
+
+                millisecondsSum += sw.Elapsed.Milliseconds;
+                sw.Reset();
+            }
+
+            return Tuple.Create(new StatsResults(millisecondsSum/3, 0, 0), path);
         }
 
         public Movement.MovementType Hint()
         {
-            State stateCopy = Cloner.DeepClone(logic.state);
             List<Node> path = BFS();
-            logic.state = stateCopy;
 
             if (path.Count < 2) return Movement.MovementType.NONE;
             return path[1].movement;
@@ -68,7 +109,7 @@ namespace robot
 
         public List<Node> BFS()
         {
-            Node root = new Node(null, null, Cloner.DeepClone(logic.state), logic, 0);
+            Node root = new Node(null, null, this.state, 0);
             List<Node> visited = new List<Node>();
             Queue<Node> queue = new Queue<Node>();
             Node current = null;
@@ -80,8 +121,8 @@ namespace robot
             {
                 current = queue.Dequeue();
                 count++;
-                logic.state = Cloner.DeepClone(current.state);  // ??
-                if (logic.VerifyEndGame())
+
+                if (Logic.VerifyEndGame(current.state))
                 {
                     return GetNodePath(current);
                 }
@@ -99,7 +140,7 @@ namespace robot
 
         public List<Node> DFS()
         {
-            Node root = new Node(null, null, Cloner.DeepClone(logic.state), logic, 0);
+            Node root = new Node(null, null, this.state, 0);
             List<Node> visited = new List<Node>();
             return DepthRecursiveCall(root, visited, 0);
         }
@@ -108,8 +149,7 @@ namespace robot
         {
             if (depthCount > depthLimit) return null;
             
-            logic.state = Cloner.DeepClone(node.state);  // ??
-            if (logic.VerifyEndGame()) 
+            if (Logic.VerifyEndGame(node.state)) 
                 return GetNodePath(node);
             
             depthCount++;
@@ -144,8 +184,7 @@ namespace robot
         {
             List<Node> visited = new List<Node>();
             PriorityQueue<Node> queue = new PriorityQueue<Node>(pQType);
-            Node current = null;
-            Node root = new Node(null, null, Cloner.DeepClone(logic.state), logic, 0);
+            Node current = null, root = new Node(null, null, this.state, 0);
             queue.Insert(root, heuristic(root));
             int count = 0;
 
@@ -153,8 +192,8 @@ namespace robot
             {
                 current = queue.Pop();
                 count++;
-                logic.state = Cloner.DeepClone(current.state);  // ??
-                if (logic.VerifyEndGame())
+                
+                if (Logic.VerifyEndGame(current.state))
                 {
                     return GetNodePath(current);
                 }
@@ -178,6 +217,7 @@ namespace robot
 
         public List<Node> AStarDirection() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.AStarDirection);
 
+
         private List<Node> GetNodePath(Node node)
         {
             List<Node> path = new List<Node>();
@@ -194,7 +234,7 @@ namespace robot
             return path;
         }
 
-        private void PrintSearchPath(List<Node> path)
+        public static void PrintSearchPath(List<Node> path)
         {
             if (path == null) {
                 Console.WriteLine("No path found");

@@ -24,8 +24,7 @@ namespace game
         public Game(PieceType[,] level)
         {
             this.state = new State(level, level.GetLength(0), level.GetLength(1));
-            this.logic = new Logic(this.state);
-            this.robot = new Robot(this.logic);
+            this.robot = new Robot(this.state);
         }
 
         public void RunGame()
@@ -37,22 +36,22 @@ namespace game
                 if (keyInfo.Key == ConsoleKey.H) {
                     Movement.MovementType hintDirection = robot.Hint();
                     Console.WriteLine(" [HINT] " + hintDirection);
-                    state = logic.state;
+                    //state = logic.state;
                 }
                 else if (keyInfo.Key == ConsoleKey.Q) {
                     Console.WriteLine(" [QUIT] ");
                     break;
                 }
                 else {
-                    logic.Move(keyInfo);
+                    Logic.Move(this.state, keyInfo);
                 }
-                if (logic.VerifyEndGame()) break;
+                if (Logic.VerifyEndGame(this.state)) break;
             }
         }
         
         public void RunAI(AlgorithmType algorithm)
         {
-            robot.Run(algorithm);
+            Robot.PrintSearchPath(robot.RunWithoutMeasurements(algorithm));
         }
     }
 }
