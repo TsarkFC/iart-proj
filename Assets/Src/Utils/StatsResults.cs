@@ -1,3 +1,5 @@
+using System;
+
 namespace statsresults
 {
     public class StatsResults
@@ -11,6 +13,13 @@ namespace statsresults
             this.timeSpent = timeSpent;
             this.nNodesVisited = nNodesVisited;
             this.maxMemoryUsed = maxMemoryUsed;
+        }
+
+        public void DisplayCli() 
+        {
+            Console.WriteLine("Time spent: " + timeSpent.ToString() + " ms");
+            Console.WriteLine("Nodes visited: " + nNodesVisited.ToString());
+            Console.WriteLine("Max memory used: " + maxMemoryUsed.ToString() + "\n");
         }
     }
 }

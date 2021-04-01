@@ -51,7 +51,8 @@ namespace game
         
         public void RunAI(AlgorithmType algorithm)
         {
-            Robot.PrintSearchPath(robot.RunWithoutMeasurements(algorithm));
+            Robot.PrintSearchPath(robot.RunWithMeasurements(algorithm));
+            StatsInfo.DisplayCli();
         }
     }
 }

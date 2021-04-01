@@ -176,7 +176,6 @@ namespace robot
 
             while (result == null)
             {
-                Console.WriteLine("Iteration: " + depthLimit.ToString());
                 result = DFS().Item1;
                 depthLimit++;
             }

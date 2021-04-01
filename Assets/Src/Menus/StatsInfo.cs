@@ -44,4 +44,13 @@ public class StatsInfo
     public static bool changed = false;
 
     public static void RemoveWarning() => Console.Write(changed);
+
+    public static void DisplayCli() 
+    {
+        foreach(KeyValuePair<AlgorithmType, StatsResults> result in algoResults)
+        {
+            Console.WriteLine(result.Key);
+            result.Value.DisplayCli();
+        }
+    }
 }
