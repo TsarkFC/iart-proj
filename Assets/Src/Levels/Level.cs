@@ -9,6 +9,7 @@ using piecetype;
 using robot;
 using cloner;
 using algorithmtype;
+using node;
 
 public abstract class Level : MonoBehaviour
 {
@@ -34,6 +35,7 @@ public abstract class Level : MonoBehaviour
     public float pieceVelocity = 500;
     public ArrowPrefab[] arrowPrefabs;
     public GameObject hintButton;
+    public GameObject showStatsButton;
 
     protected PieceType[,] board;
     protected Dictionary<PieceType, GameObject> piecePrefabDict;
@@ -46,6 +48,7 @@ public abstract class Level : MonoBehaviour
     private State state;
     private Robot robot;
     private GameObject currentHint;
+    private int movesCount = 0;
 
     // public Level(Mode mode) {
     //     this.levelMode = mode;
@@ -54,11 +57,25 @@ public abstract class Level : MonoBehaviour
     protected void BuildBoard() 
     {
         this.state = new State(board, xDim, yDim);
-        if (GameMode.mode == GameMode.Mode.AI) {
+        StatsInfo.SetCurrentMovesCount(movesCount);
+        if (GameMode.mode == GameMode.Mode.AI) 
+        {
             this.robot = new Robot(this.state);
-            this.robot.InitStepByStep(this.robot.RunWithMeasurements(AlgorithmType.ALL));
+            List<Node> path = this.robot.RunWithMeasurements(AlgorithmType.ALL);
+            this.robot.InitStepByStep(path);
+            StatsInfo.SetMinimumPossibleMoves(path.Count - 1);
         }
-        else this.robot = null;
+        else 
+        {
+            this.robot = null;
+
+            // calculating the minimum possible moves
+            Robot robot = new Robot(this.state);
+            List<Node> path = robot.RunWithoutMeasurements(AlgorithmType.ASTAR_DIRECTION);
+            StatsInfo.SetMinimumPossibleMoves(path.Count - 1);
+
+            this.showStatsButton.SetActive(false);
+        }
 
         // correspondance between PieceType and prefabs
         for (int i = 0; i < piecePrefabs.Length; i++)
@@ -102,6 +119,12 @@ public abstract class Level : MonoBehaviour
         }
 
         Debug.Log(pieces);
+    }
+
+    private void IncrementMovesCount()
+    {
+        this.movesCount++;
+        StatsInfo.SetCurrentMovesCount(this.movesCount);
     }
 
     private void InstantiateEntity(int x, int y, bool isPiece)
@@ -241,6 +264,7 @@ public abstract class Level : MonoBehaviour
                         }
                     }
                 }
+                IncrementMovesCount();
                 this.moving = true;
             }
         }

@@ -9,6 +9,8 @@ using algorithmtype;
 public class Stats : MonoBehaviour
 {
     public TextMeshProUGUI statsTextBox;
+    public TextMeshProUGUI currentMovesCount;
+    public TextMeshProUGUI minimumPossibleMoves;
 
     /*
         Minimum number of moves to complete
@@ -29,6 +31,9 @@ public class Stats : MonoBehaviour
         }
 
         statsTextBox.text = output;
+
+        currentMovesCount.text = StatsInfo.currentMovesCount + " Moves";
+        minimumPossibleMoves.text = "The minimum possible is " + StatsInfo.minimumPossibleMoves;
     }
 
     // Start is called before the first frame update

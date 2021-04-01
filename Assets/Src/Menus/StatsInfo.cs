@@ -8,6 +8,7 @@ using statsresults;
 public class StatsInfo
 {
     public static Dictionary<AlgorithmType, StatsResults> algoResults = new Dictionary<AlgorithmType, StatsResults>();
+    public static int currentMovesCount = -1, minimumPossibleMoves = -1;
 
     /*
         Minimum number of moves to complete
@@ -25,6 +26,18 @@ public class StatsInfo
     public static void AddAlgoResults(AlgorithmType type, StatsResults results)
     {
         StatsInfo.algoResults.Add(type, results);
+        changed = true;
+    }
+
+    public static void SetCurrentMovesCount(int currentMovesCount)
+    {
+        StatsInfo.currentMovesCount = currentMovesCount;
+        changed = true;
+    }
+
+    public static void SetMinimumPossibleMoves(int minimumPossibleMoves)
+    {
+        StatsInfo.minimumPossibleMoves = minimumPossibleMoves;
         changed = true;
     }
 
