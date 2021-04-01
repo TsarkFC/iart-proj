@@ -17,7 +17,6 @@ namespace game
     [Serializable]
     public class Game
     {
-        private Logic logic;
         private Robot robot;
         private State state;
 

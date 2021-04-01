@@ -12,7 +12,6 @@ using datastructures;
 using heuristic;
 using algorithmtype;
 using statsresults;
-using UnityEngine;
 
 // namespace declaration 
 namespace robot
@@ -46,13 +45,13 @@ namespace robot
 
         public List<Node> RunWithMeasurements(AlgorithmType algorithm)
         {
-            Stats.ResetAlgoResults();
+            StatsInfo.ResetAlgoResults();
             if (algorithm == AlgorithmType.ALL)
             {
                 foreach (var pair in this.algorithms)
                 {
                     var result = TakeMeasurements(pair.Value);
-                    Stats.AddAlgoResults(pair.Key, result.Item1);
+                    StatsInfo.AddAlgoResults(pair.Key, result.Item1);
                 }
 
                 return algorithms[AlgorithmType.ASTAR_DIRECTION]().Item1;
@@ -60,7 +59,7 @@ namespace robot
             else
             {
                 var result = TakeMeasurements(algorithms[algorithm]);
-                Stats.AddAlgoResults(algorithm, result.Item1);
+                StatsInfo.AddAlgoResults(algorithm, result.Item1);
                 return result.Item2;
             }
         }

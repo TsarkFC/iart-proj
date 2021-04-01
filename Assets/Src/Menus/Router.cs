@@ -19,7 +19,7 @@ public class Router : MonoBehaviour
 
     public void playSinglePlayer(int lvlIndex)
     {
-        Stats.ResetAlgoResults();
+        StatsInfo.ResetAlgoResults();
         GameMode.mode = GameMode.Mode.HUMAN;
         SceneManager.LoadScene(lvlIndex);
     }
