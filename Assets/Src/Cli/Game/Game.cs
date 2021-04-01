@@ -46,6 +46,7 @@ namespace game
                 }
                 if (Logic.VerifyEndGame(this.state)) break;
             }
+            state.PrintBoard();
         }
         
         public void RunAI(AlgorithmType algorithm)

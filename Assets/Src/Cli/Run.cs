@@ -12,6 +12,7 @@ public class Run
         {
             menu.Display();
             menu = menu.ProcessInput(menu.ReadInput());
+            Console.WriteLine("\n");
         }
     }
 }
