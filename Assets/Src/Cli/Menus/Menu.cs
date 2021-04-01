@@ -17,9 +17,10 @@ namespace menu
         
         public void Display()
         {
-            Console.WriteLine("       Sliding Tiles       \n\n");
+            Console.WriteLine("       Sliding Tiles       \n");
             foreach(string option in options)
                 Console.WriteLine(option);
+            Console.Write("\nInput: ");
         }
     }
 }

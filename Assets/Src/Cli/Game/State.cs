@@ -5,6 +5,7 @@ using System.IO;
 using piece;
 using position;
 using piecetype;
+using clisymbols;
 
 // namespace declaration 
 namespace state
@@ -93,7 +94,7 @@ namespace state
             {
                 for (int col = 0; col < colLength; col++)
                 {
-                    Console.Write(String.Format("|{0}\t|", board[row,col]));
+                    Console.Write(String.Format("{0} ", CliSymbols.symbols[board[row,col]]));
                 }
                 Console.WriteLine();
             }
