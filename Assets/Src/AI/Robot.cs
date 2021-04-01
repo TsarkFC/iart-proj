@@ -89,7 +89,7 @@ namespace robot
 
         public Movement.MovementType Hint()
         {
-            List<Node> path = BFS().Item1;
+            List<Node> path = RunWithoutMeasurements(AlgorithmType.ASTAR_DIRECTION);
 
             if (path.Count < 2) return Movement.MovementType.NONE;
             return path[1].movement;
