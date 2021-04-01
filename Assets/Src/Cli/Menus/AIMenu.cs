@@ -42,11 +42,11 @@ namespace aimenu
                 case ConsoleKey.D3:
                     algorithm = AlgorithmType.IT_DEEPENING;
                     break;
-                case ConsoleKey.D4:
-                    algorithm = AlgorithmType.GREEDY;
+                case ConsoleKey.D4: // TODO add greedy manhattan
+                    algorithm = AlgorithmType.GREEDY_DIRECTION;
                     break;
-                case ConsoleKey.D5:
-                    algorithm = AlgorithmType.ASTAR;
+                case ConsoleKey.D5: // TODO add astar manhattan
+                    algorithm = AlgorithmType.ASTAR_DIRECTION;
                     break;
                 case ConsoleKey.D6:
                     algorithm = AlgorithmType.ALL;

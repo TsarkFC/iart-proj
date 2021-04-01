@@ -23,7 +23,7 @@ namespace piece
         public override bool Equals(Object obj) 
         {
             if (!(obj is Piece)) return false;
-            Piece piece = (Piece)obj;
+            Piece piece = (Piece) obj;
             return piece.symbol == symbol && piece.position.Equals(position);
         }
 

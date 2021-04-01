@@ -8,6 +8,7 @@ using state;
 using piecetype;
 using robot;
 using cloner;
+using algorithmtype;
 
 public abstract class Level : MonoBehaviour
 {
@@ -42,7 +43,7 @@ public abstract class Level : MonoBehaviour
     private Dictionary<GameObject, Movement> piecesMovement = new Dictionary<GameObject, Movement>();  // each piece's movement
     private bool moving = false;  // is any piece moving?
 
-    private Logic logic;
+    private State state;
     private Robot robot;
     private GameObject currentHint;
 
@@ -52,10 +53,10 @@ public abstract class Level : MonoBehaviour
 
     protected void BuildBoard() 
     {
-        this.logic = new Logic(new State(board, xDim, yDim));
+        this.state = new State(board, xDim, yDim);
         if (GameMode.mode == GameMode.Mode.AI) {
-            this.robot = new Robot(new Logic(new State(board, xDim, yDim)));
-            this.robot.InitStepByStep(this.robot.GreedyDirection());
+            this.robot = new Robot(this.state);
+            this.robot.InitStepByStep(this.robot.RunWithMeasurements(AlgorithmType.ALL));
         }
         else this.robot = null;
 
@@ -142,7 +143,7 @@ public abstract class Level : MonoBehaviour
     public void ShowHintDirection()
     {
         if (this.moving) return;
-        Robot hintRobot = new Robot(this.logic);
+        Robot hintRobot = new Robot(this.state);
         Movement.MovementType hint = hintRobot.Hint();
 
         Destroy(currentHint);
@@ -221,7 +222,7 @@ public abstract class Level : MonoBehaviour
 
             if (movementType != Movement.MovementType.NONE) {
                 Destroy(currentHint);
-                Dictionary<Position, Position> prevNextPositions = logic.Move(movementType);
+                Dictionary<Position, Position> prevNextPositions = Logic.Move(this.state, movementType);
                 if (prevNextPositions == null) return;
 
                 for (int y = 0; y < yDim; y++)

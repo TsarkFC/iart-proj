@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using logic;
 using state;
 using position;
@@ -10,6 +11,7 @@ using direction;
 using datastructures;
 using heuristic;
 using algorithmtype;
+using statsresults;
 
 // namespace declaration 
 namespace robot
@@ -17,34 +19,76 @@ namespace robot
     // Class declaration 
     public class Robot
     {
-        private Logic logic;
+        private State state;
         private List<Node> path = null;
         //public int depthLimit { get; set; }
         int depthLimit = 20;
-        private Dictionary<AlgorithmType, Func<List<Node>>> algorithms = new Dictionary<AlgorithmType, Func<List<Node>>>();
+        private Dictionary<AlgorithmType, Func<Tuple<List<Node>, int>>> algorithms = new Dictionary<AlgorithmType, Func<Tuple<List<Node>, int>>>();
 
-        public Robot(Logic logic)
+        public Robot(State state)
         {
-            this.logic = logic;
+            this.state = state;
             algorithms.Add(AlgorithmType.BFS, BFS);
             algorithms.Add(AlgorithmType.DFS, DFS);
             algorithms.Add(AlgorithmType.IT_DEEPENING, ItDeepening);
-            algorithms.Add(AlgorithmType.GREEDY, BFS);
-            algorithms.Add(AlgorithmType.ASTAR, BFS);
-            algorithms.Add(AlgorithmType.ALL, BFS);
+            algorithms.Add(AlgorithmType.GREEDY_MANHATTAN, GreedyManhattan);
+            algorithms.Add(AlgorithmType.GREEDY_DIRECTION, GreedyDirection);
+            algorithms.Add(AlgorithmType.ASTAR_MANHATTAN, AStarManhattan);
+            algorithms.Add(AlgorithmType.ASTAR_DIRECTION, AStarDirection);
         }
 
-        public void Run(AlgorithmType algorithm)
+        public List<Node> RunWithoutMeasurements(AlgorithmType algorithm)
         {
-            List<Node> path = algorithms[algorithm]();
-            PrintSearchPath(path);
+            if (algorithm == AlgorithmType.ALL) throw new System.Exception("There is no need to run all the algorithms without taking measurements!");
+            return algorithms[algorithm]().Item1;
+        }
+
+        public List<Node> RunWithMeasurements(AlgorithmType algorithm)
+        {
+            StatsInfo.ResetAlgoResults();
+            if (algorithm == AlgorithmType.ALL)
+            {
+                foreach (var pair in this.algorithms)
+                {
+                    var result = TakeMeasurements(pair.Value);
+                    StatsInfo.AddAlgoResults(pair.Key, result.Item1);
+                }
+
+                return algorithms[AlgorithmType.ASTAR_DIRECTION]().Item1;
+            }
+            else
+            {
+                var result = TakeMeasurements(algorithms[algorithm]);
+                StatsInfo.AddAlgoResults(algorithm, result.Item1);
+                return result.Item2;
+            }
+        }
+
+        public Tuple<StatsResults, List<Node>> TakeMeasurements(Func<Tuple<List<Node>, int>> func)
+        {
+            Stopwatch sw = new Stopwatch();
+            int millisecondsSum = 0, nNodesVisitedSum = 0;
+
+            List<Node> pathRes = null;
+
+            for (int i = 0; i < 3; i++)
+            {
+                sw.Start();
+                Tuple<List<Node>, int> path = func();
+                sw.Stop();
+
+                millisecondsSum += sw.Elapsed.Milliseconds;
+                nNodesVisitedSum += path.Item2;
+                pathRes = path.Item1;
+                sw.Reset();
+            }
+
+            return Tuple.Create(new StatsResults(millisecondsSum/3, nNodesVisitedSum/3, 0), pathRes);
         }
 
         public Movement.MovementType Hint()
         {
-            State stateCopy = Cloner.DeepClone(logic.state);
-            List<Node> path = BFS();
-            logic.state = stateCopy;
+            List<Node> path = RunWithoutMeasurements(AlgorithmType.ASTAR_DIRECTION);
 
             if (path.Count < 2) return Movement.MovementType.NONE;
             return path[1].movement;
@@ -66,9 +110,9 @@ namespace robot
             return ret.movement;
         }
 
-        public List<Node> BFS()
+        public Tuple<List<Node>, int> BFS()
         {
-            Node root = new Node(null, null, Cloner.DeepClone(logic.state), logic, 0);
+            Node root = new Node(null, null, this.state, 0);
             List<Node> visited = new List<Node>();
             Queue<Node> queue = new Queue<Node>();
             Node current = null;
@@ -80,10 +124,10 @@ namespace robot
             {
                 current = queue.Dequeue();
                 count++;
-                logic.state = Cloner.DeepClone(current.state);  // ??
-                if (logic.VerifyEndGame())
+
+                if (Logic.VerifyEndGame(current.state))
                 {
-                    return GetNodePath(current);
+                    return Tuple.Create(GetNodePath(current), count);
                 }
 
                 List<Node> children = current.Expand();
@@ -94,22 +138,21 @@ namespace robot
                         visited.Add(node);
                     }
             }
-            return GetNodePath(current);
+            return null;
         }
 
-        public List<Node> DFS()
+        public Tuple<List<Node>, int> DFS()
         {
-            Node root = new Node(null, null, Cloner.DeepClone(logic.state), logic, 0);
+            Node root = new Node(null, null, this.state, 0);
             List<Node> visited = new List<Node>();
-            return DepthRecursiveCall(root, visited, 0);
+            return Tuple.Create(DepthRecursiveCall(root, visited, 0), -1);
         }
 
         public List<Node> DepthRecursiveCall(Node node, List<Node> visited, int depthCount)
         {
             if (depthCount > depthLimit) return null;
             
-            logic.state = Cloner.DeepClone(node.state);  // ??
-            if (logic.VerifyEndGame()) 
+            if (Logic.VerifyEndGame(node.state)) 
                 return GetNodePath(node);
             
             depthCount++;
@@ -126,7 +169,7 @@ namespace robot
             return null;
         }
 
-        public List<Node> ItDeepening()
+        public Tuple<List<Node>, int> ItDeepening()
         {
             depthLimit = 1;
             List<Node> result = null;
@@ -134,18 +177,17 @@ namespace robot
             while (result == null)
             {
                 Console.WriteLine("Iteration: " + depthLimit.ToString());
-                result = DFS();
+                result = DFS().Item1;
                 depthLimit++;
             }
-            return result;
+            return Tuple.Create(result, -1);
         }
 
-        public List<Node> InformedSearch(PriorityQueue<Node>.PQType pQType, Func<Node, float> heuristic)
+        public Tuple<List<Node>, int> InformedSearch(PriorityQueue<Node>.PQType pQType, Func<Node, float> heuristic)
         {
             List<Node> visited = new List<Node>();
             PriorityQueue<Node> queue = new PriorityQueue<Node>(pQType);
-            Node current = null;
-            Node root = new Node(null, null, Cloner.DeepClone(logic.state), logic, 0);
+            Node current = null, root = new Node(null, null, this.state, 0);
             queue.Insert(root, heuristic(root));
             int count = 0;
 
@@ -153,10 +195,10 @@ namespace robot
             {
                 current = queue.Pop();
                 count++;
-                logic.state = Cloner.DeepClone(current.state);  // ??
-                if (logic.VerifyEndGame())
+                
+                if (Logic.VerifyEndGame(current.state))
                 {
-                    return GetNodePath(current);
+                    return Tuple.Create(GetNodePath(current), count);
                 }
 
                 List<Node> children = current.Expand();
@@ -170,13 +212,14 @@ namespace robot
             return null;
         }
 
-        public List<Node> GreedyManhattan() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.GreedyManhattanDistance);
+        public Tuple<List<Node>, int> GreedyManhattan() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.GreedyManhattanDistance);
 
-        public List<Node> AStarManhattan() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.AStarManhattanDistance);
+        public Tuple<List<Node>, int> AStarManhattan() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.AStarManhattanDistance);
 
-        public List<Node> GreedyDirection() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.GreedyDirection);
+        public Tuple<List<Node>, int> GreedyDirection() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.GreedyDirection);
 
-        public List<Node> AStarDirection() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.AStarDirection);
+        public Tuple<List<Node>, int> AStarDirection() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.AStarDirection);
+
 
         private List<Node> GetNodePath(Node node)
         {
@@ -194,7 +237,7 @@ namespace robot
             return path;
         }
 
-        private void PrintSearchPath(List<Node> path)
+        public static void PrintSearchPath(List<Node> path)
         {
             if (path == null) {
                 Console.WriteLine("No path found");
