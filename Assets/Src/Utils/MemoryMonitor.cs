@@ -15,7 +15,6 @@ namespace memorymonitor
             Thread thread = new Thread(Task);
             GC.Collect();
             GC.WaitForPendingFinalizers();
-            Thread.Sleep(100);
             startMemory = GC.GetTotalMemory(false);
             thread.Start();
         }
