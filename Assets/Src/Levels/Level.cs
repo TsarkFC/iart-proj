@@ -65,7 +65,10 @@ public abstract class Level : MonoBehaviour
             this.robot = new Robot(this.state);
             List<Node> path = this.robot.RunWithMeasurements(GameMode.algorithm);
             this.robot.InitStepByStep(path);
-            StatsInfo.SetMinimumPossibleMoves(path.Count - 1);
+
+            // because the algorithm selected may not be otimum
+            List<Node> minimumPath = this.robot.RunWithoutMeasurements(AlgorithmType.ASTAR_DIRECTION);
+            StatsInfo.SetMinimumPossibleMoves(minimumPath.Count - 1);
         }
         else 
         {
