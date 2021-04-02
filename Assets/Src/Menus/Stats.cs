@@ -27,7 +27,7 @@ public class Stats : MonoBehaviour
 
         foreach (var pair in StatsInfo.algoResults)
         {
-            output += "<b>" + AlgorithmNames.get(pair.Key) + "</b>\n" + pair.Value.timeSpent + "ms, " + pair.Value.nNodesVisited + " nodes visited, " + pair.Value.nMovesUsed + " moves used\n\n";
+            output += "<b>" + AlgorithmNames.get(pair.Key) + "</b>\n<size=15>" + pair.Value.timeSpent + "ms, " + pair.Value.nNodesVisited + " nodes, " + pair.Value.nMovesUsed + " moves, memory: " + pair.Value.maxMemoryUsed + "B</size>\n\n";
         }
 
         statsTextBox.text = output;

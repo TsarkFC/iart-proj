@@ -12,6 +12,7 @@ using datastructures;
 using heuristic;
 using algorithmtype;
 using statsresults;
+using memorymonitor;
 
 // namespace declaration 
 namespace robot
@@ -69,14 +70,19 @@ namespace robot
         {
             Stopwatch sw = new Stopwatch();
             int millisecondsSum = 0, nNodesVisitedSum = 0;
+            long minMemory = -1;
 
             List<Node> pathRes = null;
+            MemoryMonitor memoryMonitor = new MemoryMonitor();
 
             for (int i = 0; i < 3; i++)
             {
+                memoryMonitor.Start();
                 sw.Start();
                 Tuple<List<Node>, int> path = func();
                 sw.Stop();
+                long memory = memoryMonitor.Stop();
+                if (memory < minMemory || minMemory == -1) minMemory = memory;
 
                 millisecondsSum += sw.Elapsed.Milliseconds;
                 nNodesVisitedSum += path.Item2;
@@ -84,7 +90,7 @@ namespace robot
                 sw.Reset();
             }
 
-            return Tuple.Create(new StatsResults(millisecondsSum/3, nNodesVisitedSum/3, 0, pathRes.Count - 1), pathRes);
+            return Tuple.Create(new StatsResults(millisecondsSum/3, nNodesVisitedSum/3, minMemory, pathRes.Count - 1), pathRes);
         }
 
         public Movement.MovementType Hint()
