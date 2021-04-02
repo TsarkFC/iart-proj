@@ -76,7 +76,7 @@ namespace heuristic
 
         public static float GreedyDirection(Node node) => PieceTargetDirection(node);
 
-        public static float AStarDirection(Node node) => node.cost + PieceTargetDirection(node);
+        public static float AStarDirection(Node node) => 10*node.cost + PieceTargetDirection(node);
 
         public static float ManhattanDistance(Node node)
         {
@@ -104,6 +104,6 @@ namespace heuristic
 
         public static float GreedyManhattanDistance(Node node) => ManhattanDistance(node);
 
-        public static float AStarManhattanDistance(Node node) => node.cost + ManhattanDistance(node);
+        public static float AStarManhattanDistance(Node node) => 10*node.cost + ManhattanDistance(node);
     }
 }

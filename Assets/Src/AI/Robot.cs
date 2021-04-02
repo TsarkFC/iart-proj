@@ -83,7 +83,7 @@ namespace robot
                 sw.Reset();
             }
 
-            return Tuple.Create(new StatsResults(millisecondsSum/3, nNodesVisitedSum/3, 0), pathRes);
+            return Tuple.Create(new StatsResults(millisecondsSum/3, nNodesVisitedSum/3, 0, pathRes.Count - 1), pathRes);
         }
 
         public Movement.MovementType Hint()
