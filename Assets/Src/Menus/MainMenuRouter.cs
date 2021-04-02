@@ -8,7 +8,7 @@ public class MainMenuRouter : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {   
+    {
         if (GameMode.menuState == GameMode.MenuStates.AI)
         {
             mainMenu.SetActive(false);

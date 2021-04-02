@@ -145,41 +145,52 @@ namespace robot
         {
             Node root = new Node(null, null, this.state, 0);
             List<Node> visited = new List<Node>();
-            return Tuple.Create(DepthRecursiveCall(root, visited, 0), -1);
+            return DepthRecursiveCall(root, visited, 0);
         }
 
-        public List<Node> DepthRecursiveCall(Node node, List<Node> visited, int depthCount)
+        public Tuple<List<Node>, int> DepthRecursiveCall(Node node, List<Node> visited, int depthCount)
         {
-            if (depthCount > depthLimit) return null;
-            
+            int count = 1;
             if (Logic.VerifyEndGame(node.state)) 
-                return GetNodePath(node);
+                return Tuple.Create(GetNodePath(node), count);
             
             depthCount++;
 
             if (!visited.Contains(node))
             {
                 visited.Add(node);
-                List<Node> children = node.Expand();
-                foreach(Node child in children) {
-                    List<Node> result = DepthRecursiveCall(child, visited, depthCount);
-                    if (result != null) return result;
+                if (depthCount <= depthLimit)
+                {
+                    List<Node> children = node.Expand();
+
+                    foreach(Node child in children) 
+                    {
+                        Tuple<List<Node>, int> result = DepthRecursiveCall(child, visited, depthCount);
+                        if (result.Item1 != null) return Tuple.Create(result.Item1, result.Item2 + count);
+                        else
+                        {
+                            count += result.Item2;
+                        }
+                    }
                 }
             }
-            return null;
+            return new Tuple<List<Node>, int>(null, count);
         }
 
         public Tuple<List<Node>, int> ItDeepening()
         {
             depthLimit = 1;
             List<Node> result = null;
+            int nodeCount = 0;
 
             while (result == null)
             {
-                result = DFS().Item1;
+                Tuple<List<Node>, int> res = DFS();
+                result = res.Item1;
+                nodeCount += res.Item2;
                 depthLimit++;
             }
-            return Tuple.Create(result, -1);
+            return Tuple.Create(result, nodeCount);
         }
 
         public Tuple<List<Node>, int> InformedSearch(PriorityQueue<Node>.PQType pQType, Func<Node, float> heuristic)
