@@ -14,6 +14,14 @@ public class Router : MonoBehaviour
     public void BackToMenu() 
     {
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        if (GameMode.mode == GameMode.Mode.HUMAN) GameMode.menuState = GameMode.MenuStates.SINGLE_PLAYER;
+        if (GameMode.mode == GameMode.Mode.AI) GameMode.menuState = GameMode.MenuStates.AI;
+        SceneManager.LoadScene(0);
+    }
+
+    public void GoToMainMenu()
+    {
+        GameMode.menuState = GameMode.MenuStates.MAIN_MENU;
         SceneManager.LoadScene(0);
     }
 

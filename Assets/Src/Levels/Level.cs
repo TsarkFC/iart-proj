@@ -36,6 +36,7 @@ public abstract class Level : MonoBehaviour
     public ArrowPrefab[] arrowPrefabs;
     public GameObject hintButton;
     public GameObject showStatsButton;
+    public GameObject gameOverSection;
 
     protected PieceType[,] board;
     protected Dictionary<PieceType, GameObject> piecePrefabDict;
@@ -44,6 +45,7 @@ public abstract class Level : MonoBehaviour
 
     private Dictionary<GameObject, Movement> piecesMovement = new Dictionary<GameObject, Movement>();  // each piece's movement
     private bool moving = false;  // is any piece moving?
+    private int gameOver = -1; // positive if game over has not been shown, negative if its not game over. equal to zero if it is game over and no further action is required
 
     private State state;
     private Robot robot;
@@ -227,45 +229,56 @@ public abstract class Level : MonoBehaviour
         }
         else  // if not moving
         {
-            Movement.MovementType movementType = Movement.MovementType.NONE;
-            if (GameMode.mode == GameMode.Mode.HUMAN) {
-                if (Input.GetKeyDown(KeyCode.RightArrow)) {
-                    movementType = Movement.MovementType.RIGHT;
-                } else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
-                    movementType = Movement.MovementType.LEFT;
-                } else if (Input.GetKeyDown(KeyCode.UpArrow)) {
-                    movementType = Movement.MovementType.UP;
-                } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
-                    movementType = Movement.MovementType.DOWN;
-                }
-            } else if (GameMode.mode == GameMode.Mode.AI) {
-                movementType = this.robot.GetNextStep();
+            if (this.gameOver > 0)
+            {
+                Debug.Log("Game over!");
+                this.hintButton.SetActive(false);
+                this.gameOverSection.SetActive(true);
+                gameOver = 0;
             }
+            else if (this.gameOver < 0)
+            {
+                Movement.MovementType movementType = Movement.MovementType.NONE;
+                if (GameMode.mode == GameMode.Mode.HUMAN) {
+                    if (Input.GetKeyDown(KeyCode.RightArrow)) {
+                        movementType = Movement.MovementType.RIGHT;
+                    } else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+                        movementType = Movement.MovementType.LEFT;
+                    } else if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                        movementType = Movement.MovementType.UP;
+                    } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
+                        movementType = Movement.MovementType.DOWN;
+                    }
+                } else if (GameMode.mode == GameMode.Mode.AI) {
+                    movementType = this.robot.GetNextStep();
+                }
 
 
-            if (movementType != Movement.MovementType.NONE) {
-                Destroy(currentHint);
-                Dictionary<Position, Position> prevNextPositions = Logic.Move(this.state, movementType);
-                if (prevNextPositions == null) return;
+                if (movementType != Movement.MovementType.NONE) {
+                    Destroy(currentHint);
+                    Dictionary<Position, Position> prevNextPositions = Logic.Move(this.state, movementType);
+                    if (prevNextPositions == null) return;
 
-                for (int y = 0; y < yDim; y++)
-                {
-                    for (int x = 0; x < xDim; x++)
+                    for (int y = 0; y < yDim; y++)
                     {
-                        if (IsPiece(board[y, x]))
+                        for (int x = 0; x < xDim; x++)
                         {
-                            Movement movement = piecesMovement[pieces[y, x]];
-                            Position nextPosition = prevNextPositions[movement.position];
-                            // Debug.Log("Previous position: " + movement.position);
-                            // Debug.Log("Next position: " + nextPosition);
-                            if (nextPosition == null) continue;
-                            // need to get the next position of the piece and calculate the amount to move
-                            movement.StartMovement(nextPosition, movementType);
+                            if (IsPiece(board[y, x]))
+                            {
+                                Movement movement = piecesMovement[pieces[y, x]];
+                                Position nextPosition = prevNextPositions[movement.position];
+                                // Debug.Log("Previous position: " + movement.position);
+                                // Debug.Log("Next position: " + nextPosition);
+                                if (nextPosition == null) continue;
+                                // need to get the next position of the piece and calculate the amount to move
+                                movement.StartMovement(nextPosition, movementType);
+                            }
                         }
                     }
+                    IncrementMovesCount();
+                    this.moving = true;
+                    if (Logic.VerifyEndGame(this.state)) this.gameOver = 1;
                 }
-                IncrementMovesCount();
-                this.moving = true;
             }
         }
         

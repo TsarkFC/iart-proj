@@ -7,4 +7,13 @@ public class GameMode
     }
 
     public static Mode mode = Mode.HUMAN;
+
+    public enum MenuStates
+    {
+        MAIN_MENU,
+        SINGLE_PLAYER,
+        AI
+    }
+
+    public static MenuStates menuState = MenuStates.MAIN_MENU;
 }
