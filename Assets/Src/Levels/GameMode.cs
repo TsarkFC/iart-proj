@@ -1,3 +1,5 @@
+using algorithmtype;
+
 public class GameMode
 {
     public enum Mode
@@ -7,6 +9,7 @@ public class GameMode
     }
 
     public static Mode mode = Mode.HUMAN;
+    public static AlgorithmType algorithm;
 
     public enum MenuStates
     {

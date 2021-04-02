@@ -63,7 +63,7 @@ public abstract class Level : MonoBehaviour
         if (GameMode.mode == GameMode.Mode.AI) 
         {
             this.robot = new Robot(this.state);
-            List<Node> path = this.robot.RunWithMeasurements(AlgorithmType.ALL);
+            List<Node> path = this.robot.RunWithMeasurements(GameMode.algorithm);
             this.robot.InitStepByStep(path);
             StatsInfo.SetMinimumPossibleMoves(path.Count - 1);
         }

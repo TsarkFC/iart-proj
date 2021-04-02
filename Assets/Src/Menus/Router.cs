@@ -2,9 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using algorithmtype;
 
 public class Router : MonoBehaviour
 {
+    private static int aiLvlIndex;
+
+    public void SetAiLvlIndex(int lvl)
+    {
+        aiLvlIndex = lvl;
+    }
+
     public void QuitGame()
     {
         Debug.Log("QUIT");
@@ -25,16 +33,17 @@ public class Router : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    public void playSinglePlayer(int lvlIndex)
+    public void PlaySinglePlayer(int lvlIndex)
     {
         StatsInfo.ResetAlgoResults();
         GameMode.mode = GameMode.Mode.HUMAN;
         SceneManager.LoadScene(lvlIndex);
     }
 
-    public void playAI(int lvlIndex)
+    public void PlayAI(int algorithm)
     {
         GameMode.mode = GameMode.Mode.AI;
-        SceneManager.LoadScene(lvlIndex);
+        GameMode.algorithm = (AlgorithmType) algorithm;
+        SceneManager.LoadScene(aiLvlIndex);
     }
 }
