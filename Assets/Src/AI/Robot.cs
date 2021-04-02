@@ -33,6 +33,7 @@ namespace robot
             algorithms.Add(AlgorithmType.IT_DEEPENING, ItDeepening);
             algorithms.Add(AlgorithmType.GREEDY_MANHATTAN, GreedyManhattan);
             algorithms.Add(AlgorithmType.GREEDY_DIRECTION, GreedyDirection);
+            algorithms.Add(AlgorithmType.GREEDY_RANDOM, GreedyRandom);
             algorithms.Add(AlgorithmType.ASTAR_MANHATTAN, AStarManhattan);
             algorithms.Add(AlgorithmType.ASTAR_DIRECTION, AStarDirection);
         }
@@ -230,6 +231,7 @@ namespace robot
 
         public Tuple<List<Node>, int> AStarDirection() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.AStarDirection);
 
+        public Tuple<List<Node>, int> GreedyRandom() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.GreedyRandom);
 
         private List<Node> GetNodePath(Node node)
         {

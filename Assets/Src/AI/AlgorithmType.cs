@@ -11,7 +11,8 @@ namespace algorithmtype {
         GREEDY_DIRECTION,
         ASTAR_MANHATTAN,
         ASTAR_DIRECTION,
-        ALL
+        ALL,
+        GREEDY_RANDOM
     }
 
     public class AlgorithmNames
@@ -25,6 +26,7 @@ namespace algorithmtype {
             names.Add(AlgorithmType.IT_DEEPENING, "Iterative Deepening");
             names.Add(AlgorithmType.GREEDY_MANHATTAN, "Greedy with manhattan heuristic");
             names.Add(AlgorithmType.GREEDY_DIRECTION, "Greedy with direction heuristic");
+            names.Add(AlgorithmType.GREEDY_RANDOM, "Greedy with random heuristic");
             names.Add(AlgorithmType.ASTAR_MANHATTAN, "A* with manhattan heuristic");
             names.Add(AlgorithmType.ASTAR_DIRECTION, "A* with direction heuristic");
         }

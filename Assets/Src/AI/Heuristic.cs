@@ -6,8 +6,10 @@ using System;
 
 namespace heuristic
 {
+
     public class Heuristic
     {
+        private static Random rand = new Random();
 
         public static float PieceTargetDirection(Node node)
         {
@@ -105,5 +107,8 @@ namespace heuristic
         public static float GreedyManhattanDistance(Node node) => ManhattanDistance(node);
 
         public static float AStarManhattanDistance(Node node) => 10*node.cost + ManhattanDistance(node);
+
+        public static float GreedyRandom(Node node) => (float) rand.NextDouble() * 50;
+
     }
 }
