@@ -9,6 +9,10 @@ namespace piece_orderer
     {
         public Position direction { get; set; }
         public PieceOrderer() {}
+        public PieceOrderer(Position direction) 
+        {
+            this.direction = direction;
+        }
 
         // 0 -> equal; -1 -> p2 greater; 1 -> p1 greater 
         public int Compare(Piece p1, Piece p2)

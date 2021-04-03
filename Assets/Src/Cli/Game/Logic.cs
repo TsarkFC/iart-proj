@@ -61,7 +61,7 @@ namespace logic
 
             foreach (Piece piece in state.pieces)
             {
-                Position nextPos = getNextPosition(state, direction, piece);
+                Position nextPos = GetNextPosition(state, direction, piece);
                 prevNextPosition.Add(piece.position, nextPos);
                 if (nextPos == null) continue;
                 Moved = true;
@@ -71,7 +71,7 @@ namespace logic
             return Moved == true ? prevNextPosition : null;
         }
 
-        private static Position getNextPosition(State state, Position direction, Piece piece)
+        public static Position GetNextPosition(State state, Position direction, Piece piece)
         {
             Position nextPos = piece.position;
             Position temp = null;

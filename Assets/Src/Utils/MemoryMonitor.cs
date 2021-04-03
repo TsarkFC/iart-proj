@@ -22,6 +22,7 @@ namespace memorymonitor
         public long Stop()
         {
             measure = false;
+            TakeMeasurement();
             // UnityEngine.Debug.Log("Start memory: " + startMemory + ", end memory: " + maxMemory + ", avg memory: " + (memorySum/count));
             long res = maxMemory - startMemory;
             Thread.Sleep(15);
@@ -36,12 +37,17 @@ namespace memorymonitor
         {
             while(measure)
             {
-                long memory = GC.GetTotalMemory(false);
-                if (memory > maxMemory) maxMemory = memory;
-                memorySum += memory;
-                count++;
+                TakeMeasurement();
                 Thread.Sleep(10);
             }
+        }
+
+        private void TakeMeasurement()
+        {
+            long memory = GC.GetTotalMemory(false);
+            if (memory > maxMemory) maxMemory = memory;
+            memorySum += memory;
+            count++;
         }
 
     }

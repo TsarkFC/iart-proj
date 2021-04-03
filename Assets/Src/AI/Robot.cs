@@ -34,9 +34,13 @@ namespace robot
             algorithms.Add(AlgorithmType.IT_DEEPENING, ItDeepening);
             algorithms.Add(AlgorithmType.GREEDY_MANHATTAN, GreedyManhattan);
             algorithms.Add(AlgorithmType.GREEDY_DIRECTION, GreedyDirection);
+            algorithms.Add(AlgorithmType.GREEDY_ALIGNMENT, GreedyAlignment);
+            algorithms.Add(AlgorithmType.GREEDY_BLOCK, GreedyBlock);
             algorithms.Add(AlgorithmType.GREEDY_RANDOM, GreedyRandom);
             algorithms.Add(AlgorithmType.ASTAR_MANHATTAN, AStarManhattan);
             algorithms.Add(AlgorithmType.ASTAR_DIRECTION, AStarDirection);
+            algorithms.Add(AlgorithmType.ASTAR_ALIGNMENT, AStarAlignment);
+            algorithms.Add(AlgorithmType.ASTAR_BLOCK, AStarBlock);
         }
 
         public List<Node> RunWithoutMeasurements(AlgorithmType algorithm)
@@ -70,7 +74,7 @@ namespace robot
         {
             Stopwatch sw = new Stopwatch();
             int millisecondsSum = 0, nNodesVisitedSum = 0;
-            long minMemory = -1;
+            long memorySum = 0;
 
             List<Node> pathRes = null;
             MemoryMonitor memoryMonitor = new MemoryMonitor();
@@ -82,7 +86,7 @@ namespace robot
                 Tuple<List<Node>, int> path = func();
                 sw.Stop();
                 long memory = memoryMonitor.Stop();
-                if (memory < minMemory || minMemory == -1) minMemory = memory;
+                memorySum += memory;
 
                 millisecondsSum += sw.Elapsed.Milliseconds;
                 nNodesVisitedSum += path.Item2;
@@ -90,7 +94,7 @@ namespace robot
                 sw.Reset();
             }
 
-            return Tuple.Create(new StatsResults(millisecondsSum/3, nNodesVisitedSum/3, minMemory, pathRes.Count - 1), pathRes);
+            return Tuple.Create(new StatsResults(millisecondsSum/3, nNodesVisitedSum/3, memorySum/3, pathRes.Count - 1), pathRes);
         }
 
         public Movement.MovementType Hint()
@@ -238,6 +242,14 @@ namespace robot
         public Tuple<List<Node>, int> AStarDirection() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.AStarDirection);
 
         public Tuple<List<Node>, int> GreedyRandom() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.GreedyRandom);
+        
+        public Tuple<List<Node>, int> GreedyAlignment() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.GreedyAlignment);
+
+        public Tuple<List<Node>, int> AStarAlignment() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.AStarAlignment);
+
+        public Tuple<List<Node>, int> GreedyBlock() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.GreedyBlock);
+
+        public Tuple<List<Node>, int> AStarBlock() => InformedSearch(PriorityQueue<Node>.PQType.MIN, Heuristic.AStarBlock);
 
         private List<Node> GetNodePath(Node node)
         {
