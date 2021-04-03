@@ -70,8 +70,12 @@ namespace levelmenu
             }
             if (ai)
                 return new AIMenu(level);
-            else 
+            else {
+                Console.WriteLine("\n\nUse arrow keys to move the pieces");
+                Console.WriteLine("Press [h] to see a hint");
+                Console.WriteLine("Press [q] to quit");   
                 new Game(level).RunGame();
+            }
 
             base.GameOver();
             return this;

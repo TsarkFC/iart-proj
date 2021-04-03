@@ -21,11 +21,12 @@ namespace aimenu
             options.Add("[1] BFS");
             options.Add("[2] DFS");
             options.Add("[3] Iterative Deepening");
-            options.Add("[4] Greedy Search (manhattan heuristic)");
+            options.Add("[4] Greedy Search (alignment heuristic)");
             options.Add("[5] Greedy Search (direction heuristic)");
-            options.Add("[6] A Star (manhattan heuristic)");
-            options.Add("[7] A Star (direction heuristic)");
-            options.Add("[8] Compare all algorithms");
+            options.Add("[6] Greedy Search (random heuristic)");
+            options.Add("[7] A Star (alignment heuristic)");
+            options.Add("[8] A Star (direction heuristic)");
+            options.Add("[9] Compare all algorithms");
             options.Add("[0] Go Back");
             base.options = options;
         }
@@ -45,18 +46,21 @@ namespace aimenu
                     algorithm = AlgorithmType.IT_DEEPENING;
                     break;
                 case ConsoleKey.D4:
-                    algorithm = AlgorithmType.GREEDY_MANHATTAN;
+                    algorithm = AlgorithmType.GREEDY_ALIGNMENT;
                     break;
                 case ConsoleKey.D5:
                     algorithm = AlgorithmType.GREEDY_DIRECTION;
                     break;
                 case ConsoleKey.D6:
-                    algorithm = AlgorithmType.ASTAR_MANHATTAN;
+                    algorithm = AlgorithmType.GREEDY_RANDOM;
                     break;
                 case ConsoleKey.D7:
-                    algorithm = AlgorithmType.ASTAR_DIRECTION;
+                    algorithm = AlgorithmType.ASTAR_ALIGNMENT;
                     break;
                 case ConsoleKey.D8:
+                    algorithm = AlgorithmType.ASTAR_DIRECTION;
+                    break;
+                case ConsoleKey.D9:
                     algorithm = AlgorithmType.ALL;
                     break;
                 case ConsoleKey.D0:
