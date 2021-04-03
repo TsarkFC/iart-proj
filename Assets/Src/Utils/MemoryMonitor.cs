@@ -23,7 +23,6 @@ namespace memorymonitor
         {
             measure = false;
             TakeMeasurement();
-            // UnityEngine.Debug.Log("Start memory: " + startMemory + ", end memory: " + maxMemory + ", avg memory: " + (memorySum/count));
             long res = maxMemory - startMemory;
             Thread.Sleep(15);
             maxMemory = -1;

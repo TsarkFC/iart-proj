@@ -100,8 +100,6 @@ public abstract class Level : MonoBehaviour
             }
         }
 
-        foreach(KeyValuePair<PieceType, GameObject> entry in piecePrefabDict) Debug.Log(entry.Key);
-
         // Instantiating entities (obstacles, pieces, targets)
         pieces = new GameObject[yDim, xDim];
 
@@ -122,8 +120,6 @@ public abstract class Level : MonoBehaviour
                 InstantiateEntity(x, y, true);
             }
         }
-
-        Debug.Log(pieces);
     }
 
     private void IncrementMovesCount()
@@ -177,7 +173,6 @@ public abstract class Level : MonoBehaviour
         Destroy(currentHint);
         if (!arrowPrefabDict.ContainsKey(hint)) return;
         currentHint = (GameObject)Instantiate(arrowPrefabDict[hint], transform.parent);
-        Debug.Log("Displayed " + hint);
     }
 
     protected void Update()
@@ -223,8 +218,6 @@ public abstract class Level : MonoBehaviour
                         pieces[y, x].transform.position = position;
 
                         movementGoesOn = movement.Update(amount) ? true : movementGoesOn; // returns true if the piece's movement continues
-
-                        // Debug.Log("Delta: "+ movement.delta + ", target: " + movement.target + ", goesOn: " + movementGoesOn);
                     }
                 }
             }
@@ -234,7 +227,6 @@ public abstract class Level : MonoBehaviour
         {
             if (this.gameOver > 0)
             {
-                Debug.Log("Game over!");
                 this.hintButton.SetActive(false);
                 this.gameOverSection.SetActive(true);
                 gameOver = 0;
@@ -270,8 +262,6 @@ public abstract class Level : MonoBehaviour
                             {
                                 Movement movement = piecesMovement[pieces[y, x]];
                                 Position nextPosition = prevNextPositions[movement.position];
-                                // Debug.Log("Previous position: " + movement.position);
-                                // Debug.Log("Next position: " + nextPosition);
                                 if (nextPosition == null) continue;
                                 // need to get the next position of the piece and calculate the amount to move
                                 movement.StartMovement(nextPosition, movementType);

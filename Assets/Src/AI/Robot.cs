@@ -94,7 +94,7 @@ namespace robot
                 sw.Reset();
             }
 
-            return Tuple.Create(new StatsResults(millisecondsSum/3, nNodesVisitedSum/3, memorySum/3, pathRes.Count - 1), pathRes);
+            return new Tuple<StatsResults, List<Node>>(new StatsResults(millisecondsSum/3, nNodesVisitedSum/3, memorySum/3, pathRes == null ? -1 : pathRes.Count - 1), pathRes);
         }
 
         public Movement.MovementType Hint()
@@ -190,6 +190,7 @@ namespace robot
 
         public Tuple<List<Node>, int> ItDeepening()
         {
+            int depthLimitCopy = depthLimit;
             depthLimit = 1;
             List<Node> result = null;
             int nodeCount = 0;
@@ -201,6 +202,7 @@ namespace robot
                 nodeCount += res.Item2;
                 depthLimit++;
             }
+            depthLimit = depthLimitCopy;
             return Tuple.Create(result, nodeCount);
         }
 

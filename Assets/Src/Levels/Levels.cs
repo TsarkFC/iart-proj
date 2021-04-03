@@ -44,5 +44,20 @@ namespace levels
                                     {PieceType.BARRIER, PieceType.BARRIER, PieceType.EMPTY, PieceType.EMPTY, PieceType.BARRIER},
                                     {PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY, PieceType.PIECE_RED},
                                     {PieceType.EMPTY, PieceType.EMPTY, PieceType.PIECE_ORANGE, PieceType.TARGET_RED, PieceType.BARRIER}};
+        public static PieceType[,] level10 = new PieceType[,] {{PieceType.EMPTY, PieceType.TARGET_ORANGE, PieceType.BARRIER, PieceType.EMPTY, PieceType.TARGET_PURPLE},
+                                    {PieceType.TARGET_RED, PieceType.BARRIER, PieceType.BARRIER, PieceType.PIECE_RED, PieceType.EMPTY},
+                                    {PieceType.EMPTY, PieceType.BARRIER, PieceType.PIECE_ORANGE, PieceType.EMPTY, PieceType.BARRIER},
+                                    {PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY, PieceType.BARRIER},
+                                    {PieceType.BARRIER, PieceType.EMPTY, PieceType.BARRIER, PieceType.PIECE_PURPLE, PieceType.BARRIER}};
+        public static PieceType[,] level11 = new PieceType[,] {{PieceType.BARRIER, PieceType.EMPTY, PieceType.BARRIER, PieceType.EMPTY, PieceType.EMPTY},
+                                    {PieceType.BARRIER, PieceType.EMPTY, PieceType.PIECE_RED, PieceType.EMPTY, PieceType.TARGET_PURPLE},
+                                    {PieceType.BARRIER, PieceType.PIECE_PURPLE, PieceType.EMPTY, PieceType.TARGET_RED, PieceType.BARRIER},
+                                    {PieceType.BARRIER, PieceType.EMPTY, PieceType.PIECE_ORANGE, PieceType.BARRIER, PieceType.EMPTY},
+                                    {PieceType.EMPTY, PieceType.BARRIER, PieceType.TARGET_ORANGE, PieceType.EMPTY, PieceType.BARRIER}};
+        public static PieceType[,] level12 = new PieceType[,] {{PieceType.BARRIER, PieceType.BARRIER, PieceType.PIECE_PURPLE, PieceType.PIECE_RED, PieceType.TARGET_PURPLE},
+                                    {PieceType.TARGET_RED, PieceType.BARRIER, PieceType.EMPTY, PieceType.BARRIER, PieceType.TARGET_ORANGE},
+                                    {PieceType.PIECE_ORANGE, PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY},
+                                    {PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY, PieceType.BARRIER, PieceType.BARRIER},
+                                    {PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY, PieceType.BARRIER, PieceType.EMPTY}};                            
     }
 }
