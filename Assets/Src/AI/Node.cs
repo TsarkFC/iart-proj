@@ -14,19 +14,24 @@ namespace node
     {
         public Node parent { get; }
         private Position direction;
+
         public State state { get; }
         public int cost { get; }
+        public List<Node> ancestors { get; }
         public Movement.MovementType movement { get; }
         
         static public List<Direction> directions = new List<Direction>();
 
-        public Node(Node parent, Direction direction, State state, int cost)
+        public Node(Node parent, Direction direction, State state, int cost, List<Node> parentsAncestors)
         {
             this.cost = cost;
             this.parent = parent;
             this.direction = direction != null ? direction.direction : null;
             this.state = state;
             this.movement = direction != null ? direction.movement : Movement.MovementType.NONE;
+
+            this.ancestors = new List<Node>(parentsAncestors);
+            this.ancestors.Add(parent);
 
             if (directions.Count == 0)
             {
@@ -41,7 +46,7 @@ namespace node
         {
             State newState = Cloner.DeepClone(this.state);
             if (Logic.Move(newState, direction.direction) == null) return null;
-            return new Node(this, direction, newState, cost);
+            return new Node(this, direction, newState, cost, this.ancestors);
         }
 
         public List<Node> Expand()

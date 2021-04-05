@@ -123,7 +123,7 @@ namespace robot
 
         public Tuple<List<Node>, int> BFS()
         {
-            Node root = new Node(null, null, this.state, 0);
+            Node root = new Node(null, null, this.state, 0, new List<Node>());
             List<Node> visited = new List<Node>();
             Queue<Node> queue = new Queue<Node>();
             Node current = null;
@@ -154,12 +154,11 @@ namespace robot
 
         public Tuple<List<Node>, int> DFS()
         {
-            Node root = new Node(null, null, this.state, 0);
-            List<Node> visited = new List<Node>();
-            return DepthRecursiveCall(root, visited, 0);
+            Node root = new Node(null, null, this.state, 0, new List<Node>());
+            return DepthRecursiveCall(root, 0);
         }
 
-        public Tuple<List<Node>, int> DepthRecursiveCall(Node node, List<Node> visited, int depthCount)
+        public Tuple<List<Node>, int> DepthRecursiveCall(Node node, int depthCount)
         {
             int count = 1;
             if (Logic.VerifyEndGame(node.state)) 
@@ -167,24 +166,23 @@ namespace robot
             
             depthCount++;
 
-            if (!visited.Contains(node))
+            if (depthCount <= depthLimit)
             {
-                visited.Add(node);
-                if (depthCount <= depthLimit)
-                {
-                    List<Node> children = node.Expand();
+                List<Node> children = node.Expand();
 
-                    foreach(Node child in children) 
-                    {
-                        Tuple<List<Node>, int> result = DepthRecursiveCall(child, visited, depthCount);
-                        if (result.Item1 != null) return Tuple.Create(result.Item1, result.Item2 + count);
-                        else
-                        {
-                            count += result.Item2;
-                        }
-                    }
+                foreach(Node child in children) 
+                {
+                    bool valid = true;
+                    foreach (Node ancestor in child.ancestors)
+                        if (child.Equals(ancestor)) valid = false;
+                    if (!valid) continue;  // if child has an equal ancestor
+
+                    Tuple<List<Node>, int> result = DepthRecursiveCall(child, depthCount);
+                    if (result.Item1 != null) return Tuple.Create(result.Item1, result.Item2 + count);
+                    else count += result.Item2;
                 }
             }
+
             return new Tuple<List<Node>, int>(null, count);
         }
 
@@ -210,7 +208,7 @@ namespace robot
         {
             List<Node> visited = new List<Node>();
             PriorityQueue<Node> queue = new PriorityQueue<Node>(pQType);
-            Node current = null, root = new Node(null, null, this.state, 0);
+            Node current = null, root = new Node(null, null, this.state, 0, new List<Node>());
             queue.Insert(root, heuristic(root));
             int count = 0;
 

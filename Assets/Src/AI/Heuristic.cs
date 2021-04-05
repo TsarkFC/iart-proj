@@ -12,7 +12,7 @@ namespace heuristic
     public class Heuristic
     {
         private static Random rand = new Random();
-        private static int AStartCostWeight = 3;
+        private static int AStartCostWeight = 4;
         private static List<Position> directions = new List<Position>() {
             new Position(1, 0),
             new Position(-1, 0),
