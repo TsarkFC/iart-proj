@@ -1,0 +1,47 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1620558797",
+        "python_version": "3.8.5 (default, Jan 27 2021, 15:41:15) \n[GCC 9.3.0]",
+        "command_line_arguments": "/mnt/c/Users/digas/OneDrive/Documentos/iart-proj/.venv/bin/mlagents-learn --run-id=test2",
+        "mlagents_version": "0.26.0",
+        "mlagents_envs_version": "0.26.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "1.8.1+cu102",
+        "numpy_version": "1.20.2",
+        "end_time_seconds": "1620558804"
+    },
+    "total": 7.167909400000099,
+    "count": 1,
+    "self": 0.020658600000388105,
+    "children": {
+        "run_training.setup": {
+            "total": 0.14990599999964616,
+            "count": 1,
+            "self": 0.14990599999964616
+        },
+        "TrainerController.start_learning": {
+            "total": 6.997344800000064,
+            "count": 1,
+            "self": 0.0019152000013491488,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 6.995403799999622,
+                    "count": 1,
+                    "self": 6.995403799999622
+                },
+                "trainer_threads": {
+                    "total": 2.1999994714860804e-06,
+                    "count": 1,
+                    "self": 2.1999994714860804e-06
+                },
+                "TrainerController._save_models": {
+                    "total": 2.3599999622092582e-05,
+                    "count": 1,
+                    "self": 2.3599999622092582e-05
+                }
+            }
+        }
+    }
+}

@@ -46,4 +46,6 @@ public class Router : MonoBehaviour
         GameMode.algorithm = (AlgorithmType) algorithm;
         SceneManager.LoadScene(aiLvlIndex);
     }
+
+
 }
