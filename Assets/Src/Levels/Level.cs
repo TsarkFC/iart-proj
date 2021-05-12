@@ -91,33 +91,16 @@ public abstract class Level : MonoBehaviour
             }
         }
 
-        // instantiating backgrounds
+        // instantiating backgrounds and entities (obstacles, pieces, targets)
+        pieces = new GameObject[yDim, xDim];
         for (int y = 0; y < yDim; y++)
         {
             for (int x = 0; x < xDim; x++)
             {
                 GameObject background = (GameObject)Instantiate(backgroundPrefab, GetWorldPosition(x*90, ((yDim-1)-y)*90), Quaternion.identity, transform);
-            }
-        }
 
-        // Instantiating entities (obstacles, pieces, targets)
-        pieces = new GameObject[yDim, xDim];
-
-        for (int y = 0; y < yDim; y++)
-        {
-            for (int x = 0; x < xDim; x++)
-            {
-                if (board[y, x] == PieceType.EMPTY || IsPiece(board[y, x])) continue;
-                InstantiateEntity(x, y, false);
-            }
-        }
-
-        for (int y = 0; y < yDim; y++)
-        {
-            for (int x = 0; x < xDim; x++)
-            {
-                if (!IsPiece(board[y, x])) continue;
-                InstantiateEntity(x, y, true);
+                if (IsPiece(board[y, x])) InstantiateEntity(x, y, true);
+                else if (board[y, x] != PieceType.EMPTY) InstantiateEntity(x, y, false);
             }
         }
     }

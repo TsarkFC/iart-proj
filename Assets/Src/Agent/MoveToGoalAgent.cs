@@ -8,17 +8,16 @@ public class MoveToGoalAgent : Agent {
 
     /**
      * ACTIONS
-     * 0 - Do nothing
-     * 1 - Move right
-     * 2 - Move left 
-     * 3 - Move up
-     * 4 - Move down
+     * 0 - Move right
+     * 1 - Move left 
+     * 2 - Move up
+     * 3 - Move down
      */
 
     public override void OnEpisodeBegin()
     {
         // reset game state
-        transform.position = new Vector3(57, 230, 0);
+        transform.position = new Vector3(171, (float) 299.5, 0);
     }
 
     public override void OnActionReceived(float[] vectorAction)
@@ -29,20 +28,19 @@ public class MoveToGoalAgent : Agent {
         int action = (int) vectorAction[0];
         switch(action)
         {
-            case 1:
+            case 0:
                 transform.position += new Vector3(25, 0, 0);
                 break;
-            case 2:
+            case 1:
                 transform.position += new Vector3(-25, 0, 0);
                 break;
-            case 3:
+            case 2:
                 transform.position += new Vector3(0, 25, 0);
                 break;
-            case 4:
+            case 3:
                 transform.position += new Vector3(0, -25, 0);
                 break;
         }
-        Debug.Log(transform.position);
     }
 
     [SerializeField] private Transform targetTransform;
