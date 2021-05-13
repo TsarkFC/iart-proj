@@ -47,5 +47,12 @@ public class Router : MonoBehaviour
         SceneManager.LoadScene(aiLvlIndex);
     }
 
+    public void PlayAgent(int lvlIndex)
+    {
+        StatsInfo.ResetAlgoResults();
+        GameMode.mode = GameMode.Mode.AGENT;
+        SceneManager.LoadScene(lvlIndex);
+    }
+
 
 }

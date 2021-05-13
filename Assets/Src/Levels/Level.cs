@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using position;
 using logic;
@@ -52,6 +53,8 @@ public abstract class Level : MonoBehaviour
     private GameObject currentHint;
     private int movesCount = 0;
 
+    private TaskCompletionSource<int> movementTask = null;
+
     // public Level(Mode mode) {
     //     this.levelMode = mode;
     // }
@@ -68,6 +71,12 @@ public abstract class Level : MonoBehaviour
 
             // because the algorithm selected may not be otimum
             List<Node> minimumPath = this.robot.RunWithoutMeasurements(AlgorithmType.ASTAR_DIRECTION);
+            StatsInfo.SetMinimumPossibleMoves(minimumPath.Count - 1);
+        }
+        else if (GameMode.mode == GameMode.Mode.AGENT)
+        {
+            Robot robot = new Robot(this.state);
+            List<Node> minimumPath = robot.RunWithoutMeasurements(AlgorithmType.ASTAR_DIRECTION);
             StatsInfo.SetMinimumPossibleMoves(minimumPath.Count - 1);
         }
         else 
@@ -91,14 +100,21 @@ public abstract class Level : MonoBehaviour
             }
         }
 
-        // instantiating backgrounds and entities (obstacles, pieces, targets)
+        // instantiating backgrounds (need to be instantiated before all game pieces)
         pieces = new GameObject[yDim, xDim];
         for (int y = 0; y < yDim; y++)
         {
             for (int x = 0; x < xDim; x++)
             {
                 GameObject background = (GameObject)Instantiate(backgroundPrefab, GetWorldPosition(x*90, ((yDim-1)-y)*90), Quaternion.identity, transform);
+            }
+        }
 
+        // instantiating entities(obstacles, pieces, targets)
+        for (int y = 0; y < yDim; y++)
+        {
+            for (int x = 0; x < xDim; x++)
+            {
                 if (IsPiece(board[y, x])) InstantiateEntity(x, y, true);
                 else if (board[y, x] != PieceType.EMPTY) InstantiateEntity(x, y, false);
             }
@@ -158,6 +174,56 @@ public abstract class Level : MonoBehaviour
         currentHint = (GameObject)Instantiate(arrowPrefabDict[hint], transform.parent);
     }
 
+    private void FinishMovementTask(int result)
+    {
+        this.movementTask.SetResult(result);
+        this.movementTask = null;
+    }
+
+    public TaskCompletionSource<int> HandleMovement(Movement.MovementType movementType)
+    {
+        if (this.movementTask != null)
+        {
+            Debug.LogError("Setting movement task but it wasn't null!");
+        }
+        TaskCompletionSource<int> task = new TaskCompletionSource<int>();
+        this.movementTask = task;
+        if (movementType != Movement.MovementType.NONE)
+        {
+            Destroy(currentHint);
+            Dictionary<Position, Position> prevNextPositions = Logic.Move(this.state, movementType);
+            if (prevNextPositions == null)
+            {
+                FinishMovementTask(1);
+                return task;
+            }
+
+            for (int y = 0; y < yDim; y++)
+            {
+                for (int x = 0; x < xDim; x++)
+                {
+                    if (IsPiece(board[y, x]))
+                    {
+                        Movement movement = piecesMovement[pieces[y, x]];
+                        Position nextPosition = prevNextPositions[movement.position];
+                        if (nextPosition == null) continue;
+                        // need to get the next position of the piece and calculate the amount to move
+                        movement.StartMovement(nextPosition, movementType);
+                    }
+                }
+            }
+            IncrementMovesCount();
+            this.moving = true;
+            if (Logic.VerifyEndGame(this.state)) this.gameOver = 1;
+        } 
+        else
+        {
+            FinishMovementTask(0);
+        }
+
+        return task;
+    }
+
     protected void Update()
     {
         if (this.moving) // if moving
@@ -204,7 +270,11 @@ public abstract class Level : MonoBehaviour
                     }
                 }
             }
-            if (!movementGoesOn) this.moving = false;
+            if (!movementGoesOn)
+            {
+                this.moving = false;
+                FinishMovementTask(0);
+            }
         }
         else  // if not moving
         {
@@ -217,44 +287,33 @@ public abstract class Level : MonoBehaviour
             else if (this.gameOver < 0)
             {
                 Movement.MovementType movementType = Movement.MovementType.NONE;
-                if (GameMode.mode == GameMode.Mode.HUMAN) {
-                    if (Input.GetKeyDown(KeyCode.RightArrow)) {
+                if (GameMode.mode == GameMode.Mode.HUMAN)
+                {
+                    if (Input.GetKeyDown(KeyCode.RightArrow))
+                    {
                         movementType = Movement.MovementType.RIGHT;
-                    } else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+                    }
+                    else if (Input.GetKeyDown(KeyCode.LeftArrow))
+                    {
                         movementType = Movement.MovementType.LEFT;
-                    } else if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                    }
+                    else if (Input.GetKeyDown(KeyCode.UpArrow))
+                    {
                         movementType = Movement.MovementType.UP;
-                    } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
+                    }
+                    else if (Input.GetKeyDown(KeyCode.DownArrow))
+                    {
                         movementType = Movement.MovementType.DOWN;
                     }
-                } else if (GameMode.mode == GameMode.Mode.AI) {
+                }
+                else if (GameMode.mode == GameMode.Mode.AI)
+                {
                     movementType = this.robot.GetNextStep();
                 }
+                else if (GameMode.mode == GameMode.Mode.AGENT) return;
 
 
-                if (movementType != Movement.MovementType.NONE) {
-                    Destroy(currentHint);
-                    Dictionary<Position, Position> prevNextPositions = Logic.Move(this.state, movementType);
-                    if (prevNextPositions == null) return;
-
-                    for (int y = 0; y < yDim; y++)
-                    {
-                        for (int x = 0; x < xDim; x++)
-                        {
-                            if (IsPiece(board[y, x]))
-                            {
-                                Movement movement = piecesMovement[pieces[y, x]];
-                                Position nextPosition = prevNextPositions[movement.position];
-                                if (nextPosition == null) continue;
-                                // need to get the next position of the piece and calculate the amount to move
-                                movement.StartMovement(nextPosition, movementType);
-                            }
-                        }
-                    }
-                    IncrementMovesCount();
-                    this.moving = true;
-                    if (Logic.VerifyEndGame(this.state)) this.gameOver = 1;
-                }
+                HandleMovement(movementType);
             }
         }
         

@@ -3,51 +3,54 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
+using System.Threading.Tasks;
 
 public class MoveToGoalAgent : Agent {
 
-    /**
-     * ACTIONS
-     * 0 - Move right
-     * 1 - Move left 
-     * 2 - Move up
-     * 3 - Move down
-     */
+    public Level level;
+
+    Movement.MovementType[] movements = {
+        Movement.MovementType.RIGHT,
+        Movement.MovementType.UP,
+        Movement.MovementType.LEFT,
+        Movement.MovementType.DOWN
+    };
 
     public override void OnEpisodeBegin()
     {
-        // reset game state
-        transform.position = new Vector3(171, (float) 299.5, 0);
+        // reset level
     }
 
-    public override void OnActionReceived(float[] vectorAction)
+    public async override void OnActionReceived(float[] vectorAction)
     {
         Debug.Log(vectorAction[0]);
+
+        Movement.MovementType movementType = Movement.MovementType.NONE;
         
         // move piece accordingly to game logic
         int action = (int) vectorAction[0];
-        switch(action)
+
+        TaskCompletionSource<int> task = level.HandleMovement(movements[action]);
+        int result = await task.Task;
+
+        if (result != 0)
         {
-            case 0:
-                transform.position += new Vector3(25, 0, 0);
-                break;
-            case 1:
-                transform.position += new Vector3(-25, 0, 0);
-                break;
-            case 2:
-                transform.position += new Vector3(0, 25, 0);
-                break;
-            case 3:
-                transform.position += new Vector3(0, -25, 0);
-                break;
+            Debug.Log("Couldn't move!");
         }
+        else
+        {
+            Debug.Log("Moved to " + movementType);
+        }
+
+        // SetReward(-1f);
+        // EndEpisode();
     }
 
-    [SerializeField] private Transform targetTransform;
+    // [SerializeField] private Transform targetTransform;
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(transform.position);
-        sensor.AddObservation(targetTransform.position);
+        //sensor.AddObservation(targetTransform.position);
 
         //TODO: receive data 
         //TODO: agent position
@@ -63,20 +66,5 @@ public class MoveToGoalAgent : Agent {
         float y = Input.GetAxis("Vertical");
 
         transform.position += new Vector3(x*20, y*20, 0);
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.TryGetComponent<Goal>(out Goal goal))
-        {
-            Debug.Log("COLLISION");
-            SetReward(1f);
-            EndEpisode();
-        }
-        else if (other.TryGetComponent<Wall>(out Wall wall))
-        {
-            SetReward(-1f);
-            EndEpisode();
-        }
     }
 }

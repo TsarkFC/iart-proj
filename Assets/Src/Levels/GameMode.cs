@@ -5,7 +5,8 @@ public class GameMode
     public enum Mode
     {
         AI,
-        HUMAN
+        HUMAN,
+        AGENT
     }
 
     public static Mode mode = Mode.HUMAN;
