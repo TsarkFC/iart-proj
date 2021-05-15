@@ -58,11 +58,12 @@ public class MoveToGoalAgent : Agent {
     /**
      * Used to test / simulate the agent actions
      */
-    /*public override void Heuristic(float[] actionsOut)
+    public override void Heuristic(float[] actionsOut)
     {
+        Debug.Log("INSIDE HEURISTIC");
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
 
         transform.position += new Vector3(x * 20, y * 20, 0);
-    }*/
+    }
 }

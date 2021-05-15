@@ -16,7 +16,8 @@ public class GameMode
     {
         MAIN_MENU,
         SINGLE_PLAYER,
-        AI
+        AI,
+        REINFORCEMENT_LEARNING
     }
 
     public static MenuStates menuState = MenuStates.MAIN_MENU;

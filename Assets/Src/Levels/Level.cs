@@ -287,6 +287,9 @@ public abstract class Level : MonoBehaviour
             else if (this.gameOver < 0)
             {
                 Movement.MovementType movementType = Movement.MovementType.NONE;
+
+                Debug.Log("GOT MOVEMENT!");
+
                 if (GameMode.mode == GameMode.Mode.HUMAN)
                 {
                     if (Input.GetKeyDown(KeyCode.RightArrow))

@@ -15,15 +15,14 @@ public class Router : MonoBehaviour
 
     public void QuitGame()
     {
-        Debug.Log("QUIT");
         Application.Quit();
     }
 
     public void BackToMenu() 
     {
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
         if (GameMode.mode == GameMode.Mode.HUMAN) GameMode.menuState = GameMode.MenuStates.SINGLE_PLAYER;
         if (GameMode.mode == GameMode.Mode.AI) GameMode.menuState = GameMode.MenuStates.AI;
+        if (GameMode.mode == GameMode.Mode.AGENT) GameMode.menuState = GameMode.MenuStates.REINFORCEMENT_LEARNING;
         SceneManager.LoadScene(0);
     }
 
@@ -51,7 +50,7 @@ public class Router : MonoBehaviour
     {
         StatsInfo.ResetAlgoResults();
         GameMode.mode = GameMode.Mode.AGENT;
-        SceneManager.LoadScene(lvlIndex);
+        SceneManager.LoadScene(lvlIndex + 12);
     }
 
 
