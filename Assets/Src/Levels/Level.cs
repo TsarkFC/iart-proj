@@ -48,7 +48,7 @@ public abstract class Level : MonoBehaviour
     private bool moving = false;  // is any piece moving?
     private int gameOver = -1; // positive if game over has not been shown, negative if its not game over. equal to zero if it is game over and no further action is required
 
-    private State state;
+    public State state { get; set; }
     private Robot robot;
     private GameObject currentHint;
     private int movesCount = 0;
@@ -59,7 +59,7 @@ public abstract class Level : MonoBehaviour
     //     this.levelMode = mode;
     // }
 
-    protected void BuildBoard() 
+    public void BuildBoard() 
     {
         this.state = new State(board, xDim, yDim);
         StatsInfo.SetCurrentMovesCount(movesCount);
@@ -100,23 +100,23 @@ public abstract class Level : MonoBehaviour
             }
         }
 
-        // instantiating backgrounds (need to be instantiated before all game pieces)
+        // instantiating backgrounds and entities (need to be instantiated before all game pieces)
         pieces = new GameObject[yDim, xDim];
         for (int y = 0; y < yDim; y++)
         {
             for (int x = 0; x < xDim; x++)
             {
                 GameObject background = (GameObject)Instantiate(backgroundPrefab, GetWorldPosition(x*90, ((yDim-1)-y)*90), Quaternion.identity, transform);
+                if (board[y, x] != PieceType.EMPTY && !IsPiece(board[y, x])) InstantiateEntity(x, y, false);
             }
         }
 
-        // instantiating entities(obstacles, pieces, targets)
+        // instantiating pieces
         for (int y = 0; y < yDim; y++)
         {
             for (int x = 0; x < xDim; x++)
             {
                 if (IsPiece(board[y, x])) InstantiateEntity(x, y, true);
-                else if (board[y, x] != PieceType.EMPTY) InstantiateEntity(x, y, false);
             }
         }
     }

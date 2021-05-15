@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Threading.Tasks;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
-using System.Threading.Tasks;
+using UnityEngine;
 
 public class MoveToGoalAgent : Agent {
 
@@ -11,26 +9,24 @@ public class MoveToGoalAgent : Agent {
 
     Movement.MovementType[] movements = {
         Movement.MovementType.RIGHT,
-        Movement.MovementType.UP,
         Movement.MovementType.LEFT,
+        Movement.MovementType.UP,
         Movement.MovementType.DOWN
     };
 
     public override void OnEpisodeBegin()
     {
-        // reset level
+        level.BuildBoard();
     }
 
     public async override void OnActionReceived(float[] vectorAction)
     {
-        Debug.Log(vectorAction[0]);
-
-        Movement.MovementType movementType = Movement.MovementType.NONE;
-        
         // move piece accordingly to game logic
-        int action = (int) vectorAction[0];
+        int action = (int)vectorAction[0];
+        Debug.Log("GOT ACTION");
 
-        TaskCompletionSource<int> task = level.HandleMovement(movements[action]);
+        Movement.MovementType movementType = movements[action];
+        TaskCompletionSource<int> task = level.HandleMovement(movementType);
         int result = await task.Task;
 
         if (result != 0)
@@ -42,29 +38,31 @@ public class MoveToGoalAgent : Agent {
             Debug.Log("Moved to " + movementType);
         }
 
+        //TODO: analyse state and apply reward function
         // SetReward(-1f);
         // EndEpisode();
     }
 
-    // [SerializeField] private Transform targetTransform;
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(transform.position);
-        //sensor.AddObservation(targetTransform.position);
-
-        //TODO: receive data 
-        //TODO: agent position
-        //TODO: target positions
+        //Add board to observations
+        for (int y = 0; y < level.state.yDim; y++)
+        {
+            for (int x = 0; x < level.state.xDim; x++)
+            {
+                sensor.AddObservation(new Vector3(y, x, (int) level.state.originalBoard[y, x]));
+            }
+        }
     }
 
     /**
      * Used to test / simulate the agent actions
      */
-    public override void Heuristic(float[] actionsOut)
+    /*public override void Heuristic(float[] actionsOut)
     {
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
 
-        transform.position += new Vector3(x*20, y*20, 0);
-    }
+        transform.position += new Vector3(x * 20, y * 20, 0);
+    }*/
 }
