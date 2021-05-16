@@ -13,6 +13,11 @@ public class MoveToGoalAgent : Agent {
         Movement.MovementType.DOWN
     };
 
+    public override void Initialize()
+    {
+        GameMode.mode = GameMode.Mode.AGENT;  // important for when the game is being ran directly from the ML level
+    }
+
     public override void OnEpisodeBegin()
     {
         level.BuildBoard();
@@ -50,10 +55,6 @@ public class MoveToGoalAgent : Agent {
             Debug.LogWarning("Tried to move to a place where it is not possible to move.");
             SetReward(-1f);
         }
-
-        //TODO: analyse state and apply reward function
-        // SetReward(-1f);
-        // EndEpisode();
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -73,11 +74,21 @@ public class MoveToGoalAgent : Agent {
      */
     public override void Heuristic(float[] actionsOut)
     {
-        return;
-        Debug.Log("INSIDE HEURISTIC");
-        float x = Input.GetAxis("Horizontal");
-        float y = Input.GetAxis("Vertical");
-
-        //transform.position += new Vector3(x * 20, y * 20, 0);
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            actionsOut[0] = 0;
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            actionsOut[0] = 1;
+        }
+        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            actionsOut[0] = 2;
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            actionsOut[0] = 3;
+        }
     }
 }
