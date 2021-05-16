@@ -42,27 +42,30 @@ public abstract class Level : MonoBehaviour
     protected PieceType[,] board;
     protected Dictionary<PieceType, GameObject> piecePrefabDict;
     protected Dictionary<Movement.MovementType, GameObject> arrowPrefabDict = new Dictionary<Movement.MovementType, GameObject>();
-    private GameObject[,] pieces;
+    private GameObject[,] pieces = null;
 
-    private Dictionary<GameObject, Movement> piecesMovement = new Dictionary<GameObject, Movement>();  // each piece's movement
-    private bool moving = false;  // is any piece moving?
-    private int gameOver = -1; // positive if game over has not been shown, negative if its not game over. equal to zero if it is game over and no further action is required
+    private Dictionary<GameObject, Movement> piecesMovement;  // each piece's movement
+    public bool moving = false;  // is any piece moving?
+    public int gameOver; // positive if game over has not been shown, negative if its not game over. equal to zero if it is game over and no further action is required
 
     public State state { get; set; }
     private Robot robot;
     private GameObject currentHint;
-    private int movesCount = 0;
-
-    private TaskCompletionSource<int> movementTask = null;
-
-    // public Level(Mode mode) {
-    //     this.levelMode = mode;
-    // }
+    private int movesCount;
 
     public void BuildBoard() 
     {
         this.state = new State(board, xDim, yDim);
+
+        this.hintButton.SetActive(true);
+        this.gameOverSection.SetActive(false);
+        this.gameOver = -1;
+
+        this.piecesMovement = new Dictionary<GameObject, Movement>();
+
+        this.movesCount = 0;
         StatsInfo.SetCurrentMovesCount(movesCount);
+
         if (GameMode.mode == GameMode.Mode.AI) 
         {
             this.robot = new Robot(this.state);
@@ -100,13 +103,22 @@ public abstract class Level : MonoBehaviour
             }
         }
 
+        bool hasBackgrounds = false;
+        if (this.pieces != null)
+        {
+            foreach (GameObject piece in pieces) Destroy(piece);
+            hasBackgrounds = true;
+        }
+
         // instantiating backgrounds and entities (need to be instantiated before all game pieces)
         pieces = new GameObject[yDim, xDim];
         for (int y = 0; y < yDim; y++)
         {
             for (int x = 0; x < xDim; x++)
             {
-                GameObject background = (GameObject)Instantiate(backgroundPrefab, GetWorldPosition(x*90, ((yDim-1)-y)*90), Quaternion.identity, transform);
+                // instantiating background
+                if (!hasBackgrounds) Instantiate(backgroundPrefab, GetWorldPosition(x * 90, ((yDim - 1) - y) * 90), Quaternion.identity, transform);
+                
                 if (board[y, x] != PieceType.EMPTY && !IsPiece(board[y, x])) InstantiateEntity(x, y, false);
             }
         }
@@ -129,7 +141,7 @@ public abstract class Level : MonoBehaviour
 
     private void InstantiateEntity(int x, int y, bool isPiece)
     {
-        pieces[y, x] = (GameObject) Instantiate(piecePrefabDict[board[y, x]], GetWorldPosition(x*90, ((yDim-1)-y)*90), Quaternion.identity, transform);
+        pieces[y, x] = Instantiate(piecePrefabDict[board[y, x]], GetWorldPosition(x*90, ((yDim-1)-y)*90), Quaternion.identity, transform);
         pieces[y, x].name = "Piece(" + x + "," + y + ")";
         if (isPiece) piecesMovement.Add(pieces[y, x], new Movement(new Position(x, y)));
     }
@@ -171,32 +183,24 @@ public abstract class Level : MonoBehaviour
 
         Destroy(currentHint);
         if (!arrowPrefabDict.ContainsKey(hint)) return;
-        currentHint = (GameObject)Instantiate(arrowPrefabDict[hint], transform.parent);
+        currentHint = Instantiate(arrowPrefabDict[hint], transform.parent);
     }
 
-    private void FinishMovementTask(int result)
+    /**
+     * Returns:
+     *      0 if the movement was successful
+     *      1 if couldn't move
+     *      -1 if movement ended the game
+     */
+    public int HandleMovement(Movement.MovementType movementType)
     {
-        this.movementTask.SetResult(result);
-        this.movementTask = null;
-    }
-
-    public TaskCompletionSource<int> HandleMovement(Movement.MovementType movementType)
-    {
-        if (this.movementTask != null)
-        {
-            Debug.LogError("Setting movement task but it wasn't null!");
-        }
-        TaskCompletionSource<int> task = new TaskCompletionSource<int>();
-        this.movementTask = task;
+        if (this.moving || gameOver > 0) return 1;
         if (movementType != Movement.MovementType.NONE)
         {
             Destroy(currentHint);
             Dictionary<Position, Position> prevNextPositions = Logic.Move(this.state, movementType);
-            if (prevNextPositions == null)
-            {
-                FinishMovementTask(1);
-                return task;
-            }
+
+            if (prevNextPositions == null) return 1; // couldn't move
 
             for (int y = 0; y < yDim; y++)
             {
@@ -214,14 +218,13 @@ public abstract class Level : MonoBehaviour
             }
             IncrementMovesCount();
             this.moving = true;
-            if (Logic.VerifyEndGame(this.state)) this.gameOver = 1;
-        } 
-        else
-        {
-            FinishMovementTask(0);
+            if (Logic.VerifyEndGame(this.state))
+            {
+                this.gameOver = 1;
+                return -1;
+            }
         }
-
-        return task;
+        return 0;
     }
 
     protected void Update()
@@ -271,10 +274,7 @@ public abstract class Level : MonoBehaviour
                 }
             }
             if (!movementGoesOn)
-            {
                 this.moving = false;
-                FinishMovementTask(0);
-            }
         }
         else  // if not moving
         {
@@ -287,8 +287,6 @@ public abstract class Level : MonoBehaviour
             else if (this.gameOver < 0)
             {
                 Movement.MovementType movementType = Movement.MovementType.NONE;
-
-                Debug.Log("GOT MOVEMENT!");
 
                 if (GameMode.mode == GameMode.Mode.HUMAN)
                 {

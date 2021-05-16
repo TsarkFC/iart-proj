@@ -2044,7 +2044,6 @@ GameObject:
   - component: {fileID: 892473566}
   - component: {fileID: 892473569}
   - component: {fileID: 892473568}
-  - component: {fileID: 892473567}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -2094,20 +2093,8 @@ MonoBehaviour:
   hintButton: {fileID: 74808286}
   showStatsButton: {fileID: 166862276}
   gameOverSection: {fileID: 183833422}
---- !u!114 &892473567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 892473565}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DecisionPeriod: 5
-  TakeActionsBetweenDecisions: 1
+  moving: 0
+  gameOver: 0
 --- !u!114 &892473568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2146,7 +2133,7 @@ MonoBehaviour:
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: My Behavior
+  m_BehaviorName: PlayerAgent
   TeamId: 0
   m_UseChildSensors: 1
 --- !u!156049354 &892473570

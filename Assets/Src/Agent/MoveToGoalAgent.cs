@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Unity.MLAgents;
+﻿using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
 
@@ -19,23 +18,37 @@ public class MoveToGoalAgent : Agent {
         level.BuildBoard();
     }
 
-    public async override void OnActionReceived(float[] vectorAction)
+    private void FixedUpdate()
+    {
+        if (!level.moving && level.gameOver < 0) RequestDecision();
+    }
+
+    public override void OnActionReceived(float[] vectorAction)
     {
         // move piece accordingly to game logic
-        int action = (int)vectorAction[0];
-        Debug.Log("GOT ACTION");
+        int action = (int) vectorAction[0];
+
+        if (level.moving || level.gameOver >= 0) Debug.LogError("This isn't supposed to happen!");
 
         Movement.MovementType movementType = movements[action];
-        TaskCompletionSource<int> task = level.HandleMovement(movementType);
-        int result = await task.Task;
+        int result = level.HandleMovement(movementType);
 
-        if (result != 0)
+        if (result == 0 && action != 0) // made a move
         {
-            Debug.Log("Couldn't move!");
+            //Debug.Log("Moved to " + movementType);
+            SetReward(-3f);
         }
-        else
+        else if (result == -1)
         {
-            Debug.Log("Moved to " + movementType);
+            SetReward(100f);
+            EndEpisode();
+            Debug.Log("Episode Ended!");
+            return;
+        }
+        else if (result == 1)  // if moved to invalid position
+        {
+            Debug.LogWarning("Tried to move to a place where it is not possible to move.");
+            SetReward(-1f);
         }
 
         //TODO: analyse state and apply reward function
@@ -60,10 +73,11 @@ public class MoveToGoalAgent : Agent {
      */
     public override void Heuristic(float[] actionsOut)
     {
+        return;
         Debug.Log("INSIDE HEURISTIC");
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
 
-        transform.position += new Vector3(x * 20, y * 20, 0);
+        //transform.position += new Vector3(x * 20, y * 20, 0);
     }
 }
