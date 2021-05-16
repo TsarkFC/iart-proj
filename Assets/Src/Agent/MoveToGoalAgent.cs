@@ -5,8 +5,7 @@ using UnityEngine;
 public class MoveToGoalAgent : Agent {
 
     public Level level;
-
-    Movement.MovementType[] movements = {
+    readonly Movement.MovementType[] movements = {
         Movement.MovementType.RIGHT,
         Movement.MovementType.LEFT,
         Movement.MovementType.UP,
@@ -41,11 +40,10 @@ public class MoveToGoalAgent : Agent {
         if (result == 0 && action != 0) // made a move
         {
             //Debug.Log("Moved to " + movementType);
-            SetReward(-3f);
+            SetReward(-1f);
         }
         else if (result == -1)
         {
-            SetReward(100f);
             EndEpisode();
             Debug.Log("Episode Ended!");
             return;
@@ -53,7 +51,7 @@ public class MoveToGoalAgent : Agent {
         else if (result == 1)  // if moved to invalid position
         {
             Debug.LogWarning("Tried to move to a place where it is not possible to move.");
-            SetReward(-1f);
+            //SetReward(-1f); // ?
         }
     }
 
@@ -64,7 +62,7 @@ public class MoveToGoalAgent : Agent {
         {
             for (int x = 0; x < level.state.xDim; x++)
             {
-                sensor.AddObservation(new Vector3(y, x, (int) level.state.originalBoard[y, x]));
+                sensor.AddObservation(new Vector3(y, x, (int) Level.stringRepToPieceType(level.state.board[y, x])));
             }
         }
     }

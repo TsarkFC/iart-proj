@@ -16,18 +16,20 @@ namespace state
     {
         public int xDim { get; }
         public int yDim { get; }
-        public String[,] board;
+        public string[,] board;
         public PieceType[,] originalBoard { get; }
         public List<Piece> pieces = new List<Piece>();
         public List<Piece> targets = new List<Piece>();
 
-        private String[] boardElements = new string[] { "pp", "tp", "po", "to", "pr", "tr", "o", " " };
+        private string[] boardElements = new string[] { "pp", "tp", "po", "to", "pr", "tr", "o", " " };
+
+
 
         public State(PieceType[,] board, int xDim, int yDim)
         {
             this.xDim = xDim;
             this.yDim = yDim;
-            this.board = new String[ xDim, yDim ];
+            this.board = new string[ xDim, yDim ];
             this.originalBoard = board;
             
 

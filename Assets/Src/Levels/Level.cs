@@ -53,6 +53,22 @@ public abstract class Level : MonoBehaviour
     private GameObject currentHint;
     private int movesCount;
 
+    private static Dictionary<String, PieceType> stringPieceType = new Dictionary<string, PieceType>();
+
+    static Level()
+    {
+        stringPieceType.Add(" ", PieceType.EMPTY);
+        stringPieceType.Add("o", PieceType.BARRIER);
+        stringPieceType.Add("tr", PieceType.TARGET_RED);
+        stringPieceType.Add("pr", PieceType.PIECE_RED);
+        stringPieceType.Add("to", PieceType.TARGET_ORANGE);
+        stringPieceType.Add("po", PieceType.PIECE_ORANGE);
+        stringPieceType.Add("tp", PieceType.TARGET_PURPLE);
+        stringPieceType.Add("pp", PieceType.PIECE_PURPLE);
+    }
+
+    public static PieceType stringRepToPieceType(string rep) => stringPieceType[rep];
+
     public void BuildBoard() 
     {
         this.state = new State(board, xDim, yDim);
