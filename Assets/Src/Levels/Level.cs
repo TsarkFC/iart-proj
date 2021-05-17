@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using position;
 using logic;
@@ -41,25 +42,46 @@ public abstract class Level : MonoBehaviour
     protected PieceType[,] board;
     protected Dictionary<PieceType, GameObject> piecePrefabDict;
     protected Dictionary<Movement.MovementType, GameObject> arrowPrefabDict = new Dictionary<Movement.MovementType, GameObject>();
-    private GameObject[,] pieces;
+    private GameObject[,] pieces = null;
 
-    private Dictionary<GameObject, Movement> piecesMovement = new Dictionary<GameObject, Movement>();  // each piece's movement
-    private bool moving = false;  // is any piece moving?
-    private int gameOver = -1; // positive if game over has not been shown, negative if its not game over. equal to zero if it is game over and no further action is required
+    private Dictionary<GameObject, Movement> piecesMovement;  // each piece's movement
+    public bool moving = false;  // is any piece moving?
+    public int gameOver; // positive if game over has not been shown, negative if its not game over. equal to zero if it is game over and no further action is required
 
-    private State state;
+    public State state { get; set; }
     private Robot robot;
     private GameObject currentHint;
-    private int movesCount = 0;
+    private int movesCount;
 
-    // public Level(Mode mode) {
-    //     this.levelMode = mode;
-    // }
+    private static Dictionary<String, PieceType> stringPieceType = new Dictionary<string, PieceType>();
 
-    protected void BuildBoard() 
+    static Level()
+    {
+        stringPieceType.Add(" ", PieceType.EMPTY);
+        stringPieceType.Add("o", PieceType.BARRIER);
+        stringPieceType.Add("tr", PieceType.TARGET_RED);
+        stringPieceType.Add("pr", PieceType.PIECE_RED);
+        stringPieceType.Add("to", PieceType.TARGET_ORANGE);
+        stringPieceType.Add("po", PieceType.PIECE_ORANGE);
+        stringPieceType.Add("tp", PieceType.TARGET_PURPLE);
+        stringPieceType.Add("pp", PieceType.PIECE_PURPLE);
+    }
+
+    public static PieceType stringRepToPieceType(string rep) => stringPieceType[rep];
+
+    public void BuildBoard() 
     {
         this.state = new State(board, xDim, yDim);
+
+        this.hintButton.SetActive(true);
+        this.gameOverSection.SetActive(false);
+        this.gameOver = -1;
+
+        this.piecesMovement = new Dictionary<GameObject, Movement>();
+
+        this.movesCount = 0;
         StatsInfo.SetCurrentMovesCount(movesCount);
+
         if (GameMode.mode == GameMode.Mode.AI) 
         {
             this.robot = new Robot(this.state);
@@ -68,6 +90,12 @@ public abstract class Level : MonoBehaviour
 
             // because the algorithm selected may not be otimum
             List<Node> minimumPath = this.robot.RunWithoutMeasurements(AlgorithmType.ASTAR_DIRECTION);
+            StatsInfo.SetMinimumPossibleMoves(minimumPath.Count - 1);
+        }
+        else if (GameMode.mode == GameMode.Mode.AGENT)
+        {
+            Robot robot = new Robot(this.state);
+            List<Node> minimumPath = robot.RunWithoutMeasurements(AlgorithmType.ASTAR_DIRECTION);
             StatsInfo.SetMinimumPossibleMoves(minimumPath.Count - 1);
         }
         else 
@@ -91,16 +119,32 @@ public abstract class Level : MonoBehaviour
             }
         }
 
-        // instantiating backgrounds and entities (obstacles, pieces, targets)
+        bool hasBackgrounds = false;
+        if (this.pieces != null)
+        {
+            foreach (GameObject piece in pieces) Destroy(piece);
+            hasBackgrounds = true;
+        }
+
+        // instantiating backgrounds and entities (need to be instantiated before all game pieces)
         pieces = new GameObject[yDim, xDim];
         for (int y = 0; y < yDim; y++)
         {
             for (int x = 0; x < xDim; x++)
             {
-                GameObject background = (GameObject)Instantiate(backgroundPrefab, GetWorldPosition(x*90, ((yDim-1)-y)*90), Quaternion.identity, transform);
+                // instantiating background
+                if (!hasBackgrounds) Instantiate(backgroundPrefab, GetWorldPosition(x * 90, ((yDim - 1) - y) * 90), Quaternion.identity, transform);
+                
+                if (board[y, x] != PieceType.EMPTY && !IsPiece(board[y, x])) InstantiateEntity(x, y, false);
+            }
+        }
 
+        // instantiating pieces
+        for (int y = 0; y < yDim; y++)
+        {
+            for (int x = 0; x < xDim; x++)
+            {
                 if (IsPiece(board[y, x])) InstantiateEntity(x, y, true);
-                else if (board[y, x] != PieceType.EMPTY) InstantiateEntity(x, y, false);
             }
         }
     }
@@ -113,7 +157,7 @@ public abstract class Level : MonoBehaviour
 
     private void InstantiateEntity(int x, int y, bool isPiece)
     {
-        pieces[y, x] = (GameObject) Instantiate(piecePrefabDict[board[y, x]], GetWorldPosition(x*90, ((yDim-1)-y)*90), Quaternion.identity, transform);
+        pieces[y, x] = Instantiate(piecePrefabDict[board[y, x]], GetWorldPosition(x*90, ((yDim-1)-y)*90), Quaternion.identity, transform);
         pieces[y, x].name = "Piece(" + x + "," + y + ")";
         if (isPiece) piecesMovement.Add(pieces[y, x], new Movement(new Position(x, y)));
     }
@@ -155,7 +199,48 @@ public abstract class Level : MonoBehaviour
 
         Destroy(currentHint);
         if (!arrowPrefabDict.ContainsKey(hint)) return;
-        currentHint = (GameObject)Instantiate(arrowPrefabDict[hint], transform.parent);
+        currentHint = Instantiate(arrowPrefabDict[hint], transform.parent);
+    }
+
+    /**
+     * Returns:
+     *      0 if the movement was successful
+     *      1 if couldn't move
+     *      -1 if movement ended the game
+     */
+    public int HandleMovement(Movement.MovementType movementType)
+    {
+        if (this.moving || gameOver > 0) return 1;
+        if (movementType != Movement.MovementType.NONE)
+        {
+            Destroy(currentHint);
+            Dictionary<Position, Position> prevNextPositions = Logic.Move(this.state, movementType);
+
+            if (prevNextPositions == null) return 1; // couldn't move
+
+            for (int y = 0; y < yDim; y++)
+            {
+                for (int x = 0; x < xDim; x++)
+                {
+                    if (IsPiece(board[y, x]))
+                    {
+                        Movement movement = piecesMovement[pieces[y, x]];
+                        Position nextPosition = prevNextPositions[movement.position];
+                        if (nextPosition == null) continue;
+                        // need to get the next position of the piece and calculate the amount to move
+                        movement.StartMovement(nextPosition, movementType);
+                    }
+                }
+            }
+            IncrementMovesCount();
+            this.moving = true;
+            if (Logic.VerifyEndGame(this.state))
+            {
+                this.gameOver = 1;
+                return -1;
+            }
+        }
+        return 0;
     }
 
     protected void Update()
@@ -204,7 +289,8 @@ public abstract class Level : MonoBehaviour
                     }
                 }
             }
-            if (!movementGoesOn) this.moving = false;
+            if (!movementGoesOn)
+                this.moving = false;
         }
         else  // if not moving
         {
@@ -217,44 +303,34 @@ public abstract class Level : MonoBehaviour
             else if (this.gameOver < 0)
             {
                 Movement.MovementType movementType = Movement.MovementType.NONE;
-                if (GameMode.mode == GameMode.Mode.HUMAN) {
-                    if (Input.GetKeyDown(KeyCode.RightArrow)) {
+
+                if (GameMode.mode == GameMode.Mode.HUMAN)
+                {
+                    if (Input.GetKeyDown(KeyCode.RightArrow))
+                    {
                         movementType = Movement.MovementType.RIGHT;
-                    } else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+                    }
+                    else if (Input.GetKeyDown(KeyCode.LeftArrow))
+                    {
                         movementType = Movement.MovementType.LEFT;
-                    } else if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                    }
+                    else if (Input.GetKeyDown(KeyCode.UpArrow))
+                    {
                         movementType = Movement.MovementType.UP;
-                    } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
+                    }
+                    else if (Input.GetKeyDown(KeyCode.DownArrow))
+                    {
                         movementType = Movement.MovementType.DOWN;
                     }
-                } else if (GameMode.mode == GameMode.Mode.AI) {
+                }
+                else if (GameMode.mode == GameMode.Mode.AI)
+                {
                     movementType = this.robot.GetNextStep();
                 }
+                else if (GameMode.mode == GameMode.Mode.AGENT) return;
 
 
-                if (movementType != Movement.MovementType.NONE) {
-                    Destroy(currentHint);
-                    Dictionary<Position, Position> prevNextPositions = Logic.Move(this.state, movementType);
-                    if (prevNextPositions == null) return;
-
-                    for (int y = 0; y < yDim; y++)
-                    {
-                        for (int x = 0; x < xDim; x++)
-                        {
-                            if (IsPiece(board[y, x]))
-                            {
-                                Movement movement = piecesMovement[pieces[y, x]];
-                                Position nextPosition = prevNextPositions[movement.position];
-                                if (nextPosition == null) continue;
-                                // need to get the next position of the piece and calculate the amount to move
-                                movement.StartMovement(nextPosition, movementType);
-                            }
-                        }
-                    }
-                    IncrementMovesCount();
-                    this.moving = true;
-                    if (Logic.VerifyEndGame(this.state)) this.gameOver = 1;
-                }
+                HandleMovement(movementType);
             }
         }
         

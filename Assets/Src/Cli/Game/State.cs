@@ -16,50 +16,28 @@ namespace state
     {
         public int xDim { get; }
         public int yDim { get; }
-        public String[,] board;
+        public string[,] board;
+        public PieceType[,] originalBoard { get; }
         public List<Piece> pieces = new List<Piece>();
         public List<Piece> targets = new List<Piece>();
+
+        private string[] boardElements = new string[] { "pp", "tp", "po", "to", "pr", "tr", "o", " " };
+
+
 
         public State(PieceType[,] board, int xDim, int yDim)
         {
             this.xDim = xDim;
             this.yDim = yDim;
-            this.board = new String[ xDim, yDim ];
+            this.board = new string[ xDim, yDim ];
+            this.originalBoard = board;
             
 
             for (int y = 0; y < yDim; y++)
             {
                 for (int x = 0; x < xDim; x++)
                 {
-                    switch(board[y, x]) 
-                    {
-                        case PieceType.PIECE_PURPLE:
-                            this.board[y, x] = "pp";
-                            break;
-                        case PieceType.PIECE_ORANGE:
-                            this.board[y, x] = "po";
-                            break;
-                        case PieceType.PIECE_RED:
-                            this.board[y, x] = "pr";
-                            break;
-                        case PieceType.TARGET_PURPLE:
-                            this.board[y, x] = "tp";
-                            break;
-                        case PieceType.TARGET_ORANGE:
-                            this.board[y, x] = "to";
-                            break;
-                        case PieceType.TARGET_RED:
-                            this.board[y, x] = "tr";
-                            break;
-                        case PieceType.BARRIER:
-                            this.board[y, x] = "o";
-                            break;
-                        case PieceType.EMPTY:
-                            this.board[y, x] = " ";
-                            break;
-                        default:
-                            break;
-                    }
+                    this.board[y, x] = boardElements[(int) board[y, x]];
                 }
             }
 

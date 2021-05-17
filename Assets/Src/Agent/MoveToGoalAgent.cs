@@ -1,57 +1,70 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Unity.MLAgents;
+﻿using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
+using UnityEngine;
 
 public class MoveToGoalAgent : Agent {
 
-    /**
-     * ACTIONS
-     * 0 - Move right
-     * 1 - Move left 
-     * 2 - Move up
-     * 3 - Move down
-     */
+    public Level level;
+    readonly Movement.MovementType[] movements = {
+        Movement.MovementType.RIGHT,
+        Movement.MovementType.LEFT,
+        Movement.MovementType.UP,
+        Movement.MovementType.DOWN
+    };
+
+    public override void Initialize()
+    {
+        GameMode.mode = GameMode.Mode.AGENT;  // important for when the game is being ran directly from the ML level
+    }
 
     public override void OnEpisodeBegin()
     {
-        // reset game state
-        transform.position = new Vector3(171, (float) 299.5, 0);
+        level.BuildBoard();
+    }
+
+    private void FixedUpdate()
+    {
+        if (!level.moving && level.gameOver < 0) RequestDecision();
     }
 
     public override void OnActionReceived(float[] vectorAction)
     {
-        Debug.Log(vectorAction[0]);
-        
         // move piece accordingly to game logic
         int action = (int) vectorAction[0];
-        switch(action)
+
+        if (level.moving || level.gameOver >= 0) Debug.LogError("This isn't supposed to happen!");
+
+        Movement.MovementType movementType = movements[action];
+        int result = level.HandleMovement(movementType);
+
+        if (result == 0 && action != 0) // made a move
         {
-            case 0:
-                transform.position += new Vector3(25, 0, 0);
-                break;
-            case 1:
-                transform.position += new Vector3(-25, 0, 0);
-                break;
-            case 2:
-                transform.position += new Vector3(0, 25, 0);
-                break;
-            case 3:
-                transform.position += new Vector3(0, -25, 0);
-                break;
+            //Debug.Log("Moved to " + movementType);
+            SetReward(-1f);
+        }
+        else if (result == -1)
+        {
+            EndEpisode();
+            Debug.Log("Episode Ended!");
+            return;
+        }
+        else if (result == 1)  // if moved to invalid position
+        {
+            Debug.LogWarning("Tried to move to a place where it is not possible to move.");
+            //SetReward(-1f); // ?
         }
     }
 
-    [SerializeField] private Transform targetTransform;
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(transform.position);
-        sensor.AddObservation(targetTransform.position);
-
-        //TODO: receive data 
-        //TODO: agent position
-        //TODO: target positions
+        //Add board to observations
+        for (int y = 0; y < level.state.yDim; y++)
+        {
+            for (int x = 0; x < level.state.xDim; x++)
+            {
+                sensor.AddObservation(new Vector3(y, x, (int) Level.stringRepToPieceType(level.state.board[y, x])));
+            }
+        }
     }
 
     /**
@@ -59,24 +72,21 @@ public class MoveToGoalAgent : Agent {
      */
     public override void Heuristic(float[] actionsOut)
     {
-        float x = Input.GetAxis("Horizontal");
-        float y = Input.GetAxis("Vertical");
-
-        transform.position += new Vector3(x*20, y*20, 0);
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.TryGetComponent<Goal>(out Goal goal))
+        if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            Debug.Log("COLLISION");
-            SetReward(1f);
-            EndEpisode();
+            actionsOut[0] = 0;
         }
-        else if (other.TryGetComponent<Wall>(out Wall wall))
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            SetReward(-1f);
-            EndEpisode();
+            actionsOut[0] = 1;
+        }
+        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            actionsOut[0] = 2;
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            actionsOut[0] = 3;
         }
     }
 }

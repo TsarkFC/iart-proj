@@ -5,7 +5,8 @@ public class GameMode
     public enum Mode
     {
         AI,
-        HUMAN
+        HUMAN,
+        AGENT
     }
 
     public static Mode mode = Mode.HUMAN;
@@ -15,7 +16,8 @@ public class GameMode
     {
         MAIN_MENU,
         SINGLE_PLAYER,
-        AI
+        AI,
+        REINFORCEMENT_LEARNING
     }
 
     public static MenuStates menuState = MenuStates.MAIN_MENU;

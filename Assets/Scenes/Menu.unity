@@ -204,7 +204,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2076907754}
-        m_MethodName: PlaySinglePlayer
+        m_MethodName: PlayAgent
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4538,7 +4538,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2076907754}
-        m_MethodName: PlaySinglePlayer
+        m_MethodName: PlayAgent
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4679,7 +4679,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2076907754}
-        m_MethodName: PlaySinglePlayer
+        m_MethodName: PlayAgent
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4886,7 +4886,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2076907754}
-        m_MethodName: PlaySinglePlayer
+        m_MethodName: PlayAgent
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4991,7 +4991,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 693196868}
-  - component: {fileID: 693196869}
   - component: {fileID: 693196870}
   m_Layer: 0
   m_Name: LevelButtons
@@ -5026,28 +5025,6 @@ Transform:
   m_Father: {fileID: 703862340}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &693196869
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 693196867}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 247498b9db009fdf999a312aee94e284, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lvlButtons:
-  - {fileID: 1185371679}
-  - {fileID: 1614005604}
-  - {fileID: 512426597}
-  - {fileID: 988261098}
-  - {fileID: 1561608408}
-  - {fileID: 401701760}
-  - {fileID: 1353266695}
-  - {fileID: 915072300}
-  - {fileID: 823961338}
 --- !u!114 &693196870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5776,7 +5753,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2076907754}
-        m_MethodName: PlaySinglePlayer
+        m_MethodName: PlayAgent
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6982,7 +6959,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2076907754}
-        m_MethodName: PlaySinglePlayer
+        m_MethodName: PlayAgent
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8531,7 +8508,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2076907754}
-        m_MethodName: PlaySinglePlayer
+        m_MethodName: PlayAgent
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9370,7 +9347,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2076907754}
-        m_MethodName: PlaySinglePlayer
+        m_MethodName: PlayAgent
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12837,7 +12814,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2076907754}
-        m_MethodName: PlaySinglePlayer
+        m_MethodName: PlayAgent
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -14129,6 +14106,7 @@ MonoBehaviour:
   mainMenu: {fileID: 148071388}
   singlePlayerMenu: {fileID: 703862339}
   aiMenu: {fileID: 708764944}
+  reinforcementdMenu: {fileID: 2034236496}
 --- !u!1 &1665702655
 GameObject:
   m_ObjectHideFlags: 0
@@ -16057,7 +16035,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2076907754}
-        m_MethodName: PlaySinglePlayer
+        m_MethodName: PlayAgent
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -17309,7 +17287,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2076907753}
-  - component: {fileID: 2076907755}
   - component: {fileID: 2076907754}
   m_Layer: 0
   m_Name: LevelButtons
@@ -17356,28 +17333,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f18a1c73ec76d23748049c93a07a9919, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2076907755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2076907752}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 247498b9db009fdf999a312aee94e284, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lvlButtons:
-  - {fileID: 1904186946}
-  - {fileID: 586706088}
-  - {fileID: 640293162}
-  - {fileID: 1000342936}
-  - {fileID: 554694826}
-  - {fileID: 915196256}
-  - {fileID: 18627123}
-  - {fileID: 2111095922}
-  - {fileID: 1539647896}
 --- !u!1 &2078331384
 GameObject:
   m_ObjectHideFlags: 0
@@ -17596,7 +17551,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2076907754}
-        m_MethodName: PlaySinglePlayer
+        m_MethodName: PlayAgent
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -18013,7 +17968,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2076907754}
-        m_MethodName: PlaySinglePlayer
+        m_MethodName: PlayAgent
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
