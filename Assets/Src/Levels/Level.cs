@@ -53,6 +53,7 @@ public abstract class Level : MonoBehaviour
     private Robot robot;
     private GameObject currentHint;
     private int movesCount;
+    public int levelNo { get; set; }
 
     private static Dictionary<String, PieceType> stringPieceType = new Dictionary<string, PieceType>();
 

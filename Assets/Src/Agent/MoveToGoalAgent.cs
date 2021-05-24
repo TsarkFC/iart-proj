@@ -5,6 +5,7 @@ using UnityEngine;
 public class MoveToGoalAgent : Agent {
 
     public Level level;
+    private StatsRecorder recorder;
     readonly Movement.MovementType[] movements = {
         Movement.MovementType.RIGHT,
         Movement.MovementType.LEFT,
@@ -44,8 +45,9 @@ public class MoveToGoalAgent : Agent {
         }
         else if (result == -1)
         {
+            Academy.Instance.StatsRecorder.Add("Agent/Level" + level.levelNo, this.GetCumulativeReward());
+            Debug.Log("Episode Ended: " + this.GetCumulativeReward());
             EndEpisode();
-            Debug.Log("Episode Ended!");
             return;
         }
         else if (result == 1)  // if moved to invalid position
