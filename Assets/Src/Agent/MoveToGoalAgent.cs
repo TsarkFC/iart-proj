@@ -5,7 +5,7 @@ using UnityEngine;
 public class MoveToGoalAgent : Agent {
 
     public Level level;
-    private StatsRecorder recorder;
+    private int iteration = 0;
     readonly Movement.MovementType[] movements = {
         Movement.MovementType.RIGHT,
         Movement.MovementType.LEFT,
@@ -32,6 +32,7 @@ public class MoveToGoalAgent : Agent {
     {
         // move piece accordingly to game logic
         int action = (int) vectorAction[0];
+        iteration++;
 
         if (level.moving || level.gameOver >= 0) Debug.LogError("This isn't supposed to happen!");
 
@@ -45,15 +46,24 @@ public class MoveToGoalAgent : Agent {
         }
         else if (result == -1)
         {
-            Academy.Instance.StatsRecorder.Add("Agent/Level" + level.levelNo, this.GetCumulativeReward());
-            Debug.Log("Episode Ended: " + this.GetCumulativeReward());
+            //Debug.Log("Level: " + level.levelNo + "\nStep count: " + StepCount + "\nIteration: " + iteration + "\nEpisode Ended: " + this.GetCumulativeReward());
+            Academy.Instance.StatsRecorder.Add("Agent/Level" + level.levelNo + "/Reward", this.GetCumulativeReward());
+            Academy.Instance.StatsRecorder.Add("Agent/Level" + level.levelNo + "/Iteration", iteration);
             EndEpisode();
+            iteration = 0;
             return;
         }
         else if (result == 1)  // if moved to invalid position
         {
             Debug.LogWarning("Tried to move to a place where it is not possible to move.");
             //SetReward(-1f); // ?
+        }
+
+        if (iteration > 1000)
+        {
+            SetReward(-10f);
+            EndEpisode();
+            iteration = 0;
         }
     }
 
