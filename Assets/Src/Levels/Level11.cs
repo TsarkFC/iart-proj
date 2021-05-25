@@ -12,5 +12,6 @@ public class Level11 : Level
         base.board = Levels.level11;
         base.BuildBoard();
         base.BuildHints();
+        base.levelNo = 11;
     }
 }

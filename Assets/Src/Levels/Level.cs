@@ -53,6 +53,7 @@ public abstract class Level : MonoBehaviour
     private Robot robot;
     private GameObject currentHint;
     private int movesCount;
+    public int levelNo { get; set; }
 
     private static Dictionary<String, PieceType> stringPieceType = new Dictionary<string, PieceType>();
 
@@ -74,8 +75,11 @@ public abstract class Level : MonoBehaviour
     {
         this.state = new State(board, xDim, yDim);
 
-        this.hintButton.SetActive(true);
-        this.gameOverSection.SetActive(false);
+        if (GameMode.mode != GameMode.Mode.AGENT)
+        {
+            this.hintButton.SetActive(true);
+            this.gameOverSection.SetActive(false);
+        }
         this.gameOver = -1;
 
         this.piecesMovement = new Dictionary<GameObject, Movement>();
@@ -175,6 +179,7 @@ public abstract class Level : MonoBehaviour
 
     protected void BuildHints()
     {
+        if (GameMode.mode == GameMode.Mode.AGENT) return;
         if (GameMode.mode == GameMode.Mode.AI)
         {
             hintButton.SetActive(false);
@@ -297,8 +302,11 @@ public abstract class Level : MonoBehaviour
         {
             if (this.gameOver > 0)
             {
-                this.hintButton.SetActive(false);
-                this.gameOverSection.SetActive(true);
+                if (GameMode.mode != GameMode.Mode.AGENT)
+                {
+                    this.hintButton.SetActive(false);
+                    this.gameOverSection.SetActive(true);
+                }
                 gameOver = 0;
             }
             else if (this.gameOver < 0)
