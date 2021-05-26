@@ -1261,7 +1261,7 @@ MonoBehaviour:
     VectorActionSize: 04000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
-  m_Model: {fileID: 5022602860645237092, guid: e9a91cce44e38a4429e3aec4348785a7, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: a7bdcda482bf90542a2f33a14b8bc229, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: PlayerAgent
