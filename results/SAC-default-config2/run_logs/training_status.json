@@ -1,0 +1,60 @@
+{
+    "4x4": {
+        "checkpoints": [
+            {
+                "steps": 499999,
+                "file_path": "results\\SAC-default-config2\\4x4\\4x4-499999.onnx",
+                "reward": null,
+                "creation_time": 1622000089.33025,
+                "auxillary_file_paths": [
+                    "results\\SAC-default-config2\\4x4\\4x4-499999.pt"
+                ]
+            },
+            {
+                "steps": 618128,
+                "file_path": "results\\SAC-default-config2\\4x4\\4x4-618128.onnx",
+                "reward": -2.7023594229717793,
+                "creation_time": 1622003752.5892577,
+                "auxillary_file_paths": [
+                    "results\\SAC-default-config2\\4x4\\4x4-618128.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 618128,
+            "file_path": "results\\SAC-default-config2\\4x4.onnx",
+            "reward": -2.7023594229717793,
+            "creation_time": 1622003752.5892577,
+            "auxillary_file_paths": [
+                "results\\SAC-default-config2\\4x4\\4x4-618128.pt"
+            ]
+        }
+    },
+    "5x5": {
+        "checkpoints": [
+            {
+                "steps": 445774,
+                "file_path": "results\\SAC-default-config2\\5x5\\5x5-445774.onnx",
+                "reward": null,
+                "creation_time": 1622003752.4012325,
+                "auxillary_file_paths": [
+                    "results\\SAC-default-config2\\5x5\\5x5-445774.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 445774,
+            "file_path": "results\\SAC-default-config2\\5x5.onnx",
+            "reward": null,
+            "creation_time": 1622003752.4012325,
+            "auxillary_file_paths": [
+                "results\\SAC-default-config2\\5x5\\5x5-445774.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.26.0",
+        "torch_version": "1.8.1+cpu"
+    }
+}
