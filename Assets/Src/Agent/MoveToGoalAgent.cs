@@ -56,7 +56,7 @@ public class MoveToGoalAgent : Agent {
         else if (result == 1)  // if moved to invalid position
         {
             Debug.LogWarning("Tried to move to a place where it is not possible to move.");
-            SetReward(-2f); // ?
+            SetReward(-2f);
         }
 
         if (iteration > 1000)

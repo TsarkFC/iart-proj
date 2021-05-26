@@ -1,0 +1,69 @@
+{
+    "4x4": {
+        "checkpoints": [
+            {
+                "steps": 499973,
+                "file_path": "results\\PPO-default-2\\4x4\\4x4-499973.onnx",
+                "reward": -5.647290640394089,
+                "creation_time": 1621977966.0124965,
+                "auxillary_file_paths": [
+                    "results\\PPO-default-2\\4x4\\4x4-499973.pt"
+                ]
+            },
+            {
+                "steps": 665589,
+                "file_path": "results\\PPO-default-2\\4x4\\4x4-665589.onnx",
+                "reward": -5.736059163549813,
+                "creation_time": 1621979580.254843,
+                "auxillary_file_paths": [
+                    "results\\PPO-default-2\\4x4\\4x4-665589.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 665589,
+            "file_path": "results\\PPO-default-2\\4x4.onnx",
+            "reward": -5.736059163549813,
+            "creation_time": 1621979580.254843,
+            "auxillary_file_paths": [
+                "results\\PPO-default-2\\4x4\\4x4-665589.pt"
+            ]
+        }
+    },
+    "5x5": {
+        "checkpoints": [
+            {
+                "steps": 499968,
+                "file_path": "results\\PPO-default-2\\5x5\\5x5-499968.onnx",
+                "reward": -156.28571428571428,
+                "creation_time": 1621979580.1088257,
+                "auxillary_file_paths": [
+                    "results\\PPO-default-2\\5x5\\5x5-499968.pt"
+                ]
+            },
+            {
+                "steps": 500032,
+                "file_path": "results\\PPO-default-2\\5x5\\5x5-500032.onnx",
+                "reward": -156.28571428571428,
+                "creation_time": 1621979580.1848257,
+                "auxillary_file_paths": [
+                    "results\\PPO-default-2\\5x5\\5x5-500032.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 500032,
+            "file_path": "results\\PPO-default-2\\5x5.onnx",
+            "reward": -156.28571428571428,
+            "creation_time": 1621979580.1848257,
+            "auxillary_file_paths": [
+                "results\\PPO-default-2\\5x5\\5x5-500032.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.26.0",
+        "torch_version": "1.8.1+cpu"
+    }
+}

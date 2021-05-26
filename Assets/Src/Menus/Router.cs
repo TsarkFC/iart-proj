@@ -37,6 +37,11 @@ public class Router : MonoBehaviour
         SceneManager.LoadScene(25);
     }
 
+    public void LoadNewScene()
+    {
+        SceneManager.LoadScene(26);
+    }
+
     public void PlaySinglePlayer(int lvlIndex)
     {
         StatsInfo.ResetAlgoResults();
