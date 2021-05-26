@@ -59,9 +59,5 @@ namespace levels
                                     {PieceType.PIECE_ORANGE, PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY},
                                     {PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY, PieceType.BARRIER, PieceType.BARRIER},
                                     {PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY, PieceType.BARRIER, PieceType.EMPTY}};
-        public static PieceType[,] newLevel = new PieceType[,] {{PieceType.EMPTY, PieceType.PIECE_PURPLE, PieceType.EMPTY, PieceType.BARRIER},
-                                    {PieceType.PIECE_PURPLE, PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY},
-                                    {PieceType.BARRIER, PieceType.TARGET_PURPLE, PieceType.TARGET_PURPLE, PieceType.BARRIER},
-                                    {PieceType.EMPTY, PieceType.BARRIER, PieceType.BARRIER, PieceType.EMPTY}};
     }
 }
