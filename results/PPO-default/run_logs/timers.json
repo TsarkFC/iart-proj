@@ -1,0 +1,1047 @@
+{
+    "name": "root",
+    "gauges": {
+        "4x4.Policy.Entropy.mean": {
+            "value": 0.8996104001998901,
+            "min": 0.8962758779525757,
+            "max": 1.3534715175628662,
+            "count": 15
+        },
+        "4x4.Policy.Entropy.sum": {
+            "value": 44905.8515625,
+            "min": 44819.171875,
+            "max": 67923.96875,
+            "count": 15
+        },
+        "4x4.Environment.EpisodeLength.mean": {
+            "value": 12.403307548679647,
+            "min": 11.859694537923893,
+            "max": 41.73954703832753,
+            "count": 15
+        },
+        "4x4.Environment.EpisodeLength.sum": {
+            "value": 46500.0,
+            "min": 45807.0,
+            "max": 47917.0,
+            "count": 15
+        },
+        "4x4.Agent.Level1.Reward.mean": {
+            "value": -1.1001378043178687,
+            "min": -6.247376311844078,
+            "max": -1.0870938628158844,
+            "count": 15
+        },
+        "4x4.Agent.Level1.Reward.sum": {
+            "value": -2395.0,
+            "min": -4167.0,
+            "max": -2289.0,
+            "count": 15
+        },
+        "4x4.Agent.Level1.Iteration.mean": {
+            "value": 2.127698667891594,
+            "min": 2.107851985559567,
+            "max": 7.971514242878561,
+            "count": 15
+        },
+        "4x4.Agent.Level1.Iteration.sum": {
+            "value": 4632.0,
+            "min": 4062.0,
+            "max": 5317.0,
+            "count": 15
+        },
+        "4x4.Step.mean": {
+            "value": 749991.0,
+            "min": 49961.0,
+            "max": 749991.0,
+            "count": 15
+        },
+        "4x4.Step.sum": {
+            "value": 749991.0,
+            "min": 49961.0,
+            "max": 749991.0,
+            "count": 15
+        },
+        "4x4.Policy.ExtrinsicValueEstimate.mean": {
+            "value": -9.949701309204102,
+            "min": -19.37890625,
+            "max": -9.760326385498047,
+            "count": 15
+        },
+        "4x4.Policy.ExtrinsicValueEstimate.sum": {
+            "value": -41211.6640625,
+            "min": -46117.3671875,
+            "max": -27794.921875,
+            "count": 15
+        },
+        "4x4.Environment.CumulativeReward.mean": {
+            "value": -10.515474919957311,
+            "min": -37.61759581881533,
+            "max": -10.071206628689797,
+            "count": 15
+        },
+        "4x4.Environment.CumulativeReward.sum": {
+            "value": -39412.0,
+            "min": -43185.0,
+            "max": -38895.0,
+            "count": 15
+        },
+        "4x4.Policy.ExtrinsicReward.mean": {
+            "value": -10.515474919957311,
+            "min": -37.61759581881533,
+            "max": -10.071206628689797,
+            "count": 15
+        },
+        "4x4.Policy.ExtrinsicReward.sum": {
+            "value": -39412.0,
+            "min": -43185.0,
+            "max": -38895.0,
+            "count": 15
+        },
+        "4x4.Agent.Level2.Reward.mean": {
+            "value": -14.76865671641791,
+            "min": -66.50588235294117,
+            "max": -12.018575851393189,
+            "count": 15
+        },
+        "4x4.Agent.Level2.Reward.sum": {
+            "value": -3958.0,
+            "min": -5653.0,
+            "max": -3882.0,
+            "count": 15
+        },
+        "4x4.Agent.Level2.Iteration.mean": {
+            "value": 22.04850746268657,
+            "min": 18.393188854489164,
+            "max": 78.49411764705883,
+            "count": 15
+        },
+        "4x4.Agent.Level2.Iteration.sum": {
+            "value": 5909.0,
+            "min": 5844.0,
+            "max": 6672.0,
+            "count": 15
+        },
+        "4x4.Agent.Level6.Reward.mean": {
+            "value": -7.769565217391304,
+            "min": -28.43455497382199,
+            "max": -7.409563409563409,
+            "count": 15
+        },
+        "4x4.Agent.Level6.Reward.sum": {
+            "value": -3574.0,
+            "min": -5431.0,
+            "max": -3547.0,
+            "count": 15
+        },
+        "4x4.Agent.Level6.Iteration.mean": {
+            "value": 11.521739130434783,
+            "min": 10.970893970893972,
+            "max": 33.40837696335078,
+            "count": 15
+        },
+        "4x4.Agent.Level6.Iteration.sum": {
+            "value": 5300.0,
+            "min": 5277.0,
+            "max": 6381.0,
+            "count": 15
+        },
+        "4x4.Agent.Level10.Reward.mean": {
+            "value": -90.21052631578948,
+            "min": -463.0,
+            "max": -66.91666666666667,
+            "count": 15
+        },
+        "4x4.Agent.Level10.Reward.sum": {
+            "value": -1714.0,
+            "min": -3336.0,
+            "max": -184.0,
+            "count": 15
+        },
+        "4x4.Agent.Level10.Iteration.mean": {
+            "value": 122.63157894736842,
+            "min": 91.58333333333333,
+            "max": 571.0,
+            "count": 15
+        },
+        "4x4.Agent.Level10.Iteration.sum": {
+            "value": 2330.0,
+            "min": 232.0,
+            "max": 4480.0,
+            "count": 15
+        },
+        "4x4.Agent.Level9.Reward.mean": {
+            "value": -61.7752808988764,
+            "min": -141.21428571428572,
+            "max": -59.07446808510638,
+            "count": 15
+        },
+        "4x4.Agent.Level9.Reward.sum": {
+            "value": -5498.0,
+            "min": -6708.0,
+            "max": -5466.0,
+            "count": 15
+        },
+        "4x4.Agent.Level9.Iteration.mean": {
+            "value": 79.43820224719101,
+            "min": 76.47872340425532,
+            "max": 174.11904761904762,
+            "count": 15
+        },
+        "4x4.Agent.Level9.Iteration.sum": {
+            "value": 7070.0,
+            "min": 6923.0,
+            "max": 8466.0,
+            "count": 15
+        },
+        "4x4.Agent.Level4.Reward.mean": {
+            "value": -5.871080139372823,
+            "min": -31.079470198675498,
+            "max": -5.871080139372823,
+            "count": 15
+        },
+        "4x4.Agent.Level4.Reward.sum": {
+            "value": -3370.0,
+            "min": -4693.0,
+            "max": -3367.0,
+            "count": 15
+        },
+        "4x4.Agent.Level4.Iteration.mean": {
+            "value": 8.850174216027874,
+            "min": 8.850174216027874,
+            "max": 38.158940397350996,
+            "count": 15
+        },
+        "4x4.Agent.Level4.Iteration.sum": {
+            "value": 5080.0,
+            "min": 5062.0,
+            "max": 5762.0,
+            "count": 15
+        },
+        "4x4.Agent.Level7.Reward.mean": {
+            "value": -361.5,
+            "min": -523.75,
+            "max": -202.875,
+            "count": 5
+        },
+        "4x4.Agent.Level7.Reward.sum": {
+            "value": -723.0,
+            "min": -4574.0,
+            "max": -723.0,
+            "count": 5
+        },
+        "4x4.Agent.Level7.Iteration.mean": {
+            "value": 467.0,
+            "min": 256.625,
+            "max": 689.5,
+            "count": 5
+        },
+        "4x4.Agent.Level7.Iteration.sum": {
+            "value": 934.0,
+            "min": 934.0,
+            "max": 5519.0,
+            "count": 5
+        },
+        "4x4.Agent.Level3.Reward.mean": {
+            "value": -23.34285714285714,
+            "min": -324.45454545454544,
+            "max": -20.799319727891156,
+            "count": 15
+        },
+        "4x4.Agent.Level3.Reward.sum": {
+            "value": -5719.0,
+            "min": -7875.0,
+            "max": -3569.0,
+            "count": 15
+        },
+        "4x4.Agent.Level3.Iteration.mean": {
+            "value": 29.693877551020407,
+            "min": 25.860544217687075,
+            "max": 369.1818181818182,
+            "count": 15
+        },
+        "4x4.Agent.Level3.Iteration.sum": {
+            "value": 7275.0,
+            "min": 4061.0,
+            "max": 9303.0,
+            "count": 15
+        },
+        "4x4.Agent.Level5.Reward.mean": {
+            "value": -6.666666666666667,
+            "min": -41.5,
+            "max": -5.666666666666667,
+            "count": 15
+        },
+        "4x4.Agent.Level5.Reward.sum": {
+            "value": -20.0,
+            "min": -249.0,
+            "max": -17.0,
+            "count": 15
+        },
+        "4x4.Agent.Level5.Iteration.mean": {
+            "value": 10.333333333333334,
+            "min": 8.666666666666666,
+            "max": 50.5,
+            "count": 15
+        },
+        "4x4.Agent.Level5.Iteration.sum": {
+            "value": 31.0,
+            "min": 26.0,
+            "max": 303.0,
+            "count": 15
+        },
+        "4x4.Losses.PolicyLoss.mean": {
+            "value": 0.022169630901577576,
+            "min": 0.020711176904539268,
+            "max": 0.026730982943748434,
+            "count": 10
+        },
+        "4x4.Losses.PolicyLoss.sum": {
+            "value": 0.11084815450788787,
+            "min": 0.08284470761815707,
+            "max": 0.13365491471874216,
+            "count": 10
+        },
+        "4x4.Losses.ValueLoss.mean": {
+            "value": 61.41498700459797,
+            "min": 54.33773568471273,
+            "max": 77.70902402242025,
+            "count": 10
+        },
+        "4x4.Losses.ValueLoss.sum": {
+            "value": 307.07493502298985,
+            "min": 255.75100574493408,
+            "max": 388.54512011210124,
+            "count": 10
+        },
+        "4x4.Policy.LearningRate.mean": {
+            "value": 1.6668454443879995e-05,
+            "min": 1.6668454443879995e-05,
+            "max": 0.00028461750512749997,
+            "count": 10
+        },
+        "4x4.Policy.LearningRate.sum": {
+            "value": 8.334227221939998e-05,
+            "min": 8.334227221939998e-05,
+            "max": 0.0012845034718322,
+            "count": 10
+        },
+        "4x4.Policy.Epsilon.mean": {
+            "value": 0.10555612,
+            "min": 0.10555612,
+            "max": 0.1948725,
+            "count": 10
+        },
+        "4x4.Policy.Epsilon.sum": {
+            "value": 0.5277806,
+            "min": 0.5003522,
+            "max": 0.9281678,
+            "count": 10
+        },
+        "4x4.Policy.Beta.mean": {
+            "value": 0.00028725038799999993,
+            "min": 0.00028725038799999993,
+            "max": 0.00474413775,
+            "count": 10
+        },
+        "4x4.Policy.Beta.sum": {
+            "value": 0.0014362519399999996,
+            "min": 0.0014362519399999996,
+            "max": 0.021415573220000005,
+            "count": 10
+        },
+        "4x4.Agent.Level12.Reward.mean": {
+            "value": -148.24137931034483,
+            "min": -456.25,
+            "max": -136.12820512820514,
+            "count": 15
+        },
+        "4x4.Agent.Level12.Reward.sum": {
+            "value": -4299.0,
+            "min": -5309.0,
+            "max": -1279.0,
+            "count": 15
+        },
+        "4x4.Agent.Level12.Iteration.mean": {
+            "value": 198.58620689655172,
+            "min": 180.71794871794873,
+            "max": 591.0,
+            "count": 15
+        },
+        "4x4.Agent.Level12.Iteration.sum": {
+            "value": 5759.0,
+            "min": 1507.0,
+            "max": 7048.0,
+            "count": 15
+        },
+        "4x4.Agent.Level11.Reward.mean": {
+            "value": -400.75,
+            "min": -536.3333333333334,
+            "max": -279.2,
+            "count": 15
+        },
+        "4x4.Agent.Level11.Reward.sum": {
+            "value": -1603.0,
+            "min": -3486.0,
+            "max": -830.0,
+            "count": 15
+        },
+        "4x4.Agent.Level11.Iteration.mean": {
+            "value": 578.75,
+            "min": 346.4,
+            "max": 775.6666666666666,
+            "count": 15
+        },
+        "4x4.Agent.Level11.Iteration.sum": {
+            "value": 2315.0,
+            "min": 1078.0,
+            "max": 4639.0,
+            "count": 15
+        },
+        "4x4.Agent.Level8.Reward.mean": {
+            "value": -61.0,
+            "min": -674.0,
+            "max": -61.0,
+            "count": 9
+        },
+        "4x4.Agent.Level8.Reward.sum": {
+            "value": -61.0,
+            "min": -674.0,
+            "max": -61.0,
+            "count": 9
+        },
+        "4x4.Agent.Level8.Iteration.mean": {
+            "value": 92.0,
+            "min": 92.0,
+            "max": 878.0,
+            "count": 9
+        },
+        "4x4.Agent.Level8.Iteration.sum": {
+            "value": 92.0,
+            "min": 92.0,
+            "max": 878.0,
+            "count": 9
+        },
+        "4x4.IsTraining.mean": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 1.0,
+            "count": 15
+        },
+        "4x4.IsTraining.sum": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 1.0,
+            "count": 15
+        },
+        "5x5.Policy.Entropy.mean": {
+            "value": 0.9701253175735474,
+            "min": 0.9701253175735474,
+            "max": 1.3236466646194458,
+            "count": 10
+        },
+        "5x5.Policy.Entropy.sum": {
+            "value": 48495.59375,
+            "min": 48495.59375,
+            "max": 66371.6171875,
+            "count": 10
+        },
+        "5x5.Agent.Level1.Reward.mean": {
+            "value": -1.0961204400694846,
+            "min": -4.254609929078014,
+            "max": -1.0961204400694846,
+            "count": 10
+        },
+        "5x5.Agent.Level1.Reward.sum": {
+            "value": -3786.0,
+            "min": -5999.0,
+            "max": -3395.0,
+            "count": 10
+        },
+        "5x5.Agent.Level1.Iteration.mean": {
+            "value": 2.121019108280255,
+            "min": 2.121019108280255,
+            "max": 5.728368794326241,
+            "count": 10
+        },
+        "5x5.Agent.Level1.Iteration.sum": {
+            "value": 7326.0,
+            "min": 6218.0,
+            "max": 8077.0,
+            "count": 10
+        },
+        "5x5.Agent.Level2.Reward.mean": {
+            "value": -15.423940149625935,
+            "min": -63.595588235294116,
+            "max": -12.483739837398375,
+            "count": 10
+        },
+        "5x5.Agent.Level2.Reward.sum": {
+            "value": -6185.0,
+            "min": -8649.0,
+            "max": -6136.0,
+            "count": 10
+        },
+        "5x5.Agent.Level2.Iteration.mean": {
+            "value": 23.034912718204488,
+            "min": 18.90650406504065,
+            "max": 76.01470588235294,
+            "count": 10
+        },
+        "5x5.Agent.Level2.Iteration.sum": {
+            "value": 9237.0,
+            "min": 8764.0,
+            "max": 10353.0,
+            "count": 10
+        },
+        "5x5.Agent.Level6.Reward.mean": {
+            "value": -7.6730245231607626,
+            "min": -25.42942942942943,
+            "max": -7.438337801608579,
+            "count": 10
+        },
+        "5x5.Agent.Level6.Reward.sum": {
+            "value": -5632.0,
+            "min": -8468.0,
+            "max": -5229.0,
+            "count": 10
+        },
+        "5x5.Agent.Level6.Iteration.mean": {
+            "value": 11.403269754768392,
+            "min": 11.049597855227882,
+            "max": 30.525525525525527,
+            "count": 10
+        },
+        "5x5.Agent.Level6.Iteration.sum": {
+            "value": 8370.0,
+            "min": 7784.0,
+            "max": 10165.0,
+            "count": 10
+        },
+        "5x5.Environment.EpisodeLength.mean": {
+            "value": 191.75471698113208,
+            "min": 191.75471698113208,
+            "max": 429.0619469026549,
+            "count": 10
+        },
+        "5x5.Environment.EpisodeLength.sum": {
+            "value": 50815.0,
+            "min": 48484.0,
+            "max": 51034.0,
+            "count": 10
+        },
+        "5x5.Agent.Level10.Reward.mean": {
+            "value": -79.38888888888889,
+            "min": -292.0,
+            "max": -79.38888888888889,
+            "count": 9
+        },
+        "5x5.Agent.Level10.Reward.sum": {
+            "value": -2858.0,
+            "min": -3746.0,
+            "max": -584.0,
+            "count": 9
+        },
+        "5x5.Agent.Level10.Iteration.mean": {
+            "value": 108.5,
+            "min": 108.5,
+            "max": 382.6666666666667,
+            "count": 9
+        },
+        "5x5.Agent.Level10.Iteration.sum": {
+            "value": 3906.0,
+            "min": 690.0,
+            "max": 4984.0,
+            "count": 9
+        },
+        "5x5.Step.mean": {
+            "value": 499948.0,
+            "min": 49941.0,
+            "max": 499948.0,
+            "count": 10
+        },
+        "5x5.Step.sum": {
+            "value": 499948.0,
+            "min": 49941.0,
+            "max": 499948.0,
+            "count": 10
+        },
+        "5x5.Policy.ExtrinsicValueEstimate.mean": {
+            "value": -48.199302673339844,
+            "min": -55.90845489501953,
+            "max": -19.071197509765625,
+            "count": 10
+        },
+        "5x5.Policy.ExtrinsicValueEstimate.sum": {
+            "value": -43427.5703125,
+            "min": -48640.35546875,
+            "max": -15886.3076171875,
+            "count": 10
+        },
+        "5x5.Environment.CumulativeReward.mean": {
+            "value": -136.9811320754717,
+            "min": -356.82300884955754,
+            "max": -136.9811320754717,
+            "count": 10
+        },
+        "5x5.Environment.CumulativeReward.sum": {
+            "value": -36300.0,
+            "min": -40321.0,
+            "max": -35588.0,
+            "count": 10
+        },
+        "5x5.Policy.ExtrinsicReward.mean": {
+            "value": -136.9811320754717,
+            "min": -356.82300884955754,
+            "max": -136.9811320754717,
+            "count": 10
+        },
+        "5x5.Policy.ExtrinsicReward.sum": {
+            "value": -36300.0,
+            "min": -40321.0,
+            "max": -35588.0,
+            "count": 10
+        },
+        "5x5.Agent.Level9.Reward.mean": {
+            "value": -59.94405594405595,
+            "min": -138.51470588235293,
+            "max": -59.94405594405595,
+            "count": 10
+        },
+        "5x5.Agent.Level9.Reward.sum": {
+            "value": -8572.0,
+            "min": -9597.0,
+            "max": -8572.0,
+            "count": 10
+        },
+        "5x5.Agent.Level9.Iteration.mean": {
+            "value": 77.61538461538461,
+            "min": 77.61538461538461,
+            "max": 168.6764705882353,
+            "count": 10
+        },
+        "5x5.Agent.Level9.Iteration.sum": {
+            "value": 11099.0,
+            "min": 11099.0,
+            "max": 11983.0,
+            "count": 10
+        },
+        "5x5.Agent.Level4.Reward.mean": {
+            "value": -5.988925802879291,
+            "min": -26.767025089605735,
+            "max": -5.968109339407745,
+            "count": 10
+        },
+        "5x5.Agent.Level4.Reward.sum": {
+            "value": -5408.0,
+            "min": -7468.0,
+            "max": -5054.0,
+            "count": 10
+        },
+        "5x5.Agent.Level4.Iteration.mean": {
+            "value": 8.991140642303433,
+            "min": 8.991140642303433,
+            "max": 33.32616487455197,
+            "count": 10
+        },
+        "5x5.Agent.Level4.Iteration.sum": {
+            "value": 8119.0,
+            "min": 7505.0,
+            "max": 9298.0,
+            "count": 10
+        },
+        "5x5.Agent.Level7.Reward.mean": {
+            "value": -451.0,
+            "min": -451.0,
+            "max": -219.55172413793105,
+            "count": 3
+        },
+        "5x5.Agent.Level7.Reward.sum": {
+            "value": -2255.0,
+            "min": -6367.0,
+            "max": -2255.0,
+            "count": 3
+        },
+        "5x5.Agent.Level7.Iteration.mean": {
+            "value": 592.8,
+            "min": 267.6551724137931,
+            "max": 592.8,
+            "count": 3
+        },
+        "5x5.Agent.Level7.Iteration.sum": {
+            "value": 2964.0,
+            "min": 2964.0,
+            "max": 7762.0,
+            "count": 3
+        },
+        "5x5.Agent.Level3.Reward.mean": {
+            "value": -22.615,
+            "min": -309.45,
+            "max": -21.31590909090909,
+            "count": 10
+        },
+        "5x5.Agent.Level3.Reward.sum": {
+            "value": -9046.0,
+            "min": -10055.0,
+            "max": -6189.0,
+            "count": 10
+        },
+        "5x5.Agent.Level3.Iteration.mean": {
+            "value": 28.7325,
+            "min": 26.577272727272728,
+            "max": 350.85,
+            "count": 10
+        },
+        "5x5.Agent.Level3.Iteration.sum": {
+            "value": 11493.0,
+            "min": 7017.0,
+            "max": 12242.0,
+            "count": 10
+        },
+        "5x5.Agent.Level5.Reward.mean": {
+            "value": -8.75,
+            "min": -25.25,
+            "max": -7.75,
+            "count": 10
+        },
+        "5x5.Agent.Level5.Reward.sum": {
+            "value": -70.0,
+            "min": -303.0,
+            "max": -19.0,
+            "count": 10
+        },
+        "5x5.Agent.Level5.Iteration.mean": {
+            "value": 12.75,
+            "min": 11.5,
+            "max": 31.666666666666668,
+            "count": 10
+        },
+        "5x5.Agent.Level5.Iteration.sum": {
+            "value": 102.0,
+            "min": 27.0,
+            "max": 380.0,
+            "count": 10
+        },
+        "5x5.Agent.Level12.Reward.mean": {
+            "value": -123.83636363636364,
+            "min": -504.42857142857144,
+            "max": -123.83636363636364,
+            "count": 10
+        },
+        "5x5.Agent.Level12.Reward.sum": {
+            "value": -6811.0,
+            "min": -7565.0,
+            "max": -2026.0,
+            "count": 10
+        },
+        "5x5.Agent.Level12.Iteration.mean": {
+            "value": 165.9090909090909,
+            "min": 165.9090909090909,
+            "max": 658.5714285714286,
+            "count": 10
+        },
+        "5x5.Agent.Level12.Iteration.sum": {
+            "value": 9125.0,
+            "min": 2693.0,
+            "max": 10084.0,
+            "count": 10
+        },
+        "5x5.Agent.Level11.Reward.mean": {
+            "value": -399.7,
+            "min": -532.5,
+            "max": -234.75,
+            "count": 10
+        },
+        "5x5.Agent.Level11.Reward.sum": {
+            "value": -3997.0,
+            "min": -5440.0,
+            "max": -939.0,
+            "count": 10
+        },
+        "5x5.Agent.Level11.Iteration.mean": {
+            "value": 592.9,
+            "min": 286.25,
+            "max": 763.25,
+            "count": 10
+        },
+        "5x5.Agent.Level11.Iteration.sum": {
+            "value": 5929.0,
+            "min": 1145.0,
+            "max": 7421.0,
+            "count": 10
+        },
+        "5x5.Losses.PolicyLoss.mean": {
+            "value": 0.023415727520671985,
+            "min": 0.020989467088753978,
+            "max": 0.026055509303696454,
+            "count": 10
+        },
+        "5x5.Losses.PolicyLoss.sum": {
+            "value": 0.11707863760335993,
+            "min": 0.09470020108856261,
+            "max": 0.13027754651848228,
+            "count": 10
+        },
+        "5x5.Losses.ValueLoss.mean": {
+            "value": 78.82083862304688,
+            "min": 33.629448739687604,
+            "max": 83.22048484802247,
+            "count": 10
+        },
+        "5x5.Losses.ValueLoss.sum": {
+            "value": 394.1041931152344,
+            "min": 134.51779495875041,
+            "max": 416.1024242401123,
+            "count": 10
+        },
+        "5x5.Policy.LearningRate.mean": {
+            "value": 1.643733452092e-05,
+            "min": 1.643733452092e-05,
+            "max": 0.00028458945513685,
+            "count": 10
+        },
+        "5x5.Policy.LearningRate.sum": {
+            "value": 8.21866726046e-05,
+            "min": 8.21866726046e-05,
+            "max": 0.0012841998719333998,
+            "count": 10
+        },
+        "5x5.Policy.Epsilon.mean": {
+            "value": 0.10547908000000003,
+            "min": 0.10547908000000003,
+            "max": 0.19486314999999998,
+            "count": 10
+        },
+        "5x5.Policy.Epsilon.sum": {
+            "value": 0.5273954000000002,
+            "min": 0.49999460000000007,
+            "max": 0.9280666000000002,
+            "count": 10
+        },
+        "5x5.Policy.Beta.mean": {
+            "value": 0.0002834060920000001,
+            "min": 0.0002834060920000001,
+            "max": 0.004743671185,
+            "count": 10
+        },
+        "5x5.Policy.Beta.sum": {
+            "value": 0.0014170304600000004,
+            "min": 0.0014170304600000004,
+            "max": 0.021410523339999998,
+            "count": 10
+        },
+        "5x5.Agent.Level8.Reward.mean": {
+            "value": -61.0,
+            "min": -674.0,
+            "max": -61.0,
+            "count": 7
+        },
+        "5x5.Agent.Level8.Reward.sum": {
+            "value": -61.0,
+            "min": -724.0,
+            "max": -61.0,
+            "count": 7
+        },
+        "5x5.Agent.Level8.Iteration.mean": {
+            "value": 92.0,
+            "min": 92.0,
+            "max": 878.0,
+            "count": 7
+        },
+        "5x5.Agent.Level8.Iteration.sum": {
+            "value": 92.0,
+            "min": 92.0,
+            "max": 1063.0,
+            "count": 7
+        },
+        "5x5.IsTraining.mean": {
+            "value": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "count": 10
+        },
+        "5x5.IsTraining.sum": {
+            "value": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "count": 10
+        }
+    },
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1621966835",
+        "python_version": "3.9.5 (tags/v3.9.5:0a7dcbd, May  3 2021, 17:27:52) [MSC v.1928 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\Users\\digas\\OneDrive\\Documentos\\iart-proj\\.venv_windows\\Scripts\\mlagents-learn --run-id=PPO-default",
+        "mlagents_version": "0.26.0",
+        "mlagents_envs_version": "0.26.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "1.8.1+cpu",
+        "numpy_version": "1.20.3",
+        "end_time_seconds": "1621972830"
+    },
+    "total": 5994.3204817,
+    "count": 1,
+    "self": 0.018900400000347872,
+    "children": {
+        "run_training.setup": {
+            "total": 0.06171990000000005,
+            "count": 1,
+            "self": 0.06171990000000005
+        },
+        "TrainerController.start_learning": {
+            "total": 5994.239861399999,
+            "count": 1,
+            "self": 10.001765799904206,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 18.8295365,
+                    "count": 1,
+                    "self": 18.8295365
+                },
+                "TrainerController.advance": {
+                    "total": 5965.233894200094,
+                    "count": 384046,
+                    "self": 11.731947600354943,
+                    "children": {
+                        "env_step": {
+                            "total": 5584.102073400017,
+                            "count": 384046,
+                            "self": 4994.018421200171,
+                            "children": {
+                                "SubprocessEnvManager._take_step": {
+                                    "total": 583.7180251998711,
+                                    "count": 384046,
+                                    "self": 32.0411901999629,
+                                    "children": {
+                                        "TorchPolicy.evaluate": {
+                                            "total": 551.6768349999082,
+                                            "count": 524205,
+                                            "self": 151.0672308997237,
+                                            "children": {
+                                                "TorchPolicy.sample_actions": {
+                                                    "total": 400.6096041001845,
+                                                    "count": 524205,
+                                                    "self": 400.6096041001845
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "workers": {
+                                    "total": 6.365626999974062,
+                                    "count": 384046,
+                                    "self": 0.0,
+                                    "children": {
+                                        "worker_root": {
+                                            "total": 5959.1186115999635,
+                                            "count": 384046,
+                                            "is_parallel": true,
+                                            "self": 1476.67385429959,
+                                            "children": {
+                                                "steps_from_proto": {
+                                                    "total": 0.0004060999999992987,
+                                                    "count": 1,
+                                                    "is_parallel": true,
+                                                    "self": 0.00024340000000222517,
+                                                    "children": {
+                                                        "_process_rank_one_or_two_observation": {
+                                                            "total": 0.00016269999999707352,
+                                                            "count": 2,
+                                                            "is_parallel": true,
+                                                            "self": 0.00016269999999707352
+                                                        }
+                                                    }
+                                                },
+                                                "UnityEnvironment.step": {
+                                                    "total": 4482.444351200374,
+                                                    "count": 384046,
+                                                    "is_parallel": true,
+                                                    "self": 47.52194030046212,
+                                                    "children": {
+                                                        "UnityEnvironment._generate_step_input": {
+                                                            "total": 107.43569960003711,
+                                                            "count": 384046,
+                                                            "is_parallel": true,
+                                                            "self": 107.43569960003711
+                                                        },
+                                                        "communicator.exchange": {
+                                                            "total": 4117.255933500024,
+                                                            "count": 384046,
+                                                            "is_parallel": true,
+                                                            "self": 4117.255933500024
+                                                        },
+                                                        "steps_from_proto": {
+                                                            "total": 210.2307777998507,
+                                                            "count": 768092,
+                                                            "is_parallel": true,
+                                                            "self": 135.23372830035217,
+                                                            "children": {
+                                                                "_process_rank_one_or_two_observation": {
+                                                                    "total": 74.99704949949853,
+                                                                    "count": 1536184,
+                                                                    "is_parallel": true,
+                                                                    "self": 74.99704949949853
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "trainer_advance": {
+                            "total": 369.3998731997225,
+                            "count": 768092,
+                            "self": 16.776270199601072,
+                            "children": {
+                                "process_trajectory": {
+                                    "total": 153.54639620011923,
+                                    "count": 768092,
+                                    "self": 153.26067780011928,
+                                    "children": {
+                                        "RLTrainer._checkpoint": {
+                                            "total": 0.28571839999995063,
+                                            "count": 2,
+                                            "self": 0.28571839999995063
+                                        }
+                                    }
+                                },
+                                "_update_policy": {
+                                    "total": 199.07720680000216,
+                                    "count": 96,
+                                    "self": 140.7151530000172,
+                                    "children": {
+                                        "TorchPPOOptimizer.update": {
+                                            "total": 58.36205379998495,
+                                            "count": 2880,
+                                            "self": 58.36205379998495
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "trainer_threads": {
+                    "total": 1.3999997463542968e-06,
+                    "count": 1,
+                    "self": 1.3999997463542968e-06
+                },
+                "TrainerController._save_models": {
+                    "total": 0.17466350000086095,
+                    "count": 1,
+                    "self": 0.005949100000179897,
+                    "children": {
+                        "RLTrainer._checkpoint": {
+                            "total": 0.16871440000068105,
+                            "count": 2,
+                            "self": 0.16871440000068105
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
