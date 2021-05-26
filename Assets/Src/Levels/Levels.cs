@@ -58,6 +58,6 @@ namespace levels
                                     {PieceType.TARGET_RED, PieceType.BARRIER, PieceType.EMPTY, PieceType.BARRIER, PieceType.TARGET_ORANGE},
                                     {PieceType.PIECE_ORANGE, PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY},
                                     {PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY, PieceType.BARRIER, PieceType.BARRIER},
-                                    {PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY, PieceType.BARRIER, PieceType.EMPTY}};                            
+                                    {PieceType.EMPTY, PieceType.EMPTY, PieceType.EMPTY, PieceType.BARRIER, PieceType.EMPTY}};
     }
 }

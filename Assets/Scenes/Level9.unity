@@ -2415,6 +2415,9 @@ MonoBehaviour:
   hintButton: {fileID: 370214266}
   showStatsButton: {fileID: 1057332198}
   gameOverSection: {fileID: 531998324}
+  moving: 0
+  gameOver: 0
+  scalingFactor: 1
 --- !u!156049354 &1721799676
 Grid:
   m_ObjectHideFlags: 0

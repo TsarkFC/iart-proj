@@ -47,11 +47,13 @@ public abstract class Level : MonoBehaviour
     private Dictionary<GameObject, Movement> piecesMovement;  // each piece's movement
     public bool moving = false;  // is any piece moving?
     public int gameOver; // positive if game over has not been shown, negative if its not game over. equal to zero if it is game over and no further action is required
+    public float scalingFactor;
 
     public State state { get; set; }
     private Robot robot;
     private GameObject currentHint;
     private int movesCount;
+    public int levelNo { get; set; }
 
     private static Dictionary<String, PieceType> stringPieceType = new Dictionary<string, PieceType>();
 
@@ -73,8 +75,11 @@ public abstract class Level : MonoBehaviour
     {
         this.state = new State(board, xDim, yDim);
 
-        this.hintButton.SetActive(true);
-        this.gameOverSection.SetActive(false);
+        if (GameMode.mode != GameMode.Mode.AGENT)
+        {
+            this.hintButton.SetActive(true);
+            this.gameOverSection.SetActive(false);
+        }
         this.gameOver = -1;
 
         this.piecesMovement = new Dictionary<GameObject, Movement>();
@@ -133,7 +138,7 @@ public abstract class Level : MonoBehaviour
             for (int x = 0; x < xDim; x++)
             {
                 // instantiating background
-                if (!hasBackgrounds) Instantiate(backgroundPrefab, GetWorldPosition(x * 90, ((yDim - 1) - y) * 90), Quaternion.identity, transform);
+                if (!hasBackgrounds) Instantiate(backgroundPrefab, GetWorldPosition((int)(x * 90 * scalingFactor), (int)(((yDim - 1) - y) * 90* scalingFactor)), Quaternion.identity, transform);
                 
                 if (board[y, x] != PieceType.EMPTY && !IsPiece(board[y, x])) InstantiateEntity(x, y, false);
             }
@@ -157,9 +162,9 @@ public abstract class Level : MonoBehaviour
 
     private void InstantiateEntity(int x, int y, bool isPiece)
     {
-        pieces[y, x] = Instantiate(piecePrefabDict[board[y, x]], GetWorldPosition(x*90, ((yDim-1)-y)*90), Quaternion.identity, transform);
+        pieces[y, x] = Instantiate(piecePrefabDict[board[y, x]], GetWorldPosition((int)(x *90*scalingFactor), (int)(((yDim-1)-y)*90*scalingFactor)), Quaternion.identity, transform);
         pieces[y, x].name = "Piece(" + x + "," + y + ")";
-        if (isPiece) piecesMovement.Add(pieces[y, x], new Movement(new Position(x, y)));
+        if (isPiece) piecesMovement.Add(pieces[y, x], new Movement(new Position(x, y), scalingFactor));
     }
 
     Vector3 GetWorldPosition(int x, int y)
@@ -174,6 +179,7 @@ public abstract class Level : MonoBehaviour
 
     protected void BuildHints()
     {
+        if (GameMode.mode == GameMode.Mode.AGENT) return;
         if (GameMode.mode == GameMode.Mode.AI)
         {
             hintButton.SetActive(false);
@@ -296,8 +302,11 @@ public abstract class Level : MonoBehaviour
         {
             if (this.gameOver > 0)
             {
-                this.hintButton.SetActive(false);
-                this.gameOverSection.SetActive(true);
+                if (GameMode.mode != GameMode.Mode.AGENT)
+                {
+                    this.hintButton.SetActive(false);
+                    this.gameOverSection.SetActive(true);
+                }
                 gameOver = 0;
             }
             else if (this.gameOver < 0)

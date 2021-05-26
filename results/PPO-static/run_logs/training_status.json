@@ -1,0 +1,51 @@
+{
+    "5x5": {
+        "checkpoints": [
+            {
+                "steps": 311479,
+                "file_path": "results\\PPO-default\\5x5\\5x5-311479.onnx",
+                "reward": -12.333333333333334,
+                "creation_time": 1621966279.9910126,
+                "auxillary_file_paths": [
+                    "results\\PPO-default\\5x5\\5x5-311479.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 311479,
+            "file_path": "results\\PPO-default\\5x5.onnx",
+            "reward": -12.333333333333334,
+            "creation_time": 1621966279.9910126,
+            "auxillary_file_paths": [
+                "results\\PPO-default\\5x5\\5x5-311479.pt"
+            ]
+        }
+    },
+    "4x4": {
+        "checkpoints": [
+            {
+                "steps": 482780,
+                "file_path": "results\\PPO-default\\4x4\\4x4-482780.onnx",
+                "reward": null,
+                "creation_time": 1621966280.0970106,
+                "auxillary_file_paths": [
+                    "results\\PPO-default\\4x4\\4x4-482780.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 482780,
+            "file_path": "results\\PPO-default\\4x4.onnx",
+            "reward": null,
+            "creation_time": 1621966280.0970106,
+            "auxillary_file_paths": [
+                "results\\PPO-default\\4x4\\4x4-482780.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.26.0",
+        "torch_version": "1.8.1+cpu"
+    }
+}
