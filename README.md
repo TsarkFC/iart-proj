@@ -1,3 +1,13 @@
+# Match the Tiles
+
+## Game & Algorithms Demo
+
+![](https://imgpile.com/images/NesLWc.gif)
+
+## Reinforcement Learning Training Demo
+
+![](https://i.postimg.cc/251Ctz7F/training.gif)
+
 ## Graphical interface running instruction
 - `Windows Build`: excute the IARTistas.exe file present in group35WindowsBuild64.zip
 - `Linux Build`: excute the IARTgroup35.x86_64 file present group35LinuxBuild64.zip
