@@ -2,7 +2,7 @@
 
 ## Game & Algorithms Demo
 
-![](https://imgpile.com/images/NesLWc.gif)
+![](https://imgpile.com/images/NesBe1.gif)
 
 ## Reinforcement Learning Training Demo
 
